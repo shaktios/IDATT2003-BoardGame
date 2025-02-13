@@ -17,6 +17,7 @@ public class Die {
         lastRolledValue = random.nextInt(sides) + 1; 
         return lastRolledValue; 
     }
+    
     public int getValue(){
         return lastRolledValue; 
     }
