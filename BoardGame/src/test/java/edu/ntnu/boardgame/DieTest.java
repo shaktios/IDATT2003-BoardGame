@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 
@@ -20,7 +20,7 @@ public class DieTest {
     @Test
     void getValueAfterRoll(){
         Die die = new Die(6); 
-        int roll() = die.roll(); 
+        int roll = die.roll(); 
         assertEquals(roll, die.getValue(), "getValue() should return the last rolled value."); 
     }
 
