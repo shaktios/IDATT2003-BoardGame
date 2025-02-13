@@ -1,4 +1,4 @@
-package no.ntnu.boardgame;
+package edu.ntnu.boardgame;
 
 /**
  * Hello world!
