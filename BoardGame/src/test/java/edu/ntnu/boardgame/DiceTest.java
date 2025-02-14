@@ -1,4 +1,5 @@
 package edu.ntnu.boardgame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +31,13 @@ public class DiceTest {
         }
 
         assertTrue(differentValues, "Rolling multiple times should give different sums.");
+    }
+    
+    @Test
+    void testInvalidDiceCreation() {
+        assertThrows(IllegalArgumentException.class, () -> new Dice(6, 0), "Bør kaste exception for 0 terninger.");
+        assertThrows(IllegalArgumentException.class, () -> new Dice(6, -1), "Bør kaste exception for negativt antall terninger.");
+        assertThrows(IllegalArgumentException.class, () -> new Dice(0, 2), "Bør kaste exception for terning med 0 sider.");
     }
 
 

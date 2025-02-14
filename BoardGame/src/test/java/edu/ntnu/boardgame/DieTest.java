@@ -39,5 +39,17 @@ public class DieTest {
         assertTrue(differentRollCount > 0, "Die should roll different values over multiple rolls.");
     }
 
+    @Test
+    void testInvalidDieCreation() {
+        assertThrows(IllegalArgumentException.class, () -> new Die(0), "Bør kaste exception for terning med 0 sider.");
+        assertThrows(IllegalArgumentException.class, () -> new Die(-3), "Bør kaste exception for negativt antall sider.");
+    }
+    
+    @Test
+    void testValidDieCreation() {
+        Die die = new Die(6);
+        assertEquals(6, die.sides, "Feil antall sider på terningen.");
+    }
+
     
 }
