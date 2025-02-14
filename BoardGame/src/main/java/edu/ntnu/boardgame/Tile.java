@@ -12,6 +12,9 @@ public class Tile {
     private final int position; //en tile burde være immutabel, posisjonen flyttes ikke på brettet --> bruker derfor final...
     
     public Tile(int position){
+        if (position <= 0) {
+        throw new IllegalArgumentException("Posisjonen må være et positivt tall.");
+    }
         this.position = position; 
     }
 

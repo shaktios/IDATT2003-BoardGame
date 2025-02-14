@@ -5,6 +5,9 @@ public class Dice extends Die {
 
     public Dice(int sides, int numberOfDice){
         super(sides);
+        if (numberOfDice < 1) {
+            throw new IllegalArgumentException("Det må være minst én terning.");
+        }
         this.numberOfDice = numberOfDice; 
     }
 

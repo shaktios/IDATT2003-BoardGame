@@ -10,6 +10,9 @@ public class Player {
     //private Tile currentTile ; // implementeres senere 
 
     public Player(String name /* , Tile startTile)*/){
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Spillernavnet kan ikke være tomt.");
+        }
         this.name = name; 
         //this.currentTile = startTile;
 
