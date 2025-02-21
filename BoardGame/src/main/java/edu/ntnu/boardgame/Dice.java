@@ -1,7 +1,8 @@
 package edu.ntnu.boardgame;
 
 public class Dice extends Die {
-    private int numberOfDice; 
+    private final int numberOfDice; 
+
 
     public Dice(int sides, int numberOfDice){
         super(sides);

@@ -4,13 +4,13 @@ import java.util.Random;
 
 
 public class Die {
-    protected int sides; 
+    protected final int sides; 
     protected int lastRolledValue; 
     private final Random random; 
 
     public Die(int sides){
-        if(sides<1 ){
-            throw new IllegalArgumentException("En terning må ha minst 1 side.");
+        if(sides<2 ){
+            throw new IllegalArgumentException("En terning må ha minst 2 sider.");
         }
         this.sides = sides; 
         this.random = new Random(); 
