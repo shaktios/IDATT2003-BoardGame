@@ -1,4 +1,5 @@
 edu/ntnu/boardgame/Boardgame.class
+edu/ntnu/boardgame/BoardgameApp.class
 edu/ntnu/boardgame/Dice.class
 edu/ntnu/boardgame/Die.class
 edu/ntnu/boardgame/App.class
