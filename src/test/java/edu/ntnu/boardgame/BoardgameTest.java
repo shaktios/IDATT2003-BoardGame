@@ -45,7 +45,9 @@ public class BoardgameTest {
     void testGetDice() {
         Dice dice = boardGame.getDice();
         assertNotNull(dice, "Dice-objektet burde ikke være null");
-        assertEquals(2, dice.roll(), "BoardGame burde bruke 2 terninger (hvis vi antar hver gir 1 som minimum)");
+
+        int rollResult = dice.roll();
+        assertTrue(rollResult >= 2 && rollResult <= 12, "Summen av to seks-sidede terninger burde være mellom 2 og 12");
     }
 
 
