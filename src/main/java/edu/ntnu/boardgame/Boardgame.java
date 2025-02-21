@@ -32,8 +32,9 @@ public class Boardgame {
             throw new IllegalArgumentException("Navnet kan ikke være tomt eller null");
         }
 
-        players.add(new Player(name));
-        System.out.println("Spiller " + name + " har blitt lagt til i spillet");
+        Tile startTile = board.getTile(1); 
+        players.add(new Player(name,startTile));
+        System.out.println("Spiller " + name + " har blitt lagt til i spillet på felt; " + startTile.getPosition());
     }
 
     public List<Player> getPlayers(){
