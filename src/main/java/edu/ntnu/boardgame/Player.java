@@ -9,6 +9,13 @@ public class Player {
   private String name; 
   private Tile currentTile; 
 
+  /*
+    * Constructor for the Player class.
+    * @param name The name of the player.
+    * @param startTile The tile the player starts on.
+    * @throws IllegalArgumentException if the name is null or empty, or if the startTile is null.
+    * 
+  */
   public Player(String name, Tile startTile) {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Spillernavnet kan ikke være tomt.");
@@ -21,14 +28,27 @@ public class Player {
     this.currentTile = startTile;
   }
 
+  /*
+    * @return The name of the player. 
+  */
   public String getName() {
     return name;
   }
-    
+  
+  /*
+    * @return The current tile the player is on.
+  */
   public Tile getCurrentTile() {
     return currentTile;
   } 
 
+  /*
+    * Moves the player a given number of steps on the board.
+    * @param steps The number of steps to move the player.
+    * @param board The board the player is moving on.
+    * @throws IllegalArgumentException if the number of steps is less than 1.
+    * 
+  */
   public void move(int steps, Board board){
     if (steps < 1) {
       throw new IllegalArgumentException("Spilleren må flytte seg minst ett steg.");
