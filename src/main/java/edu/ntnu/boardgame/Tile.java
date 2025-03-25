@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame;
 
+
 /* Representerer ett felt på spillbrettet. I denne mappen har vi sagt at felt skal henge etter hverandre.
 Derfor
 
@@ -11,11 +12,13 @@ Derfor
 
 public class Tile {
   private final int position; //en tile burde være immutabel, posisjonen flyttes ikke på brettet --> bruker derfor final...
+  private Tile nextTile;
     
   public Tile(int position) {
     if (position <= 0) {
     throw new IllegalArgumentException("Posisjonen må være et positivt tall.");
   }
+
     this.position = position; 
   }
 
@@ -23,6 +26,13 @@ public class Tile {
     return position; 
   }
 
+  public void setNextTile(Tile nextTile) {
+    this.nextTile = nextTile;
+}
+
+public Tile getNextTile() {
+    return this.nextTile;
+}
 
     
 }

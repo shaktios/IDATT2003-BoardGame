@@ -1,6 +1,7 @@
 edu/ntnu/boardgame/io/BoardFileReader.class
 edu/ntnu/boardgame/Boardgame.class
 edu/ntnu/boardgame/io/BoardFileWriterGson.class
+edu/ntnu/boardgame/BoardGameFactory.class
 edu/ntnu/boardgame/Die.class
 edu/ntnu/boardgame/App.class
 edu/ntnu/boardgame/Player.class
@@ -11,3 +12,4 @@ edu/ntnu/boardgame/io/BoardFileReaderGson.class
 edu/ntnu/boardgame/Board.class
 edu/ntnu/boardgame/io/BoardFileWriter.class
 edu/ntnu/boardgame/Tile.class
+edu/ntnu/boardgame/exceptions/InvalidBoardFileException.class
