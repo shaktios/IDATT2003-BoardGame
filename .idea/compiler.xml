@@ -6,8 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="idatt2003-boardgame" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="idatt2003-boardgame" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

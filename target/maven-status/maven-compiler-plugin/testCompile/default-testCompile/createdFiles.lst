@@ -1,7 +1,9 @@
 edu/ntnu/boardgame/BoardTest.class
 edu/ntnu/boardgame/DiceTest.class
-edu/ntnu/boardgame/TileTest.class
-edu/ntnu/boardgame/io/PlayerFileHandlerTest.class
 edu/ntnu/boardgame/PlayerTest.class
 edu/ntnu/boardgame/BoardgameTest.class
 edu/ntnu/boardgame/DieTest.class
+edu/ntnu/boardgame/io/BoardFileReaderGsonTest.class
+edu/ntnu/boardgame/io/BoardFileHandlerTest.class
+edu/ntnu/boardgame/TileTest.class
+edu/ntnu/boardgame/io/PlayerFileHandlerTest.class
