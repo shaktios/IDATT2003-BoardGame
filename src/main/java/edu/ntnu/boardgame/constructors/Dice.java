@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 
 
 

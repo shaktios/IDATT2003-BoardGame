@@ -1,5 +1,7 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Dice;
+
 /**
  *
  *

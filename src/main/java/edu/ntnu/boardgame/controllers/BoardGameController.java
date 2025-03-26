@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.controllers;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

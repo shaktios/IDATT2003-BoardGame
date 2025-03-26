@@ -2,6 +2,8 @@ package edu.ntnu.boardgame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import edu.ntnu.boardgame.constructors.Tile;
 import org.junit.jupiter.api.Test;
 
 public class BoardTest {

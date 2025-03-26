@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Die;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +49,8 @@ public class DieTest {
     @Test
     void testValidDieCreation() {
         Die die = new Die(6);
-        assertEquals(6, die.sides, "Feil antall sider på terningen.");
+        int side = die.getSides();
+        assertEquals(6, side, "Feil antall sider på terningen.");
     }
 
     

@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 
 
 /* Representerer ett felt på spillbrettet. I denne mappen har vi sagt at felt skal henge etter hverandre.

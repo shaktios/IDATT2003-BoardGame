@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Tile;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,7 +9,7 @@ public class TileTest {
     
     @Test
     void testTilePosition(){
-        Tile tile = new Tile(4); 
+        Tile tile = new Tile(4);
         assertEquals(4,tile.getPosition(), "Tile posisjonen er feil"); 
     }
 

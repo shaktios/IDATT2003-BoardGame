@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 
 import java.util.Random;
 
@@ -7,7 +7,7 @@ import java.util.Random;
  * 
  */
 public class Die {
-  protected final int sides; 
+  protected final int sides;
   protected int lastRolledValue; 
   private final Random random; 
 
@@ -22,6 +22,10 @@ public class Die {
     }
     this.sides = sides; 
     this.random = new Random(); 
+  }
+
+  public int getSides() {
+    return sides;
   }
 
   /*

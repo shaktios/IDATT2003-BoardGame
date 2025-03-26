@@ -1,6 +1,7 @@
 package edu.ntnu.boardgame;
 
 
+import edu.ntnu.boardgame.constructors.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

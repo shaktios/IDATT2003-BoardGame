@@ -1,6 +1,10 @@
 package edu.ntnu.boardgame;
 
 
+import edu.ntnu.boardgame.constructors.Dice;
+import edu.ntnu.boardgame.constructors.Player;
+import edu.ntnu.boardgame.constructors.Tile;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +38,7 @@ public class Boardgame {
       throw new IllegalArgumentException("Navnet kan ikke være tomt eller null.");
     }
 
-    Tile startTile = board.getTile(1); 
+    Tile startTile = board.getTile(1);
     players.add(new Player(name, startTile));
     System.out.println("Spiller " + name + " har blitt lagt til i spillet på felt " + startTile.getPosition());
   }

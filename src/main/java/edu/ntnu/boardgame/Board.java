@@ -1,5 +1,7 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Tile;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
     *
  */
 public class Board {
-  private final List<Tile> tiles; 
+  private final List<Tile> tiles;
   private final int size;
 
   /*
