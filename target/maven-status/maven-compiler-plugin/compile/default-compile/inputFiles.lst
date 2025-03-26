@@ -13,3 +13,5 @@
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/io/BoardFileWriter.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/io/BoardFileWriterGson.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/io/PlayerFileHandler.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/observer/BoardGameObserver.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/observer/TestObserver.java
