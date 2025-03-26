@@ -10,9 +10,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Tile;
+import edu.ntnu.boardgame.constructors.Tile;
 
-
+/*
+    * A class for writing a board to a file using the Gson library.
+ */
 public class BoardFileWriterGson implements BoardFileWriter{
 
 

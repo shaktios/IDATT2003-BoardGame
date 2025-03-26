@@ -10,9 +10,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Tile;
+import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 
+/*
+    * A class for reading a board from a file using the Gson library.
+ */
 public class BoardFileReaderGson implements BoardFileReader {
 
     @Override

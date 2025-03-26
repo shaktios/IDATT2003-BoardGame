@@ -1,11 +1,16 @@
 package edu.ntnu.boardgame.io;
 
-import edu.ntnu.boardgame.Player;
+import edu.ntnu.boardgame.constructors.Player;
 import java.io.*;
-import edu.ntnu.boardgame.Tile;
+import edu.ntnu.boardgame.constructors.Tile;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    * A class for reading and writing player data to and from a CSV file.
+    * The class has a method for reading player data from a CSV file.
+    * The class has a method for writing player data to a CSV file.
+ */
 public class PlayerFileHandler {
 
     public static List<Player> readFromCSV(File file) throws IOException {
