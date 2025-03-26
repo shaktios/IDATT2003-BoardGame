@@ -10,6 +10,10 @@ import java.util.List;
 
 import edu.ntnu.boardgame.observer.BoardGameObserver;
 
+/*
+    * A class representing a board game.
+    * The class has a constructor that takes a board, the number of dice and the number of sides per die as arguments.
+ */
 public class Boardgame {
 
   private final List<Player> players;
@@ -17,6 +21,13 @@ public class Boardgame {
   private final Board board;
   private final List<BoardGameObserver> observers = new ArrayList<>(); 
 
+  /*
+    * Constructor for the Boardgame class.
+    * @param board The board for the game.
+    * @param numDice The number of dice in the game.
+    * @param sidesPerDie The number of sides per die.
+    * @throws IllegalArgumentException if the board is null, the number of dice is less than 1 or the number of sides per die is less than 2.
+   */
   public Boardgame(Board board, int numDice, int sidesPerDie) {
     if (board == null) {
       throw new IllegalArgumentException("Board kan ikke være null");
@@ -33,6 +44,11 @@ public class Boardgame {
     this.dice = new Dice(sidesPerDie, numDice);
   }
 
+  /*
+    * Adds a player to the game.
+    * @param name The name of the player.
+    * @throws IllegalArgumentException if the name is null or empty.
+   */
   public void addPlayer(String name) {
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Navnet kan ikke være tomt eller null.");
@@ -43,34 +59,55 @@ public class Boardgame {
     System.out.println("Spiller " + name + " har blitt lagt til i spillet på felt " + startTile.getPosition());
   }
 
+  /*
+    * @return A list of the players in the game.
+   */
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
   }
 
+  /*
+    * @return The board for the game.
+   */
   public Dice getDice() {
     return dice;
   }
 
+  /*
+    * Registers an observer for the game.
+    * @param observer The observer to register.
+   */
     public void registerObserver(BoardGameObserver observer){
       if (observer != null && !observers.contains(observer)){
         observers.add(observer);
       }
     }
 
+    /*
+    * Unregisters an observer for the game.
+    * @param observer The observer to unregister.
+     */
     public void notifyPlayerMoved(Player player){
       for(BoardGameObserver observer : observers){
         observer.onPlayerMove(player);
       }
     }
 
+    /*
+    * Notifies the observers that a player has moved.
+    * @param player The player that has moved.
+     */
     public void notifyGameWon(Player player){
       for(BoardGameObserver observer : observers){
         observer.onGameWon(player);
       }
     }
 
-
-
+  /*
+    * Starts the game.
+    * The players take turns rolling the dice and moving on the board.
+    * The game ends when a player reaches the last tile on the board.
+   */
   public void playGame() {
     System.out.println("\nThe following players are playing the game:");
     for (Player player : players) {

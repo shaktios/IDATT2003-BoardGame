@@ -9,7 +9,10 @@ import edu.ntnu.boardgame.io.BoardFileReaderGson;
 import java.io.IOException;
 import java.nio.file.Path;
 
-
+/*
+    * A factory class for creating different types of board games.
+    *
+ */
 public class BoardGameFactory {
 
     // 1. Klassisk brettspill med stiger og slanger
