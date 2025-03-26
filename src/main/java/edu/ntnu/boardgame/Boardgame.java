@@ -4,11 +4,14 @@ package edu.ntnu.boardgame;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ntnu.boardgame.observer.BoardGameObserver;
+
 public class Boardgame {
 
   private final List<Player> players;
   private final Dice dice;
   private final Board board;
+  private final List<BoardGameObserver> observers = new ArrayList<>(); 
 
   public Boardgame(Board board, int numDice, int sidesPerDie) {
     if (board == null) {
@@ -44,6 +47,26 @@ public class Boardgame {
     return dice;
   }
 
+    public void registerObserver(BoardGameObserver observer){
+      if (observer != null && !observers.contains(observer)){
+        observers.add(observer);
+      }
+    }
+
+    public void notifyPlayerMoved(Player player){
+      for(BoardGameObserver observer : observers){
+        observer.onPlayerMove(player);
+      }
+    }
+
+    public void notifyGameWon(Player player){
+      for(BoardGameObserver observer : observers){
+        observer.onGameWon(player);
+      }
+    }
+
+
+
   public void playGame() {
     System.out.println("\nThe following players are playing the game:");
     for (Player player : players) {
@@ -60,9 +83,11 @@ public class Boardgame {
       for (Player player : players) {
         int roll = dice.roll();
         player.move(roll, board);
+        notifyPlayerMoved(player);
         System.out.println("Player " + player.getName() + " on tile " + player.getCurrentTile().getPosition());
 
         if (player.getCurrentTile().getPosition() == board.getSize()) {
+          notifyGameWon(player);
           System.out.println("\nAnd the winner is: " + player.getName() + "!");
           gameOver = true;
           break;

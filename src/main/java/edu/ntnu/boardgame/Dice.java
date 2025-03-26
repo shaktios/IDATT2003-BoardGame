@@ -1,6 +1,6 @@
 package edu.ntnu.boardgame;
 
-import java.util.List;
+
 
 /*
  * A class representing a set of dice.
