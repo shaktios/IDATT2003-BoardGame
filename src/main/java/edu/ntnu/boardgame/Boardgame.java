@@ -4,12 +4,27 @@ package edu.ntnu.boardgame;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    * A class representing a board game.
+    * The class has a constructor that takes a board, the number of dice and the number of sides per die as arguments.
+    * The class has a method that adds a player to the game.
+    * The class has a method that returns the players in the game.
+    * The class has a method that returns the dice in the game.
+    * The class has a method that plays the game.
+ */
 public class Boardgame {
 
   private final List<Player> players;
   private final Dice dice;
   private final Board board;
 
+  /*
+    * Constructor for the Boardgame class.
+    * @param board The board in the game.
+    * @param numDice The number of dice in the game.
+    * @param sidesPerDie The number of sides per die.
+    * @throws IllegalArgumentException if the board is null, the number of dice is less than 1 or the number of sides per die is less than 2.
+   */
   public Boardgame(Board board, int numDice, int sidesPerDie) {
     if (board == null) {
       throw new IllegalArgumentException("Board kan ikke være null");
@@ -26,6 +41,11 @@ public class Boardgame {
     this.dice = new Dice(sidesPerDie, numDice);
   }
 
+  /*
+    * Adds a player to the game.
+    * @param name The name of the player.
+    * @throws IllegalArgumentException if the name is null or empty.
+   */
   public void addPlayer(String name) {
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Navnet kan ikke være tomt eller null.");
@@ -36,14 +56,25 @@ public class Boardgame {
     System.out.println("Spiller " + name + " har blitt lagt til i spillet på felt " + startTile.getPosition());
   }
 
+  /*
+    * Returns the players in the game.
+    * @return The players in the game.
+   */
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
   }
 
+  /*
+    * Returns the dice in the game.
+    * @return The dice in the game.
+   */
   public Dice getDice() {
     return dice;
   }
 
+  /*
+    * Plays the game.
+   */
   public void playGame() {
     System.out.println("\nThe following players are playing the game:");
     for (Player player : players) {

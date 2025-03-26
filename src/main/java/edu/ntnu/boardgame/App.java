@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame;
 
 /**
- * Hello world!
+ *
  *
  */
 public class App {
