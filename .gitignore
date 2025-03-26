@@ -1,1 +1,35 @@
-BoardGame/target/
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Build
+/out/
+target/
+bin/
+
+# Logs
+*.log
+
+# OS-filer
+.DS_Store
+Thumbs.db
+
+# Maven
+dependency-reduced-pom.xml
+release.properties
+rebel.xml
+
+# Backup
+*.class
+*.swp
+*.swo
+*~
+
+# Test outputs
+/test-output/
+

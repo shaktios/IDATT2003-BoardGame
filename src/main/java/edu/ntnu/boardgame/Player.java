@@ -7,7 +7,8 @@ siste felt eller passerer siste felt, har spilleren nådd slutten av spillet (m�
 
 public class Player {
   private String name; 
-  private Tile currentTile; 
+  private Tile currentTile;
+  private String token;
 
   /*
     * Constructor for the Player class.
@@ -62,4 +63,18 @@ public class Player {
       System.out.println(name + " flyttet til felt " + newPosition);
     }
   }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    if(token == null || token.trim().isEmpty()) {
+      throw new IllegalArgumentException("Token/brikke kan ikke være tom");
+    }
+    this.token = token;
+  }
+
+
+
 }

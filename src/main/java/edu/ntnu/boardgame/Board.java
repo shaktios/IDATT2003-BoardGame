@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Board {
   private final List<Tile> tiles; 
+  private final int size;
 
   /*
     * Constructor for the Board class.
@@ -23,6 +24,8 @@ public class Board {
     }
 
     this.tiles = new ArrayList<>(); 
+    this.size = size; 
+
     for (int i = 1; i <= size; i++) {
       tiles.add(new Tile(i)); 
     }
@@ -48,6 +51,15 @@ public class Board {
   public int getSize() {
     return tiles.size();
   }
+
+
+  //metode for å sette fra en tile til en annen tile
+  public void setNextTile(int from, int to) {
+    if (from < 1 || from > size || to < 1 || to > size) {
+        throw new IllegalArgumentException("Ugyldig posisjon: " + from + " -> " + to);
+    }
+    tiles.get(from - 1).setNextTile(tiles.get(to - 1));
+}
 
     
 }

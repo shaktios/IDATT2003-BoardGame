@@ -1,5 +1,7 @@
 package edu.ntnu.boardgame;
 
+
+
 /*
  * A class representing a set of dice.
  * The class extends the Die class.
@@ -37,4 +39,13 @@ public class Dice extends Die {
     }
     return sum; 
   }
+
+  public int getNumSides() {
+    return sides;
+}
+
+public int getNumberOfDice() {
+    return numberOfDice;
+  }
+
 }
