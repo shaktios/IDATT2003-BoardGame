@@ -9,3 +9,4 @@
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/test/java/edu/ntnu/boardgame/io/BoardFileHandlerTest.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/test/java/edu/ntnu/boardgame/io/BoardFileReaderGsonTest.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/test/java/edu/ntnu/boardgame/io/PlayerFileHandlerTest.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/test/java/edu/ntnu/boardgame/io/TileCoordinatesJsonTest.java

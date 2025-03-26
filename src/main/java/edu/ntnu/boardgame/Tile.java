@@ -12,6 +12,8 @@ Derfor
 
 public class Tile {
   private final int position; //en tile burde være immutabel, posisjonen flyttes ikke på brettet --> bruker derfor final...
+  private int x = -1;
+  private int y = -1;
   private Tile nextTile;
     
   public Tile(int position) {
@@ -20,6 +22,22 @@ public class Tile {
   }
 
     this.position = position; 
+  }
+
+  public void setX(int x){
+    this.x = x;
+  }
+
+  public void setY(int y) {
+    this.y = y;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public int getY() {
+    return y;
   }
 
   public int getPosition() {

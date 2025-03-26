@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 
 public class BoardFileReaderGson implements BoardFileReader {
@@ -28,6 +29,18 @@ public class BoardFileReaderGson implements BoardFileReader {
                     JsonObject tileObj = tilesArray.get(i).getAsJsonObject();
                     int position = tileObj.get("position").getAsInt();
                     board.getTile(position); // Gjenbruker eksisterende tile
+
+                    Tile tile = board.getTile(position);
+
+                    if(tileObj.has("x")){
+                        tile.setX(tileObj.get("x").getAsInt()); 
+                    }
+
+                    if (tileObj.has("y")) {
+                        tile.setY(tileObj.get("y").getAsInt());
+                    }
+
+                    
                 }
             }
 
