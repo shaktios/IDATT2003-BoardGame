@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Tile;
+import edu.ntnu.boardgame.constructors.Tile;
 
 public class TileCoordinatesJsonTest {
     @Test

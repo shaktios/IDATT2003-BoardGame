@@ -3,10 +3,11 @@
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/BoardGameFactory.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/Boardgame.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/BoardgameApp.java
-/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/Dice.java
-/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/Die.java
-/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/Player.java
-/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/Tile.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/constructors/Dice.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/constructors/Die.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/constructors/Player.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/constructors/Tile.java
+/Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/controllers/BoardGameController.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/exceptions/InvalidBoardFileException.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/io/BoardFileReader.java
 /Users/shaktiomsharma/IDATT2003-Sluttvurdering/src/main/java/edu/ntnu/boardgame/io/BoardFileReaderGson.java
