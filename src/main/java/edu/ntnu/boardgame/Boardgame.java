@@ -1,13 +1,12 @@
 package edu.ntnu.boardgame;
 
 
-import edu.ntnu.boardgame.constructors.Dice;
-import edu.ntnu.boardgame.constructors.Player;
-import edu.ntnu.boardgame.constructors.Tile;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ntnu.boardgame.constructors.Dice;
+import edu.ntnu.boardgame.constructors.Player;
+import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
 
 /*
@@ -101,6 +100,36 @@ public class Boardgame {
       for(BoardGameObserver observer : observers){
         observer.onGameWon(player);
       }
+    }
+
+
+    /**
+     * Adds an already constructed Player object to the game.
+     * <p>
+     * This method is typically used when Player instances are created
+     * externally, such as through a graphical user interface where players
+     * provide names and tokens.
+     *
+     * @param player the Player object to be added to the game
+     * @throws IllegalArgumentException if the provided Player is null
+     */
+    public void addExistingPlayer(Player player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Spiller kan ikke være null.");
+        }
+        players.add(player);
+        System.out.println("Spiller " + player.getName() + " har blitt lagt til manuelt.");
+    }
+
+
+
+    /**
+     * Returns the game board.
+     *
+     * @return the Board object used in the game
+     */
+    public Board getBoard() {
+        return this.board;
     }
 
   /*
