@@ -33,9 +33,6 @@ public class StartScreen {
         Label titleLabel = new Label("Velkommen til Brettspillet"); 
         root.getChildren().add(titleLabel); 
 
-      
-
-
         //combobox for å velge spillvariant 
         gameSelector = new ComboBox<>(); 
         gameSelector.getItems().addAll("Classic", "Mini", "Fra JSON-fil"); 
@@ -54,6 +51,14 @@ public class StartScreen {
 
             String choosenGame = gameSelector.getValue(); 
             int amountOfPlayers = playerCountSpinner.getValue(); 
+
+            if (!InputValidator.isPlayerCountValid(amountOfPlayers)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Ugyldig antall spillere");
+                alert.setHeaderText("Du må velge mellom 1 og 5 spillere");
+                alert.showAndWait();
+                return;
+            }
 
             System.out.println("Valgt spill: " + choosenGame);
             System.out.println("Antall spillere: " + amountOfPlayers);
@@ -83,11 +88,27 @@ public class StartScreen {
 
             Button startGameButton = new Button("Start spill");
             startGameButton.setOnAction(event -> {
-                
+
                 if (!InputValidator.areAllFieldsFilled(playerNameFields)) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Ugyldig navn");
                     alert.setHeaderText("Alle spillere må skrive inn et navn");
+                    alert.showAndWait();
+                    return;
+                }
+
+                if (!InputValidator.areNamesUnique(playerNameFields)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Duplikatnavn");
+                    alert.setHeaderText("Alle spillere må ha unike navn");
+                    alert.showAndWait();
+                    return;
+                }
+
+                if (!InputValidator.areTokensUnique(playerTokenChoices)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Duplikat-token");
+                    alert.setHeaderText("Alle spillere må velge en unik brikke");
                     alert.showAndWait();
                     return;
                 }
