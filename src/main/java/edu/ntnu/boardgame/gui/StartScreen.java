@@ -3,7 +3,9 @@ package edu.ntnu.boardgame.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ntnu.boardgame.utils.InputValidator;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -78,6 +80,25 @@ public class StartScreen {
                 root.getChildren().addAll(playerNumberLabel, textField, tokenOptions);
                 
             }
+
+            Button startGameButton = new Button("Start spill");
+            startGameButton.setOnAction(event -> {
+                
+                if (!InputValidator.areAllFieldsFilled(playerNameFields)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Ugyldig navn");
+                    alert.setHeaderText("Alle spillere må skrive inn et navn");
+                    alert.showAndWait();
+                    return;
+                }
+
+                for (int i = 0; i < playerNameFields.size(); i++) {
+                    String navn = playerNameFields.get(i).getText();
+                    String token = playerTokenChoices.get(i).getValue();
+                    System.out.println("Spiller " + (i + 1) + ": " + navn + " med brikke: " + token);
+                }
+
+            }); 
 
 
             for (TextField field : playerNameFields) {
