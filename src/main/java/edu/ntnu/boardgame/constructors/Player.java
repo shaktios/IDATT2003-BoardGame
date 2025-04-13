@@ -12,6 +12,7 @@ public class Player {
   private Tile currentTile;
   private String token;
 
+
   /*
     * Constructor for the Player class.
     * @param name The name of the player.
@@ -24,7 +25,7 @@ public class Player {
       throw new IllegalArgumentException("Spillernavnet kan ikke være tomt.");
     }
     if (startTile == null) { 
-      throw new IllegalArgumentException("Startfelt kan ikke være null.");
+      throw new IllegalArgumentException("Startfelt kan ikke være tomt/Null(null ≠ tallverdien).");
     }
         
     this.name = name; 
@@ -66,16 +67,76 @@ public class Player {
     }
   }
 
+
+    /**
+     * Returns the token (piece) representing the player on the board.
+     *
+     * @return the player's token as a String
+     */
+
   public String getToken() {
     return token;
   }
 
+
+    /**
+     * Sets the player's token.
+     *
+     * @param token the new token to assign to the player
+     * @throws IllegalArgumentException if the token is null or blank
+     */
   public void setToken(String token) {
     if(token == null || token.trim().isEmpty()) {
       throw new IllegalArgumentException("Token/brikke kan ikke være tom");
     }
     this.token = token;
   }
+
+
+
+    /**
+     * Returns the current position of the player based on their tile.
+     *
+     * @return the position number of the tile the player is on
+     */
+    public int getPosition() {
+        return currentTile.getPosition();
+    }
+
+
+
+    /**
+     * Sets the player's position to a specific tile on the board.
+     * @param position the new target position to place the player on (must be
+     * within board limits)
+     * @param board the game board used to retrieve the tile corresponding to
+     * the position
+     * @throws IllegalArgumentException if the position is outside the board
+     * range
+     */
+
+    public void setPosition(int position, Board board){
+
+      if(position<1 || position > board.getSize()){
+          throw new IllegalArgumentException("Ugyldig posisjon: " + position);
+      }
+
+      this.currentTile = board.getTile(position);
+    }
+
+
+    /**
+     * Sets the current tile of the player directly.
+     *
+     * @param tile the tile to set as the player's current tile
+     * @throws IllegalArgumentException if the tile is null
+     */
+    public void setCurrentTile(Tile tile) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile kan ikke være null.");
+        }
+        this.currentTile = tile;
+    }
 
 
 
