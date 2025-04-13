@@ -170,6 +170,10 @@ public class StartScreen {
                     System.out.println("Spiller " + (i + 1) + ": " + name + " med brikke: " + token);
                 }
 
+                GameScreen gameScreen = new GameScreen();
+                stage.setScene(gameScreen.getScene(stage, boardgame));
+
+
             }); 
 
 

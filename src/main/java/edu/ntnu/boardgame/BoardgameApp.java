@@ -1,21 +1,21 @@
 package edu.ntnu.boardgame;
 
-public class BoardgameApp {
+import edu.ntnu.boardgame.gui.StartScreen;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class BoardgameApp extends Application {
 
     public static void main(String[] args) {
-        Board board = new Board(90); // Oppretter et brett med 90 felter
-        Boardgame game = new Boardgame(board, 2, 6); // To terninger, 6 sider hver
-
-        game.addPlayer("A");
-        game.addPlayer("B");
-        game.addPlayer("C");
-        game.addPlayer("D");
-
-        game.playGame(); // Starter spillet
+        launch(args); // starter JavaFX
     }
-    
 
-
-
-    
+    @Override
+    public void start(Stage primaryStage) {
+        // opprett StartScreen og vis den
+        StartScreen startScreen = new StartScreen();
+        primaryStage.setScene(startScreen.getScene(primaryStage));
+        primaryStage.setTitle("Boardgame");
+        primaryStage.show();
+    }
 }

@@ -23,6 +23,8 @@ Thumbs.db
 dependency-reduced-pom.xml
 release.properties
 rebel.xml
+target/
+
 
 # Backup
 *.class
