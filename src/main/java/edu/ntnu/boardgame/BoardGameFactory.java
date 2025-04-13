@@ -25,11 +25,10 @@ public class BoardGameFactory {
         board.setNextTile(21, 42);
         board.setNextTile(28, 84);
         board.setNextTile(51, 67);
-        board.setNextTile(72, 91);
+        board.setNextTile(72, 83);
 
         // Slanger
-        board.setNextTile(98, 78);
-        board.setNextTile(95, 75);
+        board.setNextTile(89, 63);
         board.setNextTile(87, 24);
         board.setNextTile(62, 19);
         board.setNextTile(36, 6);

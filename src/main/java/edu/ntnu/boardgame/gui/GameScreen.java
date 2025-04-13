@@ -41,6 +41,8 @@ public class GameScreen {
 
             StackPane cell = new StackPane();
             Rectangle bg = new Rectangle(50, 50);
+            bg.setStyle("-fx-stroke: black; -fx-fill: white;");
+            
             Label label = new Label(String.valueOf(pos));
 
             cell.getChildren().addAll(bg, label);

@@ -23,7 +23,10 @@ public class BoardFileReaderGson implements BoardFileReader {
         try (FileReader reader = new FileReader(path.toFile())) {
             JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
             int size = root.get("size").getAsInt();
-            Board board = new Board(size);
+            int rows = root.get("rows").getAsInt();
+            int columns = root.get("columns").getAsInt();
+
+            Board board = new Board(rows,columns);
 
             if (root.has("tiles")) {
                 JsonArray tilesArray = root.getAsJsonArray("tiles");
