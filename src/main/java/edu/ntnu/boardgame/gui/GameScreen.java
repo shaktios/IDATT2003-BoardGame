@@ -1,13 +1,15 @@
 package edu.ntnu.boardgame.gui;
 
+import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.constructors.Tile;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
+import javafx.stage.Stage; 
 
 
 
@@ -25,21 +27,24 @@ public class GameScreen {
 
         gridPane.setPadding(new Insets(10, 10, 10, 10));
 
-        int antallRader = 10;
-        int antallKolonner = 9;
 
-        for (int row = 0; row < antallRader ;row++) {
-            for (int col = 0; col < antallKolonner; col++) {
-                StackPane tile = new StackPane(); 
-                Rectangle bg = new Rectangle(50, 50); 
-                Label number = new Label("7"); 
+        Board board = boardgame.getBoard();
+        int rows = board.getRows(); 
+        int cols = board.getColumns();
+    
 
+        for (int pos = 1; pos <= board.getSize(); pos++) {
+            Tile tile = board.getTile(pos);
 
-                tile.getChildren().addAll(bg, number);
-                gridPane.add(tile, col, row);
-                
-            }
-            
+            int rowIndex = (rows * cols - pos) / cols;
+            int colIndex = (pos - 1) % cols;
+
+            StackPane cell = new StackPane();
+            Rectangle bg = new Rectangle(50, 50);
+            Label label = new Label(String.valueOf(pos));
+
+            cell.getChildren().addAll(bg, label);
+            gridPane.add(cell, colIndex, rowIndex);
         }
 
 

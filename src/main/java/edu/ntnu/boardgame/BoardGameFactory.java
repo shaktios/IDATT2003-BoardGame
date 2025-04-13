@@ -2,12 +2,12 @@ package edu.ntnu.boardgame;
 
 
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 /*
     * A factory class for creating different types of board games.
@@ -17,7 +17,7 @@ public class BoardGameFactory {
 
     // 1. Klassisk brettspill med stiger og slanger
     public static Boardgame createClassicGame() {
-        Board board = new Board(100);
+        Board board = new Board(10,9);
 
         // Stiger
         board.setNextTile(4, 14);
@@ -39,7 +39,7 @@ public class BoardGameFactory {
 
     // 2. Kort variant for testing/demonstrasjon
     public static Boardgame createMiniGame() {
-        Board board = new Board(20);
+        Board board = new Board(10,2);
         board.setNextTile(3, 10);
         board.setNextTile(15, 5);
 
