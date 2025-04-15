@@ -1,6 +1,8 @@
 package edu.ntnu.boardgame.gui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
@@ -10,137 +12,132 @@ import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage; 
-
-
-
-
-
+import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class GameScreen {
 
+    private static final int TILE_SIZE = 50;
 
-    private int currentPlayerIndex = 0; 
-    private List<Player> players; 
-    private Board board; 
-    private Label currentPlayerLabel = new Label(); // Viser hvem sin tur det er
+    private int currentPlayerIndex = 0;
+    private List<Player> players;
+    private Board board;
+    private Label currentPlayerLabel = new Label("Spillet starter!");
+    private Canvas canvas;
 
+    private Map<String, Image> playerTokens = new HashMap<>();
 
-    public List <Player> getPlayers(){
-        return players; 
-    }
-
-    public Board getBoard(){
-        return board; 
-    }
-
-    
-
-    public Scene getScene(Stage stage, Boardgame boardgame){
-
+    public Scene getScene(Stage stage, Boardgame boardgame) {
         boardgame.registerObserver(new GameObserver());
-        this.players = boardgame.getPlayers(); 
-        this.board = boardgame.getBoard(); 
-        GridPane gridPane = new GridPane();
 
-        gridPane.setMinSize(400, 200);
+        this.players = boardgame.getPlayers();
+        this.board = boardgame.getBoard();
 
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        int canvasWidth = board.getColumns() * TILE_SIZE;
+        int canvasHeight = board.getRows() * TILE_SIZE;
+        canvas = new Canvas(canvasWidth, canvasHeight);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
 
-    
-
-        Board board = boardgame.getBoard();
-        int rows = board.getRows(); 
-        int cols = board.getColumns();
-
-        for (int pos = 1; pos <= board.getSize(); pos++) {
-            Tile tile = board.getTile(pos);
-
-            int rowIndex = (rows * cols - pos) / cols;
-            int colIndex = (pos - 1) % cols;
-
-            StackPane cell = new StackPane();
-            Rectangle bg = new Rectangle(50, 50);
-            bg.setStyle("-fx-stroke: black; -fx-fill: white;");
-
-            Label label = new Label(String.valueOf(pos));
-
-            cell.getChildren().addAll(bg, label);
-            gridPane.add(cell, colIndex, rowIndex);
+        // laster inn spillerbrikkerbilder 
+        for (Player player : players) {
+            String token = player.getToken(); // f.eks. "Horse", "Queen" osv.
+            Image tokenImage = new Image(getClass().getResourceAsStream("/images/" + token + ".png"));
+            playerTokens.put(player.getName(), tokenImage);
         }
 
 
-        Button throwDiceButton = new Button("Kast Terningen");
+        // Tegn brett og brikker første gang
+        drawBoard(gc);
 
+        // Kast terning knapp
+        Button throwDiceButton = new Button("Kast Terning");
         throwDiceButton.setOnAction(event -> {
-
             Player player = players.get(currentPlayerIndex);
-            Dice dice = new Dice(6,1); // Lager et terningobjekt
-            int roll = dice.roll(); //bruker logikk som vi har lagd fra før av
-            int newPosition = player.getPosition() + roll; 
-        
-            if (newPosition > board.getSize()){
-                newPosition = board.getSize(); //stopper på siste tile. 
+            Dice dice = new Dice(6, 1);
+            int roll = dice.roll();
+
+            int newPosition = player.getPosition() + roll;
+            if (newPosition > board.getSize()) {
+                newPosition = board.getSize();
             }
 
-            player.setPosition(newPosition,board); 
+            player.setPosition(newPosition, board);
             Tile newTile = board.getTile(newPosition);
             player.setCurrentTile(newTile);
 
-            if(newPosition == board.getSize()){
-               boardgame.notifyGameWon(player); //observerklassen, at en spiller har vunnet... 
+            if (newPosition == board.getSize()) {
+                boardgame.notifyGameWon(player);
             }
 
-            boardgame.notifyPlayerMoved(player); //observerklassen, at en spiller har bevegd på seg...
-
-            currentPlayerLabel.setText(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
-
-            // TODO: oppdater GUI-visningen av brikker
-
-
+            boardgame.notifyPlayerMoved(player);
         });
 
+        // Neste tur knapp
         Button nextTurnButton = new Button("Neste tur");
-
         nextTurnButton.setOnAction(event -> {
-
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); 
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             Player nextPlayer = players.get(currentPlayerIndex);
             currentPlayerLabel.setText("Spiller sin tur: " + nextPlayer.getName());
-
         });
 
+        // Layout
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.getChildren().addAll(canvas, currentPlayerLabel, throwDiceButton, nextTurnButton);
 
-        gridPane.add(currentPlayerLabel, 0, rows + 1, cols, 1);
-        gridPane.add(throwDiceButton, 0, rows + 2, cols / 2, 1);
-        gridPane.add(nextTurnButton, cols / 2, rows + 2, cols / 2, 1);
-        
-        return new Scene(gridPane, 800, 600); 
+        return new Scene(layout, canvasWidth + 20, canvasHeight + 120);
     }
 
+    private void drawBoard(GraphicsContext gc) {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-    private class GameObserver implements BoardGameObserver{
+        int cols = board.getColumns();
+        int rows = board.getRows();
+
+        // Tegn ruter
+        for (int pos = 1; pos <= board.getSize(); pos++) {
+            int rowIndex = (rows * cols - pos) / cols;
+            int colIndex = (pos - 1) % cols;
+
+            double x = colIndex * TILE_SIZE;
+            double y = rowIndex * TILE_SIZE;
+
+            gc.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+            gc.strokeText(String.valueOf(pos), x + 5, y + 15);
+        }
+
+        // Tegn spillere
+        for (Player player : players) {
+            int pos = player.getPosition();
+            int rowIndex = (rows * cols - pos) / cols;
+            int colIndex = (pos - 1) % cols;
+
+            double x = colIndex * TILE_SIZE;
+            double y = rowIndex * TILE_SIZE;
+
+            Image tokenImage = playerTokens.get(player.getName());
+            if (tokenImage != null) {
+                gc.drawImage(tokenImage, x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+            }
+        }
+    }
+
+    private class GameObserver implements BoardGameObserver {
+
         @Override
-        public void onPlayerMove(Player player){
-            currentPlayerLabel.setText(player.getName()+ " flyttet til rute " + player.getPosition());
-            //TODO: oppdater brikkevisning...
+        public void onPlayerMove(Player player) {
+            currentPlayerLabel.setText(player.getName() + " flyttet til rute " + player.getPosition());
+            drawBoard(canvas.getGraphicsContext2D());
         }
 
         @Override
-        public void onGameWon(Player winner){
-            currentPlayerLabel.setText(winner.getName() + " vant spillet "); 
-            // TODO: kanskje få med en popup???
+        public void onGameWon(Player winner) {
+            currentPlayerLabel.setText(winner.getName() + " vant spillet!");
         }
-
-
-
     }
-
-
-    
 }

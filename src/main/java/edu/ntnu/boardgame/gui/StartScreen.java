@@ -116,8 +116,8 @@ public class StartScreen {
                 playerNameFields.add(nameField);
 
                 ComboBox<String> tokenChoice = new ComboBox<>();
-                tokenChoice.getItems().addAll("RaceCar", "Hat", "Dog", "Cat");
-                tokenChoice.setValue("RaceCar");
+                tokenChoice.getItems().addAll("Bishop", "Horse", "Pawn", "Queen", "Rook");
+                tokenChoice.setValue("Bishop");
                 playerTokenChoices.add(tokenChoice);
 
                 root.getChildren().addAll(playerNumberLabel, nameField, tokenChoice);
