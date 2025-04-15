@@ -3,7 +3,9 @@ package edu.ntnu.boardgame.gui;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import edu.ntnu.boardgame.App;
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.constructors.Dice;
@@ -14,7 +16,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -30,6 +34,9 @@ public class GameScreen {
     private Label currentPlayerLabel = new Label("Spillet starter!");
     private Canvas canvas;
 
+    private Button throwDiceButton;
+    private Button nextTurnButton;
+
     private Map<String, Image> playerTokens = new HashMap<>();
 
     public Scene getScene(Stage stage, Boardgame boardgame) {
@@ -37,6 +44,9 @@ public class GameScreen {
 
         this.players = boardgame.getPlayers();
         this.board = boardgame.getBoard();
+
+        throwDiceButton = new Button("Kast Terning");
+        nextTurnButton = new Button("Neste tur");
 
         int canvasWidth = board.getColumns() * TILE_SIZE;
         int canvasHeight = board.getRows() * TILE_SIZE;
@@ -55,7 +65,7 @@ public class GameScreen {
         drawBoard(gc);
 
         // Kast terning knapp
-        Button throwDiceButton = new Button("Kast Terning");
+        throwDiceButton.setDisable(false);
         throwDiceButton.setOnAction(event -> {
             Player player = players.get(currentPlayerIndex);
             Dice dice = new Dice(6, 1);
@@ -75,14 +85,22 @@ public class GameScreen {
             }
 
             boardgame.notifyPlayerMoved(player);
+
+            throwDiceButton.setDisable(true);      // spiller har kastet, disable
+            nextTurnButton.setDisable(false);      // neste spiller kan klikkes
         });
 
         // Neste tur knapp
-        Button nextTurnButton = new Button("Neste tur");
+        throwDiceButton.setDisable(false); // kun aktiv spiller får kaste i starten
+        nextTurnButton.setDisable(true);   // skal være deaktivert i starten
         nextTurnButton.setOnAction(event -> {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             Player nextPlayer = players.get(currentPlayerIndex);
             currentPlayerLabel.setText("Spiller sin tur: " + nextPlayer.getName());
+
+            throwDiceButton.setDisable(false);     // ny spiller får kaste
+            nextTurnButton.setDisable(true);       // disable til kastet er gjort
+
         });
 
         // Layout
@@ -138,6 +156,8 @@ public class GameScreen {
         @Override
         public void onGameWon(Player winner) {
             currentPlayerLabel.setText(winner.getName() + " vant spillet!");
+            throwDiceButton.setDisable(true);
+            nextTurnButton.setDisable(true);
         }
     }
 }
