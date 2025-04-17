@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -198,8 +199,18 @@ public class GameScreen {
         @Override
         public void onGameWon(Player winner) {
             currentPlayerLabel.setText(winner.getName() + " vant spillet!");
-            throwDiceButton.setDisable(true);
-            nextTurnButton.setDisable(true);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Spillet er ferdig");
+            alert.setHeaderText(winner.getName() + " har vunnet spillet!");
+            alert.setContentText("Du sendes tilbake til startskjermen.");
+
+            alert.showAndWait(); //  viser popup
+
+            // Restart til StartScreen 
+            StartScreen startScreen = new StartScreen();
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            stage.setScene(startScreen.getScene(stage));
         }
     }
 }
