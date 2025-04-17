@@ -10,6 +10,7 @@ import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,6 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 
 public class GameScreen {
 
@@ -76,35 +79,43 @@ public class GameScreen {
             Tile newTile = board.getTile(newPosition);
             player.setCurrentTile(newTile);
 
-            //sjekker om tilen den lander på har en action eller ikke... 
             if (newTile.getAction() != null) {
-                newTile.executeAction(player, board);  // utfør stige/slangehandlingen
+            String actionType = newTile.getAction().getClass().getSimpleName();
+            String actionText = "";
 
-                String actionType = newTile.getAction().getClass().getSimpleName();
-                String actionText = "";
-
-                if (actionType.equals("LadderAction")) {
-                    actionText = "brukte en stige";
-                } else if (actionType.equals("BackAction")) {
-                    actionText = "traff en slange";
-                } else {
-                    actionText = "ble påvirket av en handling";
-                }
-
-                currentPlayerLabel.setText(player.getName() + " kastet " + roll
-                        + ", landet på rute " + newPosition + " og " + actionText
-                        + " til rute " + player.getPosition());
+            if (actionType.equals("LadderAction")) {
+                actionText = "brukte en stige";
+            } else if (actionType.equals("BackAction")) {
+                actionText = "traff en slange";
             } else {
-                currentPlayerLabel.setText(player.getName() + " kastet " + roll
-                        + " og flyttet til rute " + newPosition);
+                actionText = "ble påvirket av en handling";
             }
+
+            currentPlayerLabel.setText(player.getName() + " landet på rute " + newPosition +
+                    " og " + actionText + "...");
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(e -> {
+                newTile.executeAction(player, board);
+                boardgame.notifyPlayerMoved(player);
+                drawBoard(canvas.getGraphicsContext2D());
+
+                // Oppdater tekst etter handling
+                currentPlayerLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+            });
+            
+            pause.play();
+        } else {
+            currentPlayerLabel.setText(player.getName() + " kastet " + roll +
+                    " og flyttet til rute " + newPosition);
+            boardgame.notifyPlayerMoved(player);
+        }
 
             //sjekk om en spiller har vunnet... 
             if (newPosition == board.getSize()) {
                 boardgame.notifyGameWon(player);
             }
 
-            boardgame.notifyPlayerMoved(player);
 
             throwDiceButton.setDisable(true);      // spiller har kastet, disable
             nextTurnButton.setDisable(false);      // neste spiller kan klikkes

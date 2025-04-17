@@ -24,8 +24,12 @@ public class BoardGameFactory {
 
 
         //Stiger
+        board.getTile(2).setAction(new LadderAction(22));
         board.getTile(3).setAction(new LadderAction(22));   // Tidlig stige
-        board.getTile(8).setAction(new LadderAction(26));   // Tidlig stige
+        board.getTile(4).setAction(new LadderAction(22)); 
+        board.getTile(5).setAction(new LadderAction(22));
+        board.getTile(6).setAction(new LadderAction(22));    // Tidlig stige
+        board.getTile(7).setAction(new LadderAction(26));   // Tidlig stige(skal egt være 8)
         board.getTile(20).setAction(new LadderAction(38));  // Midt i spillet
         board.getTile(28).setAction(new LadderAction(55));  // Midt i spillet
         board.getTile(50).setAction(new LadderAction(72));  // Litt over midten
