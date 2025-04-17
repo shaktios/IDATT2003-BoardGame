@@ -1,5 +1,9 @@
 package edu.ntnu.boardgame.constructors;
 
+import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.actions.TileAction;
+
+
 
 /* Representerer ett felt på spillbrettet. I denne mappen har vi sagt at felt skal henge etter hverandre.
 Derfor
@@ -16,6 +20,8 @@ public class Tile {
   private int y = -1;
   private Tile nextTile;
     
+  private TileAction action; // Nytt felt for tile-effekt
+
   public Tile(int position) {
     if (position <= 0) {
     throw new IllegalArgumentException("Posisjonen må være et positivt tall.");
@@ -46,11 +52,27 @@ public class Tile {
 
   public void setNextTile(Tile nextTile) {
     this.nextTile = nextTile;
-}
+  }
 
-public Tile getNextTile() {
+  public Tile getNextTile() {
     return this.nextTile;
-}
+  }
+
+
+  public void setAction(TileAction action){
+    this.action = action; 
+  }
+
+  public TileAction getAction(){
+    return this.action; 
+  }
+
+  public void executeAction(Player player, Board board){
+    if(action!=null){
+      action.execute(player, board);
+    }
+  }
+  
 
     
 }
