@@ -30,6 +30,9 @@ public class GameScreen {
     private Label currentPlayerLabel = new Label("Spillet starter!");
     private Canvas canvas;
 
+    private Button throwDiceButton;
+    private Button nextTurnButton;
+
     private Map<String, Image> playerTokens = new HashMap<>();
 
     public Scene getScene(Stage stage, Boardgame boardgame) {
@@ -37,6 +40,9 @@ public class GameScreen {
 
         this.players = boardgame.getPlayers();
         this.board = boardgame.getBoard();
+
+        throwDiceButton = new Button("Kast Terning");
+        nextTurnButton = new Button("Neste tur");
 
         int canvasWidth = board.getColumns() * TILE_SIZE;
         int canvasHeight = board.getRows() * TILE_SIZE;
@@ -55,7 +61,7 @@ public class GameScreen {
         drawBoard(gc);
 
         // Kast terning knapp
-        Button throwDiceButton = new Button("Kast Terning");
+        throwDiceButton.setDisable(false);
         throwDiceButton.setOnAction(event -> {
             Player player = players.get(currentPlayerIndex);
             Dice dice = new Dice(6, 1);
@@ -75,14 +81,22 @@ public class GameScreen {
             }
 
             boardgame.notifyPlayerMoved(player);
+
+            throwDiceButton.setDisable(true);      // spiller har kastet, disable
+            nextTurnButton.setDisable(false);      // neste spiller kan klikkes
         });
 
         // Neste tur knapp
-        Button nextTurnButton = new Button("Neste tur");
+        throwDiceButton.setDisable(false); // kun aktiv spiller får kaste i starten
+        nextTurnButton.setDisable(true);   // skal være deaktivert i starten
         nextTurnButton.setOnAction(event -> {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             Player nextPlayer = players.get(currentPlayerIndex);
             currentPlayerLabel.setText("Spiller sin tur: " + nextPlayer.getName());
+
+            throwDiceButton.setDisable(false);     // ny spiller får kaste
+            nextTurnButton.setDisable(true);       // disable til kastet er gjort
+
         });
 
         // Layout
@@ -104,6 +118,11 @@ public class GameScreen {
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
 
+            // Zigzag: speilvendte kolonner for oddetallsrader
+            if ((rows - rowIndex) % 2 == 0) {
+                colIndex = cols - 1 - colIndex;
+            }
+
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
 
@@ -116,6 +135,11 @@ public class GameScreen {
             int pos = player.getPosition();
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
+
+            // ZIGZAG-SPEILING 
+            if ((rows - rowIndex) % 2 == 0) {
+                colIndex = cols - 1 - colIndex;
+            }
 
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
@@ -138,6 +162,8 @@ public class GameScreen {
         @Override
         public void onGameWon(Player winner) {
             currentPlayerLabel.setText(winner.getName() + " vant spillet!");
+            throwDiceButton.setDisable(true);
+            nextTurnButton.setDisable(true);
         }
     }
 }
