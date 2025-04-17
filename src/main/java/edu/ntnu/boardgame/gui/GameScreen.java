@@ -3,9 +3,7 @@ package edu.ntnu.boardgame.gui;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import edu.ntnu.boardgame.App;
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.constructors.Dice;
@@ -16,9 +14,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -122,6 +118,11 @@ public class GameScreen {
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
 
+            // Zigzag: speilvendte kolonner for oddetallsrader
+            if ((rows - rowIndex) % 2 == 0) {
+                colIndex = cols - 1 - colIndex;
+            }
+
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
 
@@ -134,6 +135,11 @@ public class GameScreen {
             int pos = player.getPosition();
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
+
+            // ZIGZAG-SPEILING 
+            if ((rows - rowIndex) % 2 == 0) {
+                colIndex = cols - 1 - colIndex;
+            }
 
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
