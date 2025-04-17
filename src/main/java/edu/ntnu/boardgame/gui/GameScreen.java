@@ -76,6 +76,30 @@ public class GameScreen {
             Tile newTile = board.getTile(newPosition);
             player.setCurrentTile(newTile);
 
+            //sjekker om tilen den lander på har en action eller ikke... 
+            if (newTile.getAction() != null) {
+                newTile.executeAction(player, board);  // utfør stige/slangehandlingen
+
+                String actionType = newTile.getAction().getClass().getSimpleName();
+                String actionText = "";
+
+                if (actionType.equals("LadderAction")) {
+                    actionText = "brukte en stige";
+                } else if (actionType.equals("BackAction")) {
+                    actionText = "traff en slange";
+                } else {
+                    actionText = "ble påvirket av en handling";
+                }
+
+                currentPlayerLabel.setText(player.getName() + " kastet " + roll
+                        + ", landet på rute " + newPosition + " og " + actionText
+                        + " til rute " + player.getPosition());
+            } else {
+                currentPlayerLabel.setText(player.getName() + " kastet " + roll
+                        + " og flyttet til rute " + newPosition);
+            }
+
+            //sjekk om en spiller har vunnet... 
             if (newPosition == board.getSize()) {
                 boardgame.notifyGameWon(player);
             }
@@ -84,6 +108,7 @@ public class GameScreen {
 
             throwDiceButton.setDisable(true);      // spiller har kastet, disable
             nextTurnButton.setDisable(false);      // neste spiller kan klikkes
+            
         });
 
         // Neste tur knapp
