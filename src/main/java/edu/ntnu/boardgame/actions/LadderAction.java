@@ -18,4 +18,9 @@ public class LadderAction implements TileAction{
         player.setPosition(destination, board); 
     }
 
+    @Override
+    public int getDestination(){
+        return destination; 
+    }
+
 }

@@ -17,4 +17,9 @@ public class BackAction implements TileAction {
     public void execute(Player player, Board board) {
         player.setPosition(destination, board);
     }
+
+    @Override
+    public int getDestination(){
+        return destination; 
+    }
 }
