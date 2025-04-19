@@ -6,6 +6,8 @@ import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.actions.BackAction;
+import edu.ntnu.boardgame.actions.LadderAction;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
@@ -147,13 +149,17 @@ public class GameScreen {
     private void drawBoard(GraphicsContext gc) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+
         int cols = board.getColumns();
         int rows = board.getRows();
 
-        // Tegn ruter
+
+        // Tegner alle hovedruter (standard, mørkegrønn, mørkerød)
         for (int pos = 1; pos <= board.getSize(); pos++) {
+            Tile tile = board.getTile(pos);
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
+
 
             // Zigzag: speilvendte kolonner for oddetallsrader
             if ((rows - rowIndex) % 2 == 0) {
@@ -163,15 +169,65 @@ public class GameScreen {
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
 
+            // Farge bakgrunn basert på action
+            if (tile.getAction() instanceof LadderAction) {
+                gc.setFill(javafx.scene.paint.Color.GREEN);
+            } else if (tile.getAction() instanceof BackAction) {
+                gc.setFill(javafx.scene.paint.Color.RED);
+            } else {
+                gc.setFill(javafx.scene.paint.Color.WHITE);
+            }
+
+            gc.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+            gc.setStroke(javafx.scene.paint.Color.BLACK);
             gc.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
-            gc.strokeText(String.valueOf(pos), x + 5, y + 15);
+            gc.setFill(javafx.scene.paint.Color.BLACK);
+            gc.fillText(String.valueOf(pos), x + 5, y + 15);
+            if(tile.getAction() != null){
+                int destination = tile.getAction().getDestination();
+                String arrowText = "→ " + destination;
+                gc.setFill(javafx.scene.paint.Color.BLANCHEDALMOND);
+                gc.fillText(arrowText, x + 5, y + 30);
+            }
         }
 
-        // Tegn spillere
+        //highlighter destinasjonsfeltene for Ladder/Back
+        for (int pos = 1; pos <= board.getSize(); pos++) {
+            Tile tile = board.getTile(pos);
+            if (tile.getAction() == null) {
+                continue;
+            }
+
+            int destination = tile.getAction().getDestination();
+            Tile destTile = board.getTile(destination);
+            int destRow = (rows * cols - destination) / cols;
+            int destCol = (destination - 1) % cols;
+            if ((rows - destRow) % 2 == 0) {
+                destCol = cols - 1 - destCol;
+            }
+
+            double destX = destCol * TILE_SIZE;
+            double destY = destRow * TILE_SIZE;
+
+            if (tile.getAction() instanceof LadderAction) {
+                gc.setFill(javafx.scene.paint.Color.LAWNGREEN);
+            } else if (tile.getAction() instanceof BackAction) {
+                gc.setFill(javafx.scene.paint.Color.LIGHTSALMON);
+            }
+
+            gc.fillRect(destX, destY, TILE_SIZE, TILE_SIZE);
+            gc.setStroke(javafx.scene.paint.Color.BLACK);
+            gc.strokeRect(destX, destY, TILE_SIZE, TILE_SIZE);
+            gc.setFill(javafx.scene.paint.Color.BLACK);
+            gc.fillText(String.valueOf(destination), destX + 5, destY + 15);
+        }
+
+        //tegn spillere
         for (Player player : players) {
             int pos = player.getPosition();
             int rowIndex = (rows * cols - pos) / cols;
             int colIndex = (pos - 1) % cols;
+
 
             // ZIGZAG-SPEILING 
             if ((rows - rowIndex) % 2 == 0) {
@@ -187,6 +243,8 @@ public class GameScreen {
             }
         }
     }
+    
+    
 
     private class GameObserver implements BoardGameObserver {
 
