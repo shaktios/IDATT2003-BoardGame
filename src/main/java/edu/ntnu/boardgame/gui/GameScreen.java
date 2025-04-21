@@ -214,6 +214,33 @@ public class GameScreen {
         nextTurnButton.getStyleClass().add("game-button");
 
         stage.setResizable(false); // Lås størrelsen på vinduet
+
+        // Forklaringsboks med miniatyr-ruter
+        Canvas legendCanvas = new Canvas(500, 400); // juster høyde ved behov
+        GraphicsContext legendGC = legendCanvas.getGraphicsContext2D();
+
+        int tileSize = 30;
+        int spacing = 35;
+        int[] y = {0}; // mutable container for y-posisjon
+
+        // Tegn hver forklaringsrute
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GREEN, "Stige");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LAWNGREEN, "Mål for stige");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.RED, "Slange");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LIGHTSALMON, "Mål for slangen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GOLD, "Teleporterer spilleren til en random sted på banen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.DEEPSKYBLUE, "Returnerer spilleren tilbake til første felt");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.ORANGERED, "Du må stå over en runde");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.WHITE, "Vanlig spillrute");
+
+        VBox legendBox = new VBox(legendCanvas);
+        legendBox.setPadding(new Insets(20, 0, 0, 0)); // litt luft fra messageBox
+
+        VBox rightSide = new VBox(10, messageBox, legendBox);
+        layout.getChildren().clear();
+        layout.getChildren().addAll(leftSide, rightSide);
+        scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm());
+
         return scene;
     }
 
@@ -349,5 +376,16 @@ public class GameScreen {
             stage.setResizable(false);
             stage.setScene(startScreen.getScene(stage));
         }
+    }
+
+    // Tegner én forklaringsboks med gitt farge og tekst
+    private void drawLegendItem(GraphicsContext gc, int tileSize, int[] y, int spacing, javafx.scene.paint.Color color, String text) {
+        gc.setFill(color);
+        gc.fillRect(0, y[0], tileSize, tileSize);
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.strokeRect(0, y[0], tileSize, tileSize);
+        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.fillText(text, tileSize + 5, y[0] + 20);
+        y[0] += spacing;
     }
 }
