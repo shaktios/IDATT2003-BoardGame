@@ -24,6 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -37,6 +39,9 @@ public class GameScreen {
     private Board board;
     private Label currentPlayerLabel = new Label("Spillet starter!");
     private Canvas canvas;
+    private VBox messageBox;
+    private Label messageLabel; 
+    
 
     private Button throwDiceButton;
     private Button nextTurnButton;
@@ -57,6 +62,19 @@ public class GameScreen {
         int canvasHeight = board.getRows() * TILE_SIZE;
         canvas = new Canvas(canvasWidth, canvasHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        messageLabel = new Label("Spillet starter!");
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+
+        messageBox = new VBox(messageLabel);
+        messageBox.setPadding(new Insets(10));
+        messageBox.setStyle("-fx-border-color: black; -fx-background-color: #e6e6e6;");
+        messageBox.setPadding(new Insets(15, 10, 10, 10)); // top, right, bottom, left
+        messageBox.setPrefWidth(400);
+        messageBox.setPrefHeight(200); 
+        messageBox.setMaxHeight(200);  
+        VBox.setVgrow(messageBox, Priority.NEVER);
 
         // Laster inn spillerbrikkebilder og lagrer i map
         for (Player player : players) {
@@ -102,7 +120,7 @@ public class GameScreen {
                         "ble påvirket av en handling";
                 };
 
-                currentPlayerLabel.setText(player.getName() + " landet på rute " + newPosition
+                messageLabel.setText(player.getName() + " landet på rute " + newPosition
                         + " og " + actionText + "...");
 
                 throwDiceButton.setDisable(true);
@@ -113,7 +131,7 @@ public class GameScreen {
                     newTile.executeAction(player, board);
                     boardgame.notifyPlayerMoved(player);
                     drawBoard(canvas.getGraphicsContext2D());
-                    currentPlayerLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+                    messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
 
                     if (player.getPosition() == board.getSize()) {
                         boardgame.notifyGameWon(player);
@@ -123,7 +141,7 @@ public class GameScreen {
                 });
                 pause.play();
             } else {
-                currentPlayerLabel.setText(player.getName() + " kastet " + roll
+                messageLabel.setText(player.getName() + " kastet " + roll
                         + " og flyttet til rute " + newPosition);
                 boardgame.notifyPlayerMoved(player);
                 if (player.getPosition() == board.getSize()) {
@@ -142,7 +160,7 @@ public class GameScreen {
             Player nextPlayer = players.get(currentPlayerIndex);
 
             if (nextPlayer.shouldSkipTurn()) {
-                currentPlayerLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
+                messageLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
                 nextPlayer.setSkipNextTurn(false);
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -151,15 +169,20 @@ public class GameScreen {
                 return;
             }
 
-            currentPlayerLabel.setText("Spiller sin tur: " + nextPlayer.getName());
+            messageLabel.setText("Spiller sin tur: " + nextPlayer.getName());
             throwDiceButton.setDisable(false);
             nextTurnButton.setDisable(true);
         });
 
         // GUI layout
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10));
-        layout.getChildren().addAll(canvas, currentPlayerLabel, throwDiceButton, nextTurnButton);
+        HBox layout = new HBox(20);
+
+        VBox leftSide = new VBox(10);
+        leftSide.getChildren().addAll(canvas, throwDiceButton, nextTurnButton);
+
+        layout.getChildren().addAll(leftSide, messageBox);
+        HBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // Flytter boksen nedover
+        messageBox.setPrefWidth(400);
         stage.setResizable(false); // Gjør vinduet låst i størrelse
 
         return new Scene(layout, canvasWidth + 650, canvasHeight + 400);
@@ -271,17 +294,19 @@ public class GameScreen {
         }
     }
 
+
+
     private class GameObserver implements BoardGameObserver {
 
         @Override
         public void onPlayerMove(Player player) {
-            currentPlayerLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+            messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
             drawBoard(canvas.getGraphicsContext2D());
         }
 
         @Override
         public void onGameWon(Player winner) {
-            currentPlayerLabel.setText(winner.getName() + " vant spillet!");
+            messageLabel.setText(winner.getName() + " vant spillet!");
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Spillet er ferdig");
