@@ -11,6 +11,7 @@ public class Player {
   private String name; 
   private Tile currentTile;
   private String token;
+  private boolean skipNextTurn = false; //for skipaction-actionen
 
 
   /*
@@ -137,7 +138,24 @@ public class Player {
         }
         this.currentTile = tile;
     }
+    
 
+    /**
+     * Setter for if the player have to skip the next round 
+     *
+     * @param skip true if the player is supposed to skip the next round
+     */
+    public void setSkipNextTurn(boolean skip) {
+        this.skipNextTurn = skip;
+    }
+
+
+    /**
+     * Returns true if the player have to stand over his turn. 
+     */
+    public boolean shouldSkipTurn() {
+        return skipNextTurn;
+    }
 
 
 }
