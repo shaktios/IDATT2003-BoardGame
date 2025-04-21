@@ -7,6 +7,9 @@ import java.nio.file.Path;
 
 import edu.ntnu.boardgame.actions.BackAction;
 import edu.ntnu.boardgame.actions.LadderAction;
+import edu.ntnu.boardgame.actions.ResetAction;
+import edu.ntnu.boardgame.actions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.TeleportRandomAction;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;
@@ -22,20 +25,29 @@ public class BoardGameFactory {
     public static Boardgame createClassicGame() {
         Board board = new Board(10,9);
 
-
-        //Stiger
-        board.getTile(3).setAction(new LadderAction(22));   // Tidlig stige
-        board.getTile(7).setAction(new LadderAction(26));   // Tidlig stige(skal egt være 8)
-        board.getTile(20).setAction(new LadderAction(38));  // Midt i spillet
-        board.getTile(28).setAction(new LadderAction(55));  // Midt i spillet
-        board.getTile(50).setAction(new LadderAction(72));  // Litt over midten
+        // Stiger
+        board.getTile(3).setAction(new LadderAction(22));    // → 22 (mørk grønn)
+        board.getTile(7).setAction(new LadderAction(26));    // → 26
+        board.getTile(20).setAction(new LadderAction(38));   // → 38
+        board.getTile(28).setAction(new LadderAction(55));   // → 55
+        board.getTile(50).setAction(new LadderAction(72));   // → 72
 
         // Slanger
-        board.getTile(62).setAction(new BackAction(45));   // Midt i spillet
-        board.getTile(66).setAction(new BackAction(52));   // Midt-sent
-        board.getTile(74).setAction(new BackAction(48));   // Sen strek
-        board.getTile(88).setAction(new BackAction(69));   // Rett før mål
-    
+        board.getTile(62).setAction(new BackAction(45));     // → 45 (rød)
+        board.getTile(66).setAction(new BackAction(52));     // → 52
+        board.getTile(74).setAction(new BackAction(48));     // → 48
+        board.getTile(88).setAction(new BackAction(69));     // → 69
+
+        // Ekstra actions
+        board.getTile(43).setAction(new ResetAction());  
+        board.getTile(67).setAction(new ResetAction());
+        board.getTile(82).setAction(new ResetAction());              // → 1 (blå)
+        board.getTile(13).setAction(new SkipTurnAction());   
+        board.getTile(39).setAction(new SkipTurnAction());          // står over
+        board.getTile(6).setAction(new TeleportRandomAction());       // tilfeldig
+        board.getTile(30).setAction(new TeleportRandomAction());       // tilfeldig
+        board.getTile(59).setAction(new TeleportRandomAction());       // tilfeldig
+
 
         return new Boardgame(board, 2, 6); // standard terninger
     }
