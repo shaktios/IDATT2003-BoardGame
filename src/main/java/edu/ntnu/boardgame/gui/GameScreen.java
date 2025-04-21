@@ -134,7 +134,7 @@ public class GameScreen {
             }
         });
 
-        // Neste tur-knapp med logikk for å hoppe over tur
+        // Neste tur knapp med logikk for å hoppe over tur
         throwDiceButton.setDisable(false);
         nextTurnButton.setDisable(true);
         nextTurnButton.setOnAction(event -> {
@@ -160,8 +160,9 @@ public class GameScreen {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10));
         layout.getChildren().addAll(canvas, currentPlayerLabel, throwDiceButton, nextTurnButton);
+        stage.setResizable(false); // Gjør vinduet låst i størrelse
 
-        return new Scene(layout, canvasWidth + 20, canvasHeight + 120);
+        return new Scene(layout, canvasWidth + 650, canvasHeight + 400);
     }
 
     private void drawBoard(GraphicsContext gc) {
@@ -291,6 +292,7 @@ public class GameScreen {
 
             StartScreen startScreen = new StartScreen();
             Stage stage = (Stage) canvas.getScene().getWindow();
+            stage.setResizable(false);
             stage.setScene(startScreen.getScene(stage));
         }
     }
