@@ -1,0 +1,49 @@
+/* ladderGame.css */
+
+/* Meldingsboks til høyre */
+.message-box {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 15 10 10 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+}
+
+/* Label for meldinger (teksten inni boksen) */
+.message-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Vanlige actions */
+.action-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333;
+}
+
+/* Knapper brukt i spillet */
+.game-button {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-color: #add8e6;
+    -fx-text-fill: black;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 6 20 6 20;
+    -fx-cursor: hand;
+}
+
+/* Grønn knapp – til spesialbruk hvis ønsket */
+.button-green {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+/* Blå knapp – til spesialbruk hvis ønsket */
+.button-blue {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}

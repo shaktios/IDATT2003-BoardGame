@@ -24,8 +24,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -65,11 +67,13 @@ public class GameScreen {
 
         messageLabel = new Label("Spillet starter!");
         messageLabel.setWrapText(true);
-        messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+        messageLabel.getStyleClass().add("message-label"); 
+
+        
 
         messageBox = new VBox(messageLabel);
         messageBox.setPadding(new Insets(10));
-        messageBox.setStyle("-fx-border-color: black; -fx-background-color: #e6e6e6;");
+        messageBox.getStyleClass().add("message-box");
         messageBox.setPadding(new Insets(15, 10, 10, 10)); // top, right, bottom, left
         messageBox.setPrefWidth(400);
         messageBox.setPrefHeight(200); 
@@ -92,6 +96,7 @@ public class GameScreen {
             Player player = players.get(currentPlayerIndex);
             Dice dice = new Dice(6, 1);
             int roll = dice.roll();
+            throwDiceButton.getStyleClass().add("game-button");
 
             int newPosition = player.getPosition() + roll;
             if (newPosition > board.getSize()) {
@@ -156,6 +161,7 @@ public class GameScreen {
         throwDiceButton.setDisable(false);
         nextTurnButton.setDisable(true);
         nextTurnButton.setOnAction(event -> {
+            nextTurnButton.getStyleClass().add("game-button");
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             Player nextPlayer = players.get(currentPlayerIndex);
 
@@ -173,19 +179,42 @@ public class GameScreen {
             throwDiceButton.setDisable(false);
             nextTurnButton.setDisable(true);
         });
-
+        
         // GUI layout
         HBox layout = new HBox(20);
 
         VBox leftSide = new VBox(10);
-        leftSide.getChildren().addAll(canvas, throwDiceButton, nextTurnButton);
+        FlowPane buttonPane = new FlowPane();
+        buttonPane.setHgap(10); // Avstand mellom knappene
+        buttonPane.getChildren().addAll(throwDiceButton, nextTurnButton);
+        VBox.setMargin(buttonPane, new Insets(10, 0, 0, 0)); // top, right, bottom, left
 
+        // Legg til brett og knapper på venstresiden
+        leftSide.getChildren().addAll(canvas);
+
+        // Legg knapper og tekst i meldingsboksen (høyresiden)
+        Region spacer = new Region();
+        spacer.setPrefHeight(30); // juster høyde etter ønske
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        messageBox.getChildren().clear();
+        messageBox.getChildren().addAll(messageLabel, spacer, buttonPane);
+
+        // Fullfør layout
         layout.getChildren().addAll(leftSide, messageBox);
-        HBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // Flytter boksen nedover
+        HBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // Flytt boksen litt ned
         messageBox.setPrefWidth(400);
-        stage.setResizable(false); // Gjør vinduet låst i størrelse
+        stage.setResizable(false); // Lås størrelsen på vinduet
 
-        return new Scene(layout, canvasWidth + 650, canvasHeight + 400);
+        Scene scene = new Scene(layout, canvasWidth + 650, canvasHeight + 400);
+        scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm());
+        messageBox.getStyleClass().add("message-box");
+        messageLabel.getStyleClass().add("message-label");
+        throwDiceButton.getStyleClass().add("game-button");
+        nextTurnButton.getStyleClass().add("game-button");
+
+        stage.setResizable(false); // Lås størrelsen på vinduet
+        return scene;
     }
 
     private void drawBoard(GraphicsContext gc) {
