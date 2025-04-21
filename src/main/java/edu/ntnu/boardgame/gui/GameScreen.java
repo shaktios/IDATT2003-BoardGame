@@ -24,6 +24,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -37,6 +41,9 @@ public class GameScreen {
     private Board board;
     private Label currentPlayerLabel = new Label("Spillet starter!");
     private Canvas canvas;
+    private VBox messageBox;
+    private Label messageLabel; 
+    
 
     private Button throwDiceButton;
     private Button nextTurnButton;
@@ -58,6 +65,21 @@ public class GameScreen {
         canvas = new Canvas(canvasWidth, canvasHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        messageLabel = new Label("Spillet starter!");
+        messageLabel.setWrapText(true);
+        messageLabel.getStyleClass().add("message-label"); 
+
+        
+
+        messageBox = new VBox(messageLabel);
+        messageBox.setPadding(new Insets(10));
+        messageBox.getStyleClass().add("message-box");
+        messageBox.setPadding(new Insets(15, 10, 10, 10)); // top, right, bottom, left
+        messageBox.setPrefWidth(400);
+        messageBox.setPrefHeight(200); 
+        messageBox.setMaxHeight(200);  
+        VBox.setVgrow(messageBox, Priority.NEVER);
+
         // Laster inn spillerbrikkebilder og lagrer i map
         for (Player player : players) {
             String token = player.getToken();
@@ -74,6 +96,7 @@ public class GameScreen {
             Player player = players.get(currentPlayerIndex);
             Dice dice = new Dice(6, 1);
             int roll = dice.roll();
+            throwDiceButton.getStyleClass().add("game-button");
 
             int newPosition = player.getPosition() + roll;
             if (newPosition > board.getSize()) {
@@ -102,7 +125,7 @@ public class GameScreen {
                         "ble påvirket av en handling";
                 };
 
-                currentPlayerLabel.setText(player.getName() + " landet på rute " + newPosition
+                messageLabel.setText(player.getName() + " landet på rute " + newPosition
                         + " og " + actionText + "...");
 
                 throwDiceButton.setDisable(true);
@@ -113,7 +136,7 @@ public class GameScreen {
                     newTile.executeAction(player, board);
                     boardgame.notifyPlayerMoved(player);
                     drawBoard(canvas.getGraphicsContext2D());
-                    currentPlayerLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+                    messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
 
                     if (player.getPosition() == board.getSize()) {
                         boardgame.notifyGameWon(player);
@@ -123,7 +146,7 @@ public class GameScreen {
                 });
                 pause.play();
             } else {
-                currentPlayerLabel.setText(player.getName() + " kastet " + roll
+                messageLabel.setText(player.getName() + " kastet " + roll
                         + " og flyttet til rute " + newPosition);
                 boardgame.notifyPlayerMoved(player);
                 if (player.getPosition() == board.getSize()) {
@@ -134,15 +157,16 @@ public class GameScreen {
             }
         });
 
-        // Neste tur-knapp med logikk for å hoppe over tur
+        // Neste tur knapp med logikk for å hoppe over tur
         throwDiceButton.setDisable(false);
         nextTurnButton.setDisable(true);
         nextTurnButton.setOnAction(event -> {
+            nextTurnButton.getStyleClass().add("game-button");
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             Player nextPlayer = players.get(currentPlayerIndex);
 
             if (nextPlayer.shouldSkipTurn()) {
-                currentPlayerLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
+                messageLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
                 nextPlayer.setSkipNextTurn(false);
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -151,17 +175,46 @@ public class GameScreen {
                 return;
             }
 
-            currentPlayerLabel.setText("Spiller sin tur: " + nextPlayer.getName());
+            messageLabel.setText("Spiller sin tur: " + nextPlayer.getName());
             throwDiceButton.setDisable(false);
             nextTurnButton.setDisable(true);
         });
-
+        
         // GUI layout
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10));
-        layout.getChildren().addAll(canvas, currentPlayerLabel, throwDiceButton, nextTurnButton);
+        HBox layout = new HBox(20);
 
-        return new Scene(layout, canvasWidth + 20, canvasHeight + 120);
+        VBox leftSide = new VBox(10);
+        FlowPane buttonPane = new FlowPane();
+        buttonPane.setHgap(10); // Avstand mellom knappene
+        buttonPane.getChildren().addAll(throwDiceButton, nextTurnButton);
+        VBox.setMargin(buttonPane, new Insets(10, 0, 0, 0)); // top, right, bottom, left
+
+        // Legg til brett og knapper på venstresiden
+        leftSide.getChildren().addAll(canvas);
+
+        // Legg knapper og tekst i meldingsboksen (høyresiden)
+        Region spacer = new Region();
+        spacer.setPrefHeight(30); // juster høyde etter ønske
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        messageBox.getChildren().clear();
+        messageBox.getChildren().addAll(messageLabel, spacer, buttonPane);
+
+        // Fullfør layout
+        layout.getChildren().addAll(leftSide, messageBox);
+        HBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // Flytt boksen litt ned
+        messageBox.setPrefWidth(400);
+        stage.setResizable(false); // Lås størrelsen på vinduet
+
+        Scene scene = new Scene(layout, canvasWidth + 650, canvasHeight + 400);
+        scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm());
+        messageBox.getStyleClass().add("message-box");
+        messageLabel.getStyleClass().add("message-label");
+        throwDiceButton.getStyleClass().add("game-button");
+        nextTurnButton.getStyleClass().add("game-button");
+
+        stage.setResizable(false); // Lås størrelsen på vinduet
+        return scene;
     }
 
     private void drawBoard(GraphicsContext gc) {
@@ -270,17 +323,19 @@ public class GameScreen {
         }
     }
 
+
+
     private class GameObserver implements BoardGameObserver {
 
         @Override
         public void onPlayerMove(Player player) {
-            currentPlayerLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+            messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
             drawBoard(canvas.getGraphicsContext2D());
         }
 
         @Override
         public void onGameWon(Player winner) {
-            currentPlayerLabel.setText(winner.getName() + " vant spillet!");
+            messageLabel.setText(winner.getName() + " vant spillet!");
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Spillet er ferdig");
@@ -291,6 +346,7 @@ public class GameScreen {
 
             StartScreen startScreen = new StartScreen();
             Stage stage = (Stage) canvas.getScene().getWindow();
+            stage.setResizable(false);
             stage.setScene(startScreen.getScene(stage));
         }
     }

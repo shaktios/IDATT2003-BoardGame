@@ -135,7 +135,8 @@ public class StartScreen {
                 nextButton
         );
 
-        return new Scene(root, 600, 400);
+        stage.setResizable(false);
+        return new Scene(root, 1200, 800);
     }
 
     private void showAlert(String title, String message) {
