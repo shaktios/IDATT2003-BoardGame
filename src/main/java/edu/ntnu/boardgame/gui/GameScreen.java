@@ -224,12 +224,12 @@ public class GameScreen {
         int[] y = {0}; // mutable container for y-posisjon
 
         // Tegn hver forklaringsrute
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GREEN, "Stige");
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LAWNGREEN, "Mål for stige");
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.RED, "Slange");
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LIGHTSALMON, "Mål for slangen");
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GOLD, "Teleporterer spilleren til en random sted på banen");
-        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.DEEPSKYBLUE, "Returnerer spilleren tilbake til første felt");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GREEN, "Starten på stigen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LAWNGREEN, "Toppen av stigen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.RED, "Starten på slangen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LIGHTSALMON, "Enden på slangen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GOLD, "Teleportfelt, teleporterer spilleren til et tilfeldig felt på banen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.DEEPSKYBLUE, "Tilbake til start");
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.ORANGERED, "Du må stå over en runde");
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.WHITE, "Vanlig spillrute");
 
