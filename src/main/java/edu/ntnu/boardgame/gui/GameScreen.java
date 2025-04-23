@@ -6,11 +6,7 @@ import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
-import edu.ntnu.boardgame.actions.BackAction;
-import edu.ntnu.boardgame.actions.LadderAction;
-import edu.ntnu.boardgame.actions.ResetAction;
-import edu.ntnu.boardgame.actions.SkipTurnAction;
-import edu.ntnu.boardgame.actions.TeleportRandomAction;
+import edu.ntnu.boardgame.actions.*;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
@@ -34,7 +30,7 @@ import javafx.util.Duration;
 
 public class GameScreen {
 
-    private static final int TILE_SIZE = 50;
+    private static final int TILE_SIZE = 90;
 
     private int currentPlayerIndex = 0;
     private List<Player> players;
@@ -42,11 +38,13 @@ public class GameScreen {
     private Label currentPlayerLabel = new Label("Spillet starter!");
     private Canvas canvas;
     private VBox messageBox;
-    private Label messageLabel; 
-    
+    private Label messageLabel;
+
 
     private Button throwDiceButton;
     private Button nextTurnButton;
+
+    private ChessPuzzleAction chessPuzzleAction;
 
     // Lagrer spillerens navn og tilhørende bilde én gang
     private Map<String, Image> playerTokens = new HashMap<>();
@@ -67,17 +65,17 @@ public class GameScreen {
 
         messageLabel = new Label("Spillet starter!");
         messageLabel.setWrapText(true);
-        messageLabel.getStyleClass().add("message-label"); 
+        messageLabel.getStyleClass().add("message-label");
 
-        
+
 
         messageBox = new VBox(messageLabel);
         messageBox.setPadding(new Insets(10));
         messageBox.getStyleClass().add("message-box");
         messageBox.setPadding(new Insets(15, 10, 10, 10)); // top, right, bottom, left
         messageBox.setPrefWidth(400);
-        messageBox.setPrefHeight(200); 
-        messageBox.setMaxHeight(200);  
+        messageBox.setPrefHeight(200);
+        messageBox.setMaxHeight(200);
         VBox.setVgrow(messageBox, Priority.NEVER);
 
         // Laster inn spillerbrikkebilder og lagrer i map
@@ -98,6 +96,7 @@ public class GameScreen {
             int roll = dice.roll();
             throwDiceButton.getStyleClass().add("game-button");
 
+
             int newPosition = player.getPosition() + roll;
             if (newPosition > board.getSize()) {
                 newPosition = board.getSize();
@@ -106,6 +105,23 @@ public class GameScreen {
             player.setPosition(newPosition, board);
             Tile newTile = board.getTile(newPosition);
             player.setCurrentTile(newTile);
+
+            // 🧠 Sjekk for sjakkoppgave-felt
+            if (newPosition == 42 || newPosition == 73) {
+                messageLabel.setText(player.getName() + " landet på en sjakkoppgave!");
+
+                throwDiceButton.setDisable(true);
+                nextTurnButton.setDisable(true);
+
+                chessPuzzleAction.launchPuzzle();
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+                pause.setOnFinished(e2 -> nextTurnButton.setDisable(false));
+                pause.play();
+
+                return; // Stopper videre utførelse
+            }
+
 
             // Hvis feltet har en handling, vis beskrivelse og utfør etter pause
             if (newTile.getAction() != null) {
@@ -179,7 +195,7 @@ public class GameScreen {
             throwDiceButton.setDisable(false);
             nextTurnButton.setDisable(true);
         });
-        
+
         // GUI layout
         HBox layout = new HBox(20);
 
@@ -248,9 +264,12 @@ public class GameScreen {
                 gc.setFill(javafx.scene.paint.Color.GOLD);
             } else if (tile.getAction() instanceof SkipTurnAction) {
                 gc.setFill(javafx.scene.paint.Color.ORANGERED);
+            } else if (pos == 42 || pos == 73) {
+                gc.setFill(javafx.scene.paint.Color.PURPLE);
             } else {
                 gc.setFill(javafx.scene.paint.Color.WHITE);
             }
+
 
             gc.fillRect(x, y, TILE_SIZE, TILE_SIZE);
             gc.setStroke(javafx.scene.paint.Color.BLACK);
