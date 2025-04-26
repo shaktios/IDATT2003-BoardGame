@@ -6,7 +6,12 @@ import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
-import edu.ntnu.boardgame.actions.*;
+import edu.ntnu.boardgame.actions.BackAction;
+import edu.ntnu.boardgame.actions.ChessPuzzleAction;
+import edu.ntnu.boardgame.actions.LadderAction;
+import edu.ntnu.boardgame.actions.ResetAction;
+import edu.ntnu.boardgame.actions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
