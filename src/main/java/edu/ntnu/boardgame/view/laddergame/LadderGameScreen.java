@@ -192,74 +192,128 @@ public class LadderGameScreen {
 
         VBox legendBox = new VBox(legendCanvas);
         legendBox.setPadding(new Insets(20, 0, 0, 0));
-
+        // Layout ferdig
         VBox rightSide = new VBox(10, messageBox, legendBox);
-
         layout.getChildren().clear();
         layout.getChildren().addAll(leftSide, rightSide);
 
+        // Nå: legg til CSS-stilene
+        messageBox.getStyleClass().add("message-box");
+        messageLabel.getStyleClass().add("message-label");
+        throwDiceButton.getStyleClass().add("game-button");
+        nextTurnButton.getStyleClass().add("game-button");
+
+        // Lag scene
         Scene scene = new Scene(layout, canvasWidth + 650, canvasHeight + 400);
         scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm());
-
         stage.setResizable(false);
         return scene;
     }
 
-    private void drawBoard(GraphicsContext gc) {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+  private void drawBoard(GraphicsContext gc) {
+    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        int cols = board.getColumns();
-        int rows = board.getRows();
+    int cols = board.getColumns();
+    int rows = board.getRows();
 
-        for (int pos = 1; pos <= board.getSize(); pos++) {
-            Tile tile = board.getTile(pos);
-            int rowIndex = (rows * cols - pos) / cols;
-            int colIndex = (pos - 1) % cols;
-            if ((rows - rowIndex) % 2 == 0) {
-                colIndex = cols - 1 - colIndex;
-            }
+    // Først tegn alle feltene
+    for (int pos = 1; pos <= board.getSize(); pos++) {
+        Tile tile = board.getTile(pos);
+        int rowIndex = (rows * cols - pos) / cols;
+        int colIndex = (pos - 1) % cols;
 
-            double x = colIndex * TILE_SIZE;
-            double y = rowIndex * TILE_SIZE;
-
-            if (tile.getAction() instanceof LadderAction) {
-                gc.setFill(javafx.scene.paint.Color.GREEN);
-            } else if (tile.getAction() instanceof BackAction) {
-                gc.setFill(javafx.scene.paint.Color.RED);
-            } else if (tile.getAction() instanceof ResetAction) {
-                gc.setFill(javafx.scene.paint.Color.DEEPSKYBLUE);
-            } else if (tile.getAction() instanceof TeleportRandomAction) {
-                gc.setFill(javafx.scene.paint.Color.GOLD);
-            } else if (tile.getAction() instanceof SkipTurnAction) {
-                gc.setFill(javafx.scene.paint.Color.ORANGERED);
-            } else {
-                gc.setFill(javafx.scene.paint.Color.WHITE);
-            }
-
-            gc.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-            gc.setStroke(javafx.scene.paint.Color.BLACK);
-            gc.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
-            gc.setFill(javafx.scene.paint.Color.BLACK);
-            gc.fillText(String.valueOf(pos), x + 5, y + 15);
+        if ((rows - rowIndex) % 2 == 0) {
+            colIndex = cols - 1 - colIndex;
         }
 
-        for (Player player : players) {
-            int pos = player.getPosition();
-            int rowIndex = (rows * cols - pos) / cols;
-            int colIndex = (pos - 1) % cols;
-            if ((rows - rowIndex) % 2 == 0) {
-                colIndex = cols - 1 - colIndex;
-            }
+        double x = colIndex * TILE_SIZE;
+        double y = rowIndex * TILE_SIZE;
 
-            double x = colIndex * TILE_SIZE;
-            double y = rowIndex * TILE_SIZE;
+        if (tile.getAction() instanceof LadderAction) {
+            gc.setFill(javafx.scene.paint.Color.GREEN);
+        } else if (tile.getAction() instanceof BackAction) {
+            gc.setFill(javafx.scene.paint.Color.RED);
+        } else if (tile.getAction() instanceof ResetAction) {
+            gc.setFill(javafx.scene.paint.Color.DEEPSKYBLUE);
+        } else if (tile.getAction() instanceof TeleportRandomAction) {
+            gc.setFill(javafx.scene.paint.Color.GOLD);
+        } else if (tile.getAction() instanceof SkipTurnAction) {
+            gc.setFill(javafx.scene.paint.Color.ORANGERED);
+        } else {
+            gc.setFill(javafx.scene.paint.Color.WHITE);
+        }
 
-            Image tokenImage = playerTokens.get(player.getName());
-            if (tokenImage != null) {
-                gc.drawImage(tokenImage, x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+        gc.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.fillText(String.valueOf(pos), x + 5, y + 15);
+
+        // Tegn "→ X" hvis nødvendig
+        if (tile.getAction() instanceof LadderAction
+                || tile.getAction() instanceof BackAction
+                || tile.getAction() instanceof ResetAction) {
+            int destination = tile.getAction().getDestination();
+            if (destination > 0 && destination != pos) {
+                String arrowText = "→ " + destination;
+                gc.setFill(javafx.scene.paint.Color.BLANCHEDALMOND);
+                gc.fillText(arrowText, x + 5, y + 30);
             }
         }
     }
+
+    // Deretter highlight mål-feltene til stige og slange
+    for (int pos = 1; pos <= board.getSize(); pos++) {
+        Tile tile = board.getTile(pos);
+        if (tile.getAction() == null) {
+            continue;
+        }
+
+        int destination = tile.getAction().getDestination();
+        if (destination < 1 || destination > board.getSize() || destination == 1) {
+            continue;
+        }
+
+        int destRow = (rows * cols - destination) / cols;
+        int destCol = (destination - 1) % cols;
+        if ((rows - destRow) % 2 == 0) {
+            destCol = cols - 1 - destCol;
+        }
+
+        double destX = destCol * TILE_SIZE;
+        double destY = destRow * TILE_SIZE;
+
+        if (tile.getAction() instanceof LadderAction) {
+            gc.setFill(javafx.scene.paint.Color.LAWNGREEN);
+        } else if (tile.getAction() instanceof BackAction) {
+            gc.setFill(javafx.scene.paint.Color.LIGHTSALMON);
+        }
+
+        gc.fillRect(destX, destY, TILE_SIZE, TILE_SIZE);
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.strokeRect(destX, destY, TILE_SIZE, TILE_SIZE);
+        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.fillText(String.valueOf(destination), destX + 5, destY + 15);
+    }
+
+    // Til slutt, tegn spillerbrikkene
+    for (Player player : players) {
+        int pos = player.getPosition();
+        int rowIndex = (rows * cols - pos) / cols;
+        int colIndex = (pos - 1) % cols;
+        if ((rows - rowIndex) % 2 == 0) {
+            colIndex = cols - 1 - colIndex;
+        }
+
+        double x = colIndex * TILE_SIZE;
+        double y = rowIndex * TILE_SIZE;
+
+        Image tokenImage = playerTokens.get(player.getName());
+        if (tokenImage != null) {
+            gc.drawImage(tokenImage, x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+        }
+    }
+}
 
     private void drawLegendItem(GraphicsContext gc, int tileSize, int[] y, int spacing, javafx.scene.paint.Color color, String text) {
         gc.setFill(color);
