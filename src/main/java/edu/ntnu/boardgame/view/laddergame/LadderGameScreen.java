@@ -69,7 +69,6 @@ public class LadderGameScreen {
         messageBox.setPrefHeight(200);
         messageBox.setMaxHeight(200);
 
-        // Laster spillere og tokens
         for (Player player : players) {
             String token = player.getToken();
             Image tokenImage = new Image(getClass().getResourceAsStream("/images/" + token + ".png"));
@@ -79,17 +78,93 @@ public class LadderGameScreen {
         drawBoard(gc);
 
         throwDiceButton.setDisable(false);
-        throwDiceButton.setOnAction(event -> handleDiceRoll(boardgame));
+        throwDiceButton.setOnAction(event -> {
+            Player player = players.get(currentPlayerIndex);
+            Dice dice = new Dice(6, 1);
+            int roll = dice.roll();
+            throwDiceButton.getStyleClass().add("game-button");
+
+            int newPosition = player.getPosition() + roll;
+            if (newPosition > board.getSize()) {
+                newPosition = board.getSize();
+            }
+
+            player.setPosition(newPosition, board);
+            Tile newTile = board.getTile(newPosition);
+            player.setCurrentTile(newTile);
+
+            if (newTile.getAction() != null) {
+                String actionType = newTile.getAction().getClass().getSimpleName();
+                String actionText = switch (actionType) {
+                    case "LadderAction" -> "brukte en stige";
+                    case "BackAction" -> "traff en slange";
+                    case "SkipTurnAction" -> "mister neste tur";
+                    case "ResetAction" -> "må tilbake til start";
+                    case "TeleportRandomAction" -> "blir teleportert til et randomt sted på brettet";
+                    default -> "ble påvirket av en handling";
+                };
+
+                messageLabel.setText(player.getName() + " landet på rute " + newPosition + " og " + actionText + "...");
+
+                throwDiceButton.setDisable(true);
+                nextTurnButton.setDisable(true);
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(e -> {
+                    newTile.executeAction(player, board);
+                    boardgame.notifyPlayerMoved(player);
+                    drawBoard(canvas.getGraphicsContext2D());
+                    messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+
+                    if (player.getPosition() == board.getSize()) {
+                        boardgame.notifyGameWon(player);
+                    } else {
+                        nextTurnButton.setDisable(false);
+                    }
+                });
+                pause.play();
+            } else {
+                messageLabel.setText(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
+                boardgame.notifyPlayerMoved(player);
+                if (player.getPosition() == board.getSize()) {
+                    boardgame.notifyGameWon(player);
+                }
+                throwDiceButton.setDisable(true);
+                nextTurnButton.setDisable(false);
+            }
+        });
 
         nextTurnButton.setDisable(true);
-        nextTurnButton.setOnAction(event -> handleNextTurn());
+        nextTurnButton.setOnAction(event -> {
+            nextTurnButton.getStyleClass().add("game-button");
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            Player nextPlayer = players.get(currentPlayerIndex);
 
-        // Layout
+            if (nextPlayer.shouldSkipTurn()) {
+                messageLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
+                nextPlayer.setSkipNextTurn(false);
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(e -> nextTurnButton.fire());
+                pause.play();
+                return;
+            }
+
+            messageLabel.setText("Spiller sin tur: " + nextPlayer.getName());
+            throwDiceButton.setDisable(false);
+            nextTurnButton.setDisable(true);
+        });
+
+        // GUI layout
         HBox layout = new HBox(20);
+
         VBox leftSide = new VBox(10);
         FlowPane buttonPane = new FlowPane();
-        buttonPane.setHgap(10); // Avstand mellom knappene
+        buttonPane.setHgap(10);
         buttonPane.getChildren().addAll(throwDiceButton, nextTurnButton);
+        VBox.setMargin(buttonPane, new Insets(10, 0, 0, 0));
+
+        leftSide.getChildren().addAll(canvas);
 
         Region spacer = new Region();
         spacer.setPrefHeight(30);
@@ -98,72 +173,36 @@ public class LadderGameScreen {
         messageBox.getChildren().clear();
         messageBox.getChildren().addAll(messageLabel, spacer, buttonPane);
 
-        leftSide.getChildren().addAll(canvas);
+        // Forklaringsboks
+        Canvas legendCanvas = new Canvas(500, 400);
+        GraphicsContext legendGC = legendCanvas.getGraphicsContext2D();
 
-        layout.getChildren().addAll(leftSide, messageBox);
-        HBox.setMargin(messageBox, new Insets(30, 0, 0, 0));
+        int tileSize = 30;
+        int spacing = 35;
+        int[] y = {0};
+
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GREEN, "Starten på stigen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LAWNGREEN, "Toppen av stigen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.RED, "Starten på slangen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.LIGHTSALMON, "Enden på slangen");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GOLD, "Teleportfelt");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.DEEPSKYBLUE, "Tilbake til start");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.ORANGERED, "Mister en tur");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.WHITE, "Vanlig felt");
+
+        VBox legendBox = new VBox(legendCanvas);
+        legendBox.setPadding(new Insets(20, 0, 0, 0));
+
+        VBox rightSide = new VBox(10, messageBox, legendBox);
+
+        layout.getChildren().clear();
+        layout.getChildren().addAll(leftSide, rightSide);
 
         Scene scene = new Scene(layout, canvasWidth + 650, canvasHeight + 400);
         scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm());
 
         stage.setResizable(false);
         return scene;
-    }
-
-    private void handleDiceRoll(Boardgame boardgame) {
-        Player player = players.get(currentPlayerIndex);
-        Dice dice = new Dice(6, 1);
-        int roll = dice.roll();
-
-        int newPosition = Math.min(player.getPosition() + roll, board.getSize());
-        player.setPosition(newPosition, board);
-        Tile newTile = board.getTile(newPosition);
-        player.setCurrentTile(newTile);
-
-        if (newTile.getAction() != null) {
-            messageLabel.setText(player.getName() + " landet på rute " + newPosition + " og aktiviserte en handling...");
-            throwDiceButton.setDisable(true);
-            nextTurnButton.setDisable(true);
-
-            PauseTransition pause = new PauseTransition(Duration.seconds(2));
-            pause.setOnFinished(e -> {
-                newTile.executeAction(player, board);
-                boardgame.notifyPlayerMoved(player);
-                drawBoard(canvas.getGraphicsContext2D());
-                messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
-                if (player.getPosition() == board.getSize()) {
-                    boardgame.notifyGameWon(player);
-                } else {
-                    nextTurnButton.setDisable(false);
-                }
-            });
-            pause.play();
-        } else {
-            messageLabel.setText(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
-            boardgame.notifyPlayerMoved(player);
-            if (player.getPosition() == board.getSize()) {
-                boardgame.notifyGameWon(player);
-            }
-            throwDiceButton.setDisable(true);
-            nextTurnButton.setDisable(false);
-        }
-    }
-
-    private void handleNextTurn() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        Player nextPlayer = players.get(currentPlayerIndex);
-
-        if (nextPlayer.shouldSkipTurn()) {
-            messageLabel.setText(nextPlayer.getName() + " må stå over denne runden!");
-            nextPlayer.setSkipNextTurn(false);
-            PauseTransition pause = new PauseTransition(Duration.seconds(2));
-            pause.setOnFinished(e -> nextTurnButton.fire());
-            pause.play();
-        } else {
-            messageLabel.setText("Spiller sin tur: " + nextPlayer.getName());
-            throwDiceButton.setDisable(false);
-            nextTurnButton.setDisable(true);
-        }
     }
 
     private void drawBoard(GraphicsContext gc) {
@@ -179,6 +218,7 @@ public class LadderGameScreen {
             if ((rows - rowIndex) % 2 == 0) {
                 colIndex = cols - 1 - colIndex;
             }
+
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
 
@@ -210,6 +250,7 @@ public class LadderGameScreen {
             if ((rows - rowIndex) % 2 == 0) {
                 colIndex = cols - 1 - colIndex;
             }
+
             double x = colIndex * TILE_SIZE;
             double y = rowIndex * TILE_SIZE;
 
@@ -218,6 +259,16 @@ public class LadderGameScreen {
                 gc.drawImage(tokenImage, x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
             }
         }
+    }
+
+    private void drawLegendItem(GraphicsContext gc, int tileSize, int[] y, int spacing, javafx.scene.paint.Color color, String text) {
+        gc.setFill(color);
+        gc.fillRect(0, y[0], tileSize, tileSize);
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.strokeRect(0, y[0], tileSize, tileSize);
+        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.fillText(text, tileSize + 5, y[0] + 20);
+        y[0] += spacing;
     }
 
     private class GameObserver implements BoardGameObserver {
