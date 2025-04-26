@@ -1,15 +1,23 @@
-package edu.ntnu.boardgame.gui;
+package edu.ntnu.boardgame.view.laddergame.chesspuzzle;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.constructors.Player;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.*;
 
 public class ChessPuzzleView {
 
@@ -19,6 +27,16 @@ public class ChessPuzzleView {
             "chess_puzzle3.png", "e4",
             "chess_puzzle4.png", "Bb5"
     );
+
+    private Player player;
+    private Board board;
+    private int correctMoveForward = 5; // hvor mange ruter frem
+    private int wrongMoveBackward = 3;  // hvor mange ruter bak
+
+    public ChessPuzzleView(Player player, Board board) {
+        this.player = player;
+        this.board = board;
+    }
 
     public void show() {
         // Pick a random puzzle
@@ -43,11 +61,19 @@ public class ChessPuzzleView {
         Button submitButton = new Button("Submit");
         submitButton.setOnAction(e -> {
             String userInput = inputField.getText().trim();
+            Stage stage = (Stage) inputField.getScene().getWindow(); // hent stage for å lukke senere
+
             if (userInput.equalsIgnoreCase(correctMove)) {
-                resultLabel.setText("✅ Correct!");
+                resultLabel.setText(" Correct!");
+                movePlayer(correctMoveForward);
             } else {
-                resultLabel.setText("❌ Wrong. Try again!");
+                resultLabel.setText("Wrong!");
+                movePlayer(-wrongMoveBackward);
             }
+            // Lukk etter en liten pause for å vise resultatet
+            PauseTransition pause = new PauseTransition(javafx.util.Duration.seconds(1.5));
+            pause.setOnFinished(event -> stage.close());
+            pause.play();
         });
 
         // Layout
@@ -60,5 +86,18 @@ public class ChessPuzzleView {
         stage.setTitle("Chess Puzzle");
         stage.setScene(new Scene(layout, 600, 700));
         stage.show();
+    }
+
+    private void movePlayer(int offset) {
+        int newPosition = player.getPosition() + offset;
+
+        if (newPosition < 1) {
+            newPosition = 1;
+        } else if (newPosition > board.getSize()) {
+            newPosition = board.getSize();
+        }
+
+        player.setPosition(newPosition, board);
+        player.setCurrentTile(board.getTile(newPosition));
     }
 }

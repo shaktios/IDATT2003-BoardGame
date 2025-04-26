@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame.constructors;
 
 import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.actions.TileAction;
+import edu.ntnu.boardgame.actions.tileactions.TileAction;
 
 
 

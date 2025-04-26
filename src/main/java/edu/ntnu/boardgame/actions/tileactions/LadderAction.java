@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame.actions;
+package edu.ntnu.boardgame.actions.tileactions;
 
 
 

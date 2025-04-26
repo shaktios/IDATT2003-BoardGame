@@ -5,11 +5,11 @@ package edu.ntnu.boardgame;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.ntnu.boardgame.actions.BackAction;
-import edu.ntnu.boardgame.actions.LadderAction;
-import edu.ntnu.boardgame.actions.ResetAction;
-import edu.ntnu.boardgame.actions.SkipTurnAction;
-import edu.ntnu.boardgame.actions.TeleportRandomAction;
+import edu.ntnu.boardgame.actions.tileactions.BackAction;
+import edu.ntnu.boardgame.actions.tileactions.LadderAction;
+import edu.ntnu.boardgame.actions.tileactions.ResetAction;
+import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;
