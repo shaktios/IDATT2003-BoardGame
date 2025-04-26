@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
 import edu.ntnu.boardgame.actions.tileactions.LadderAction;
+import edu.ntnu.boardgame.actions.tileactions.ResetAction;
+import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;
@@ -24,7 +27,7 @@ public class BoardGameFactory {
         Board board = new Board(10,9);
         Boardgame boardgame = new Boardgame(board, 2, 6);
 
-/*         // Stiger
+        //stiger
         board.getTile(3).setAction(new LadderAction(22));    // → 22 (mørk grønn)
         board.getTile(7).setAction(new LadderAction(26));    // → 26
         board.getTile(20).setAction(new LadderAction(38));   // → 38
@@ -46,22 +49,8 @@ public class BoardGameFactory {
         board.getTile(6).setAction(new TeleportRandomAction());       // tilfeldig
         board.getTile(30).setAction(new TeleportRandomAction());       // tilfeldig
         board.getTile(59).setAction(new TeleportRandomAction());       // tilfeldig
-
-        board.getTile(47).setAction(new ChessPuzzleAction());
-        board.getTile(73).setAction(new ChessPuzzleAction());
-         */
-        board.getTile(2).setAction(new LadderAction(10));    // → 22 (mørk grønn)
-        board.getTile(3).setAction(new LadderAction(10));    // → 26
-        board.getTile(4).setAction(new LadderAction(10));   // → 38
-        board.getTile(5).setAction(new LadderAction(10));   // → 55
-        board.getTile(6).setAction(new LadderAction(10));   // → 72
-        board.getTile(7).setAction(new LadderAction(10));
-        board.getTile(11).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(12).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(13).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(14).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(15).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(16).setAction(new ChessPuzzleAction(boardgame));
+        board.getTile(47).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(73).setAction(new ChessPuzzleAction(boardgame));
         return boardgame; // standard terninger
     }
 
