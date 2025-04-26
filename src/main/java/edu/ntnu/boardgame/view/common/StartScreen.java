@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame.gui;
+package edu.ntnu.boardgame.view.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.utils.InputValidator;
+import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -98,7 +99,7 @@ public class StartScreen {
                 boardgame.addExistingPlayer(player);
             }
 
-            GameScreen gameScreen = new GameScreen();
+            LadderGameScreen gameScreen = new LadderGameScreen();
             stage.setScene(gameScreen.getScene(stage, boardgame));
         });
 

@@ -5,11 +5,12 @@ package edu.ntnu.boardgame;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.ntnu.boardgame.actions.BackAction;
-import edu.ntnu.boardgame.actions.LadderAction;
-import edu.ntnu.boardgame.actions.ResetAction;
-import edu.ntnu.boardgame.actions.SkipTurnAction;
-import edu.ntnu.boardgame.actions.TeleportRandomAction;
+import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
+import edu.ntnu.boardgame.actions.tileactions.BackAction;
+import edu.ntnu.boardgame.actions.tileactions.LadderAction;
+import edu.ntnu.boardgame.actions.tileactions.ResetAction;
+import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;
@@ -24,8 +25,9 @@ public class BoardGameFactory {
     // 1. Klassisk brettspill med stiger og slanger
     public static Boardgame createClassicGame() {
         Board board = new Board(10,9);
+        Boardgame boardgame = new Boardgame(board, 2, 6);
 
-        // Stiger
+        //stiger
         board.getTile(3).setAction(new LadderAction(22));    // → 22 (mørk grønn)
         board.getTile(7).setAction(new LadderAction(26));    // → 26
         board.getTile(20).setAction(new LadderAction(38));   // → 38
@@ -47,14 +49,15 @@ public class BoardGameFactory {
         board.getTile(6).setAction(new TeleportRandomAction());       // tilfeldig
         board.getTile(30).setAction(new TeleportRandomAction());       // tilfeldig
         board.getTile(59).setAction(new TeleportRandomAction());       // tilfeldig
-
-
-        return new Boardgame(board, 2, 6); // standard terninger
+        board.getTile(47).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(73).setAction(new ChessPuzzleAction(boardgame));
+        return boardgame; // standard terninger
     }
 
     // 2. Kort variant for testing/demonstrasjon
     public static Boardgame createMiniGame() {
         Board board = new Board(10,2);
+        Boardgame boardgame = new Boardgame(board, 1, 6);
         //Stiger
         board.getTile(5).setAction(new LadderAction(11));   // Tidlig stige
         board.getTile(7).setAction(new LadderAction(14));   // Tidlig stige(skal egt være 8)
@@ -64,7 +67,7 @@ public class BoardGameFactory {
         board.getTile(4).setAction(new BackAction(2));   // Midt i spillet
         board.getTile(8).setAction(new BackAction(6));   // Midt-sent
         board.getTile(19).setAction(new BackAction(1));   // Rett før mål
-        return new Boardgame(board, 1, 6); // 1 terning
+        return boardgame; 
     }
 
     // 3. Les spillbrett fra JSON-fil

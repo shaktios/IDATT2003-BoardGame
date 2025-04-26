@@ -1,6 +1,6 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.gui.StartScreen;
+import edu.ntnu.boardgame.view.common.StartScreen;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
