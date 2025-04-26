@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
 import edu.ntnu.boardgame.actions.tileactions.*;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
@@ -76,63 +77,71 @@ public class LadderGameScreen {
         }
 
         drawBoard(gc);
-
         throwDiceButton.setDisable(false);
         throwDiceButton.setOnAction(event -> {
-            Player player = players.get(currentPlayerIndex);
-            Dice dice = new Dice(6, 1);
-            int roll = dice.roll();
-            throwDiceButton.getStyleClass().add("game-button");
+        Player player = players.get(currentPlayerIndex);
+        Dice dice = new Dice(6, 1);
+        int roll = dice.roll();
+        throwDiceButton.getStyleClass().add("game-button");
 
-            int newPosition = player.getPosition() + roll;
-            if (newPosition > board.getSize()) {
-                newPosition = board.getSize();
+        int newPosition = player.getPosition() + roll;
+        if (newPosition > board.getSize()) {
+            newPosition = board.getSize();
+        }
+
+        player.setPosition(newPosition, board);
+        Tile newTile = board.getTile(newPosition);
+        player.setCurrentTile(newTile);
+
+        if (newTile.getAction() != null) {
+            // Først: hvis det er en ChessPuzzleAction
+            if (newTile.getAction() instanceof ChessPuzzleAction) {
+                messageLabel.setText(player.getName() + " landet på en sjakkoppgave!");
+                newTile.executeAction(player, board);
+                return;
             }
 
-            player.setPosition(newPosition, board);
-            Tile newTile = board.getTile(newPosition);
-            player.setCurrentTile(newTile);
+            // Ellers vanlig action
+            String actionType = newTile.getAction().getClass().getSimpleName();
+            String actionText = switch (actionType) {
+                case "LadderAction" -> "brukte en stige";
+                case "BackAction" -> "traff en slange";
+                case "SkipTurnAction" -> "mister neste tur";
+                case "ResetAction" -> "må tilbake til start";
+                case "TeleportRandomAction" -> "blir teleportert til et randomt sted på brettet";
+                default -> "ble påvirket av en handling";
+            };
 
-            if (newTile.getAction() != null) {
-                String actionType = newTile.getAction().getClass().getSimpleName();
-                String actionText = switch (actionType) {
-                    case "LadderAction" -> "brukte en stige";
-                    case "BackAction" -> "traff en slange";
-                    case "SkipTurnAction" -> "mister neste tur";
-                    case "ResetAction" -> "må tilbake til start";
-                    case "TeleportRandomAction" -> "blir teleportert til et randomt sted på brettet";
-                    default -> "ble påvirket av en handling";
-                };
+            messageLabel.setText(player.getName() + " landet på rute " + newPosition + " og " + actionText + "...");
 
-                messageLabel.setText(player.getName() + " landet på rute " + newPosition + " og " + actionText + "...");
+            throwDiceButton.setDisable(true);
+            nextTurnButton.setDisable(true);
 
-                throwDiceButton.setDisable(true);
-                nextTurnButton.setDisable(true);
-
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    newTile.executeAction(player, board);
-                    boardgame.notifyPlayerMoved(player);
-                    drawBoard(canvas.getGraphicsContext2D());
-                    messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
-
-                    if (player.getPosition() == board.getSize()) {
-                        boardgame.notifyGameWon(player);
-                    } else {
-                        nextTurnButton.setDisable(false);
-                    }
-                });
-                pause.play();
-            } else {
-                messageLabel.setText(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(e -> {
+                newTile.executeAction(player, board);
                 boardgame.notifyPlayerMoved(player);
+                drawBoard(canvas.getGraphicsContext2D());
+                messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
+
                 if (player.getPosition() == board.getSize()) {
                     boardgame.notifyGameWon(player);
+                } else {
+                    nextTurnButton.setDisable(false);
                 }
-                throwDiceButton.setDisable(true);
-                nextTurnButton.setDisable(false);
+            });
+            pause.play();
+        } else {
+            // Hvis ingen spesialfelt
+            messageLabel.setText(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
+            boardgame.notifyPlayerMoved(player);
+            if (player.getPosition() == board.getSize()) {
+                boardgame.notifyGameWon(player);
             }
-        });
+            throwDiceButton.setDisable(true);
+            nextTurnButton.setDisable(false);
+        }
+    });
 
         nextTurnButton.setDisable(true);
         nextTurnButton.setOnAction(event -> {
@@ -188,6 +197,7 @@ public class LadderGameScreen {
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.GOLD, "Teleportfelt");
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.DEEPSKYBLUE, "Tilbake til start");
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.ORANGERED, "Mister en tur");
+        drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.PURPLE, "Sjakkquiz");
         drawLegendItem(legendGC, tileSize, y, spacing, javafx.scene.paint.Color.WHITE, "Vanlig felt");
 
         VBox legendBox = new VBox(legendCanvas);
@@ -239,6 +249,8 @@ public class LadderGameScreen {
             gc.setFill(javafx.scene.paint.Color.GOLD);
         } else if (tile.getAction() instanceof SkipTurnAction) {
             gc.setFill(javafx.scene.paint.Color.ORANGERED);
+        } else if(tile.getAction() instanceof ChessPuzzleAction){
+            gc.setFill(javafx.scene.paint.Color.PURPLE);
         } else {
             gc.setFill(javafx.scene.paint.Color.WHITE);
         }

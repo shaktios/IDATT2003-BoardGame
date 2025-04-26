@@ -2,19 +2,19 @@ package edu.ntnu.boardgame.actions.puzzleactions;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.constructors.Player;
-import edu.ntnu.boardgame.view.laddergame.chesspuzzle.ChessPuzzleView;
+import edu.ntnu.boardgame.actions.tileactions.TileAction;
+import edu.ntnu.boardgame.controllers.ChessPuzzleViewController;
 
-public class ChessPuzzleAction {
+public class ChessPuzzleAction implements TileAction {
 
-    private Player player;
-    private Board board;
-
-    public ChessPuzzleAction(Player player, Board board) {
-        this.player = player;
-        this.board = board;
+    @Override
+    public void execute(Player player, Board board) {
+        ChessPuzzleViewController viewController = new ChessPuzzleViewController(player, board);
+        viewController.startPuzzle();
     }
 
-    public void launchPuzzle() {
-        new ChessPuzzleView(player, board).show();
+    @Override
+    public int getDestination() {
+        return -1; // ChessPuzzleAction har ingen destinasjon
     }
 }

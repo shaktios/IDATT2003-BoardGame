@@ -5,6 +5,7 @@ package edu.ntnu.boardgame;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
 import edu.ntnu.boardgame.actions.tileactions.LadderAction;
 import edu.ntnu.boardgame.actions.tileactions.ResetAction;
@@ -48,6 +49,9 @@ public class BoardGameFactory {
         board.getTile(30).setAction(new TeleportRandomAction());       // tilfeldig
         board.getTile(59).setAction(new TeleportRandomAction());       // tilfeldig
 
+        board.getTile(47).setAction(new ChessPuzzleAction());
+        board.getTile(73).setAction(new ChessPuzzleAction());
+        
 
         return new Boardgame(board, 2, 6); // standard terninger
     }
