@@ -31,12 +31,14 @@ public class ChessPuzzleView {
 
     private Player player;
     private Board board;
+    private Runnable onPuzzleComplete; 
     private static final int CORRECT_MOVE_FORWARD = 5;
     private static final int WRONG_MOVE_BACKWARD = 3;
 
-    public ChessPuzzleView(Player player, Board board) {
+    public ChessPuzzleView(Player player, Board board, Runnable onPuzzleComplete) {
         this.player = player;
         this.board = board;
+        this.onPuzzleComplete = onPuzzleComplete; 
     }
 
     public void show() {
@@ -60,10 +62,17 @@ public class ChessPuzzleView {
         buttonBox.setAlignment(Pos.CENTER);
 
         List<String> options = generateOptions(correctMove);
+
+        List<Button> buttons = new ArrayList<>();
+
         for (String option : options) {
             Button optionButton = new Button(option);
             optionButton.setOnAction(e -> {
                 Stage stage = (Stage) optionButton.getScene().getWindow();
+
+                // Deaktiver ALLE knapper så spilleren kun kan svare én gang
+                buttons.forEach(btn -> btn.setDisable(true));
+
                 if (option.equals(correctMove)) {
                     resultLabel.setText("Riktig! Du går fremover " + CORRECT_MOVE_FORWARD + " felt!");
                     movePlayer(CORRECT_MOVE_FORWARD);
@@ -71,10 +80,17 @@ public class ChessPuzzleView {
                     resultLabel.setText("Feil! Du går bakover " + WRONG_MOVE_BACKWARD + " felt!");
                     movePlayer(-WRONG_MOVE_BACKWARD);
                 }
+
                 PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-                pause.setOnFinished(event -> stage.close());
+                pause.setOnFinished(event -> {
+                    if (onPuzzleComplete != null) {
+                        onPuzzleComplete.run();
+                    }
+                    stage.close();
+                });
                 pause.play();
             });
+            buttons.add(optionButton);
             buttonBox.getChildren().add(optionButton);
         }
 
@@ -90,13 +106,27 @@ public class ChessPuzzleView {
 
     private List<String> generateOptions(String correctMove) {
         List<String> moves = new ArrayList<>(List.of(
-                "Qh4#", "Rg8#", "Rc8#", "Rc1#", "Qd8#", "e4#", "Bb5#", "Nh5#"
+                "Qh4#", "Rg8#", "Rc8#", "Rc1#", "Qd8#", "e4#", "Bb5#", "Nh5#",
+                "Bd3#", "Rd1#", "Qe7#", "Nd5#" // 
         ));
-        moves.remove(correctMove);
+        moves.remove(correctMove); // Fjern riktig svar
         Collections.shuffle(moves);
-        List<String> selected = new ArrayList<>(moves.subList(0, 3));
-        selected.add(correctMove);
-        Collections.shuffle(selected);
+
+        List<String> selected = new ArrayList<>();
+        int i = 0;
+        while (selected.size() < 3 && i < moves.size()) {
+            selected.add(moves.get(i));
+            i++;
+        }
+
+        // Hvis det fortsatt er færre enn 3, bare kopier noen tilfeldige trekk igjen
+        Random rand = new Random();
+        while (selected.size() < 3) {
+            selected.add(moves.get(rand.nextInt(moves.size())));
+        }
+
+        selected.add(correctMove); // Legg til riktig svar
+        Collections.shuffle(selected); // Bland rekkefølgen
         return selected;
     }
 
