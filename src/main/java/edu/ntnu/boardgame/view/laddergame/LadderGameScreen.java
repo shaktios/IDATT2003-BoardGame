@@ -128,6 +128,7 @@ public class LadderGameScreen {
         int cols = board.getColumns();
         int rows = board.getRows();
 
+        // Først: tegn alle feltene
         for (int pos = 1; pos <= board.getSize(); pos++) {
             Tile tile = board.getTile(pos);
             int row = (rows * cols - pos) / cols;
@@ -160,8 +161,57 @@ public class LadderGameScreen {
             gc.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
             gc.setFill(javafx.scene.paint.Color.BLACK);
             gc.fillText(String.valueOf(pos), x + 5, y + 15);
+
+            // Tegn pil på felter som har LadderAction, BackAction, ResetAction
+            if (tile.getAction() instanceof LadderAction
+                    || tile.getAction() instanceof BackAction
+                    || tile.getAction() instanceof ResetAction) {
+
+                int destination = tile.getAction().getDestination();
+                if (destination > 0 && destination != pos) {
+                    String arrowText = " -> " + destination;
+                    gc.fillText(arrowText, x + 5, y + 30);
+                }
+            }
         }
 
+        // Så: tegn lysere farger på målruter (topp av stige, enden av slange)
+        for (int pos = 1; pos <= board.getSize(); pos++) {
+            Tile tile = board.getTile(pos);
+            if (tile.getAction() == null) {
+                continue;
+            }
+
+            int destination = tile.getAction().getDestination();
+            if (destination < 1 || destination > board.getSize() || destination == 1) {
+                continue;
+            }
+
+            int destRow = (rows * cols - destination) / cols;
+            int destCol = (destination - 1) % cols;
+            if ((rows - destRow) % 2 == 0) {
+                destCol = cols - 1 - destCol;
+            }
+
+            double destX = destCol * TILE_SIZE;
+            double destY = destRow * TILE_SIZE;
+
+            if (tile.getAction() instanceof LadderAction) {
+                gc.setFill(javafx.scene.paint.Color.LAWNGREEN); // topp på stige
+            } else if (tile.getAction() instanceof BackAction) {
+                gc.setFill(javafx.scene.paint.Color.LIGHTSALMON); // enden av slange
+            } else {
+                continue; // andre skal ikke tegnes spesielt
+            }
+
+            gc.fillRect(destX, destY, TILE_SIZE, TILE_SIZE);
+            gc.setStroke(javafx.scene.paint.Color.BLACK);
+            gc.strokeRect(destX, destY, TILE_SIZE, TILE_SIZE);
+            gc.setFill(javafx.scene.paint.Color.BLACK);
+            gc.fillText(String.valueOf(destination), destX + 5, destY + 15);
+        }
+
+        // Til slutt: tegn spillernes brikker
         for (Player player : players) {
             int pos = player.getPosition();
             int row = (rows * cols - pos) / cols;
@@ -169,6 +219,7 @@ public class LadderGameScreen {
             if ((rows - row) % 2 == 0) {
                 col = cols - 1 - col;
             }
+
             double x = col * TILE_SIZE;
             double y = row * TILE_SIZE;
 
