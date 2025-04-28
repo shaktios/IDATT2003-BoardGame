@@ -90,7 +90,7 @@ public class StartScreenController {
         }
 
         LadderGameScreen gameScreen = new LadderGameScreen();
-        Scene ladderGameScene = gameScreen.createScene(stage, boardgame.getBoard(), players);
+        Scene ladderGameScene = gameScreen.createScene(stage, boardgame, boardgame.getBoard(), players);
         LadderGameController ladderGameController = new LadderGameController(boardgame, gameScreen);
 
         gameScreen.getThrowDiceButton().setOnAction(e -> ladderGameController.handleDiceRoll(stage));

@@ -49,6 +49,7 @@ public class LadderGameController {
         Player player = players.get(currentPlayerIndex);
         Dice dice = new Dice(6, 1);
         int roll = dice.roll();
+        view.setLastRoll(roll);
 
         int newPosition = player.getPosition() + roll;
         if (newPosition > board.getSize()) {
@@ -59,19 +60,15 @@ public class LadderGameController {
         Tile newTile = board.getTile(newPosition);
         player.setCurrentTile(newTile);
 
-        // Tegn brett på nytt NÅ
         view.redrawBoard();
-
-        view.updateMessage(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
 
         if (newTile.getAction() instanceof PuzzleTileAction puzzleAction) {
             view.disableDiceAndNextTurnButtons();
             puzzleAction.execute(player, board, () -> {
                 boardgame.notifyPlayerMoved(player);
                 view.redrawBoard();
-                view.updateMessage(player.getName() + " er nå på rute " + player.getPosition());
                 if (player.getPosition() == board.getSize()) {
-                    view.showWinMessage(player,stage);
+                    view.showWinMessage(player, stage);
                 } else {
                     view.enableNextTurnButton();
                 }
@@ -84,7 +81,7 @@ public class LadderGameController {
         } else {
             boardgame.notifyPlayerMoved(player);
             if (player.getPosition() == board.getSize()) {
-                view.showWinMessage(player,stage);
+                view.showWinMessage(player, stage);
             }
             view.disableDiceButton();
             view.enableNextTurnButton();
@@ -111,7 +108,7 @@ public class LadderGameController {
             case "ResetAction" ->
                 "må tilbake til start";
             case "TeleportRandomAction" ->
-                "blir teleportert til et randomt sted";
+                "blir teleportert til et tilfeldig sted på brettet";
             default ->
                 "ble påvirket av en handling";
         };
@@ -122,8 +119,12 @@ public class LadderGameController {
         pause.setOnFinished(e -> {
             TileAction tileAction = (TileAction) tile.getAction();
             tileAction.execute(player, board);
+
+            // Først etter flytt: nå kan vi notere flyttingen
             boardgame.notifyPlayerMoved(player);
             view.redrawBoard();
+
+            // Nå skriver vi "er nå på rute X" (hvis ønskelig)
             view.updateMessage(player.getName() + " er nå på rute " + player.getPosition());
 
             if (player.getPosition() == board.getSize()) {

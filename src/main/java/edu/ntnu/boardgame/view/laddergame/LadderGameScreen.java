@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
 import edu.ntnu.boardgame.actions.tileactions.LadderAction;
@@ -38,14 +39,18 @@ public class LadderGameScreen {
     private Label messageLabel;
     private Button throwDiceButton;
     private Button nextTurnButton;
+    private Boardgame boardgame;
     private final Map<String, Image> playerTokens = new HashMap<>();
     private VBox messageBox;
     private Board board;
     private List<Player> players;
+    private int lastRoll;
 
-    public Scene createScene(Stage stage, Board board, List<Player> players) {
+    public Scene createScene(Stage stage, Boardgame boardgame, Board board, List<Player> players) {
         this.board = board;
         this.players = players;
+        this.boardgame = boardgame;
+        boardgame.registerObserver(new GameObserver());
 
         int canvasWidth = board.getColumns() * TILE_SIZE;
         int canvasHeight = board.getRows() * TILE_SIZE;
@@ -300,13 +305,40 @@ public class LadderGameScreen {
         return canvas;
     }
 
+    public void setLastRoll(int roll) {
+        this.lastRoll = roll;
+    }
+
 
     private class GameObserver implements BoardGameObserver {
 
         @Override
         public void onPlayerMove(Player player) {
-            messageLabel.setText(player.getName() + " er nå på rute " + player.getPosition());
-            drawBoard(); 
+            Tile currentTile = player.getCurrentTile();
+
+            if (currentTile.getAction() != null) {
+                String actionType = currentTile.getAction().getClass().getSimpleName();
+                String actionText = switch (actionType) {
+                    case "LadderAction" ->
+                        "brukte en stige";
+                    case "BackAction" ->
+                        "traff en slange";
+                    case "SkipTurnAction" ->
+                        "mister neste tur";
+                    case "ResetAction" ->
+                        "må tilbake til start";
+                    case "TeleportRandomAction" ->
+                        "blir teleportert til et tilfeldig sted på brettet";
+                    default ->
+                        "ble påvirket av en handling";
+                };
+
+                messageLabel.setText(player.getName() + " kastet " + lastRoll + " og flyttet til rute " + player.getPosition() + ", og " + actionText);
+            } else {
+                messageLabel.setText(player.getName() + " kastet " + lastRoll + " og flyttet til rute " + player.getPosition() + ".");
+            }
+
+            drawBoard();
         }
 
         @Override
