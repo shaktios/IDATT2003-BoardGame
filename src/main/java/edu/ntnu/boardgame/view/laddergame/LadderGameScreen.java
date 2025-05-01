@@ -15,7 +15,6 @@ import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
-import edu.ntnu.boardgame.observer.BoardGameObserver;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -50,7 +49,7 @@ public class LadderGameScreen {
         this.board = board;
         this.players = players;
         this.boardgame = boardgame;
-        boardgame.registerObserver(new GameObserver());
+
 
         int canvasWidth = board.getColumns() * TILE_SIZE;
         int canvasHeight = board.getRows() * TILE_SIZE;
@@ -61,9 +60,12 @@ public class LadderGameScreen {
         messageLabel.getStyleClass().add("message-label");
 
         throwDiceButton = new Button("Kast Terning");
+        throwDiceButton.getStyleClass().add("game-button");
         nextTurnButton = new Button("Neste tur");
+        nextTurnButton.getStyleClass().add("game-button");
 
         messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton));
+        VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
         messageBox.setPadding(new Insets(15));
         messageBox.setPrefWidth(400);
         messageBox.setPrefHeight(200);
@@ -310,51 +312,7 @@ public class LadderGameScreen {
     }
 
 
-    private class GameObserver implements BoardGameObserver {
 
-        @Override
-        public void onPlayerMove(Player player) {
-            Tile currentTile = player.getCurrentTile();
-
-            if (currentTile.getAction() != null) {
-                String actionType = currentTile.getAction().getClass().getSimpleName();
-                String actionText = switch (actionType) {
-                    case "LadderAction" ->
-                        "brukte en stige";
-                    case "BackAction" ->
-                        "traff en slange";
-                    case "SkipTurnAction" ->
-                        "mister neste tur";
-                    case "ResetAction" ->
-                        "må tilbake til start";
-                    case "TeleportRandomAction" ->
-                        "blir teleportert til et tilfeldig sted på brettet";
-                    default ->
-                        "ble påvirket av en handling";
-                };
-
-                messageLabel.setText(player.getName() + " kastet " + lastRoll + " og flyttet til rute " + player.getPosition() + ", og " + actionText);
-            } else {
-                messageLabel.setText(player.getName() + " kastet " + lastRoll + " og flyttet til rute " + player.getPosition() + ".");
-            }
-
-            drawBoard();
-        }
-
-        @Override
-        public void onGameWon(Player winner) {
-            messageLabel.setText(winner.getName() + " vant spillet!");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Spillet er ferdig");
-            alert.setHeaderText(winner.getName() + " har vunnet spillet!");
-            alert.setContentText("Du sendes tilbake til startskjermen.");
-            alert.showAndWait();
-
-            Stage stage = (Stage) canvas.getScene().getWindow();
-            Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
-            stage.setScene(freshStartScene);
-        }
-    }
 
 
 }

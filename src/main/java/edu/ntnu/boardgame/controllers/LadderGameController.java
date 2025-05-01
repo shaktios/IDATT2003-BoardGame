@@ -4,13 +4,17 @@ import java.util.List;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.TileAction;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
+import edu.ntnu.boardgame.observer.BoardGameObserver;
 import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
 import javafx.animation.PauseTransition;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -25,6 +29,8 @@ public class LadderGameController {
     private List<Player> players;
     private int currentPlayerIndex;
     private LadderGameScreen view;
+    
+    
 
     /**
      * Constructs the LadderGameController.
@@ -38,8 +44,8 @@ public class LadderGameController {
         this.players = boardgame.getPlayers();
         this.currentPlayerIndex = 0;
         this.view = view;
+        boardgame.registerObserver(new GameObserver());
     }
-
     /**
      * Handles the dice roll and player movement.
      *
@@ -51,10 +57,8 @@ public class LadderGameController {
         int roll = dice.roll();
         view.setLastRoll(roll);
 
-        int newPosition = player.getPosition() + roll;
-        if (newPosition > board.getSize()) {
-            newPosition = board.getSize();
-        }
+        int tempPosition = player.getPosition() + roll;
+        final int newPosition = Math.min(tempPosition, board.getSize());
 
         player.setPosition(newPosition, board);
         Tile newTile = board.getTile(newPosition);
@@ -65,8 +69,11 @@ public class LadderGameController {
         if (newTile.getAction() instanceof PuzzleTileAction puzzleAction) {
             view.disableDiceAndNextTurnButtons();
             puzzleAction.execute(player, board, () -> {
+                view.updateMessage(player.getName() + " landet på felt " + player.getPosition());
                 boardgame.notifyPlayerMoved(player);
                 view.redrawBoard();
+
+                view.updateMessage(player.getName() + " flyttet til rute " + player.getPosition() + " etter svaret på sjakkoppgaven ");
                 if (player.getPosition() == board.getSize()) {
                     view.showWinMessage(player, stage);
                 } else {
@@ -79,6 +86,7 @@ public class LadderGameController {
         if (newTile.getAction() != null) {
             handleTileAction(player, newTile);
         } else {
+            view.updateMessage(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
             boardgame.notifyPlayerMoved(player);
             if (player.getPosition() == board.getSize()) {
                 view.showWinMessage(player, stage);
@@ -87,7 +95,6 @@ public class LadderGameController {
             view.enableNextTurnButton();
         }
     }
-
     /**
      * Handles when the player lands on a special tile.
      *
@@ -100,20 +107,20 @@ public class LadderGameController {
         String actionType = tile.getAction().getClass().getSimpleName();
         String actionText = switch (actionType) {
             case "LadderAction" ->
-                "brukte en stige";
+                " og brukte en stige";
             case "BackAction" ->
-                "traff en slange";
+                " og traff en slange";
             case "SkipTurnAction" ->
-                "mister neste tur";
+                " og mister neste tur";
             case "ResetAction" ->
-                "må tilbake til start";
+                " og må tilbake til start";
             case "TeleportRandomAction" ->
-                "blir teleportert til et tilfeldig sted på brettet";
+                " og blir teleportert til et tilfeldig sted på brettet";
             default ->
-                "ble påvirket av en handling";
+                " og ble påvirket av en handling";
         };
 
-        view.updateMessage(player.getName() + " landet på en spesialrute og " + actionText);
+        view.updateMessage(player.getName() + " landet på " + actionType + actionText);
 
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(e -> {
@@ -154,6 +161,32 @@ public class LadderGameController {
             view.updateMessage("Spiller sin tur: " + nextPlayer.getName());
             view.enableDiceButton();
             view.disableNextTurnButton();
+        }
+    }
+
+
+    public void showWinnerMessage(Player winner) {
+            view.updateMessage(winner.getName() + " vant spillet!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Spillet er ferdig");
+            alert.setHeaderText(winner.getName() + " har vunnet spillet!");
+            alert.setContentText("Du sendes tilbake til startskjermen.");
+            alert.showAndWait();
+
+            Stage stage = (Stage) view.getCanvas().getScene().getWindow();
+            Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
+            stage.setScene(freshStartScene);
+        }
+
+        private class GameObserver implements BoardGameObserver {
+        @Override
+        public void onPlayerMove(Player player) {
+            view.redrawBoard();
+        }
+
+        @Override
+        public void onGameWon(Player winner) {
+            showWinnerMessage(winner); 
         }
     }
 
