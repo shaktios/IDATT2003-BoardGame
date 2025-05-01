@@ -59,14 +59,20 @@ public class BoardGameFactory {
         Board board = new Board(10,2);
         Boardgame boardgame = new Boardgame(board, 1, 6);
         //Stiger
-        board.getTile(5).setAction(new LadderAction(11));   // Tidlig stige
+        board.getTile(2).setAction(new LadderAction(18));   // Tidlig stige
+        board.getTile(3).setAction(new LadderAction(18));   // Tidlig stige(skal egt være 8)
+        //Stiger
+        board.getTile(4).setAction(new LadderAction(18));   // Tidlig stige
+        board.getTile(5).setAction(new LadderAction(18));   // Tidlig stige(skal egt være 8)
+        //Stiger
+        board.getTile(6).setAction(new LadderAction(11));   // Tidlig stige
         board.getTile(7).setAction(new LadderAction(14));   // Tidlig stige(skal egt være 8)
-    
+
 
         // Slanger
-        board.getTile(4).setAction(new BackAction(2));   // Midt i spillet
-        board.getTile(8).setAction(new BackAction(6));   // Midt-sent
-        board.getTile(19).setAction(new BackAction(1));   // Rett før mål
+        board.getTile(8).setAction(new BackAction(2));   // Midt i spillet
+        board.getTile(9).setAction(new BackAction(6));   // Midt-sent
+        board.getTile(10).setAction(new BackAction(1));   // Rett før mål
         return boardgame; 
     }
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
 import edu.ntnu.boardgame.actions.tileactions.LadderAction;
@@ -15,7 +16,6 @@ import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
-import edu.ntnu.boardgame.view.common.StartScreenView;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -122,8 +122,8 @@ public class LadderGameScreen {
         alert.showAndWait();
 
         // Gå tilbake til StartScreenView
-        StartScreenView startScreen = new StartScreenView();
-        stage.setScene(startScreen.createScene(stage));
+        Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
+        stage.setScene(freshStartScene);
     }
 
     private void drawBoard() {
@@ -133,7 +133,7 @@ public class LadderGameScreen {
         int cols = board.getColumns();
         int rows = board.getRows();
 
-        // Først: tegn alle feltene
+        // tegn alle feltene
         for (int pos = 1; pos <= board.getSize(); pos++) {
             Tile tile = board.getTile(pos);
             int row = (rows * cols - pos) / cols;
@@ -180,7 +180,7 @@ public class LadderGameScreen {
             }
         }
 
-        // Så: tegn lysere farger på målruter (topp av stige, enden av slange)
+        // tegn lysere farger på målruter (topp av stige, enden av slange)
         for (int pos = 1; pos <= board.getSize(); pos++) {
             Tile tile = board.getTile(pos);
             if (tile.getAction() == null) {
@@ -348,12 +348,11 @@ public class LadderGameScreen {
             alert.setTitle("Spillet er ferdig");
             alert.setHeaderText(winner.getName() + " har vunnet spillet!");
             alert.setContentText("Du sendes tilbake til startskjermen.");
-
             alert.showAndWait();
 
-            StartScreenView startScreen = new StartScreenView();
             Stage stage = (Stage) canvas.getScene().getWindow();
-            stage.setScene(startScreen.createScene(stage));
+            Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
+            stage.setScene(freshStartScene);
         }
     }
 

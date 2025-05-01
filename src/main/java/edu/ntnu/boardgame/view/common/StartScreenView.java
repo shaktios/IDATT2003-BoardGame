@@ -27,6 +27,10 @@ public class StartScreenView {
     private List<TextField> playerNameFields = new ArrayList<>();
     private List<ComboBox<String>> playerTokenChoices = new ArrayList<>();
 
+    // Beholder handlers så de kan gjenbrukes etter restart
+    private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
+    private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
+
     public Scene createScene(Stage stage) {
         root = new VBox();
         root.setSpacing(20);
@@ -44,6 +48,14 @@ public class StartScreenView {
         nextButton = new Button("Neste");
         startGameButton = new Button("Start spill");
 
+        // Gjenoppretter tidligere EventHandler hvis satt
+        if (nextButtonHandler != null) {
+            nextButton.setOnAction(nextButtonHandler);
+        }
+        if (startGameButtonHandler != null) {
+            startGameButton.setOnAction(startGameButtonHandler);
+        }
+
         root.getChildren().addAll(
                 titleLabel,
                 gameLabel, gameSelector,
@@ -55,35 +67,55 @@ public class StartScreenView {
     }
 
     /**
-     * Setter action til Neste-knappen
+     * Sets the action handler for the "Next" button.
+     *
+     * @param handler the event handler to be triggered when the "Next" button
+     * is clicked
      */
     public void setNextButtonAction(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
-        nextButton.setOnAction(handler);
+        this.nextButtonHandler = handler;
+        if (nextButton != null) {
+            nextButton.setOnAction(handler);
+        }
     }
 
     /**
-     * Setter action til Start spill-knappen
+     * Sets the action handler for the "Start Game" button.
+     *
+     * @param handler the event handler to be triggered when the "Start Game"
+     * button is clicked
      */
     public void setStartGameButtonAction(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
-        startGameButton.setOnAction(handler);
+        this.startGameButtonHandler = handler;
+        if (startGameButton != null) {
+            startGameButton.setOnAction(handler);
+        }
     }
 
     /**
-     * Returnerer valgt spillvariant
+     * Returns the game variant selected by the user in the drop-down menu.
+     *
+     * @return the selected game variant as a String
      */
     public String getSelectedGameVariant() {
         return gameSelector.getValue();
     }
 
     /**
-     * Returnerer valgt antall spillere
+     * Returns the number of players selected by the user using the spinner.
+     *
+     * @return the number of players
      */
     public int getSelectedPlayerCount() {
         return playerCountSpinner.getValue();
     }
 
     /**
-     * Genererer inputfelt for spillerne
+     * Generates input fields for the specified number of players. Each player
+     * is given a name field and a combo box for selecting a token. Also ensures
+     * the "Start Game" button is included and properly wired.
+     *
+     * @param numberOfPlayers the number of players to generate inputs for
      */
     public void generatePlayerInputs(int numberOfPlayers) {
         root.getChildren().clear();
@@ -104,13 +136,20 @@ public class StartScreenView {
             root.getChildren().addAll(playerLabel, nameField, tokenChoice);
         }
 
+        // Start-knappen må alltid legges til med handler
         if (!root.getChildren().contains(startGameButton)) {
+            if (startGameButtonHandler != null) {
+                startGameButton.setOnAction(startGameButtonHandler);
+            }
             root.getChildren().add(startGameButton);
         }
     }
 
     /**
-     * Viser feilmelding til brukeren
+     * Displays a warning alert dialog with a title and message.
+     *
+     * @param title the title of the alert window
+     * @param message the warning message to display
      */
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -119,13 +158,22 @@ public class StartScreenView {
         alert.showAndWait();
     }
 
-    // Getters for kontrolleren å bruke
+    /**
+     * Returns the list of text fields containing player names.
+     *
+     * @return the list of player name fields
+     */
     public List<TextField> getPlayerNameFields() {
         return playerNameFields;
     }
 
+
+    /**
+     * Returns the list of combo boxes for selecting player tokens.
+     *
+     * @return the list of token selection combo boxes
+     */
     public List<ComboBox<String>> getPlayerTokenChoices() {
         return playerTokenChoices;
     }
-    
 }
