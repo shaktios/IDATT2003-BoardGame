@@ -99,8 +99,9 @@ public class ChessPuzzleView {
         layout.setAlignment(Pos.CENTER);
 
         Stage stage = new Stage();
+        stage.setResizable(false);
         stage.setTitle("Chess Puzzle");
-        stage.setScene(new Scene(layout, 600, 700));
+        stage.setScene(new Scene(layout, 850, 850));
         stage.show();
     }
 
