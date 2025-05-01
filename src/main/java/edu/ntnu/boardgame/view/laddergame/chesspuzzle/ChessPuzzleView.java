@@ -42,6 +42,7 @@ public class ChessPuzzleView {
     }
 
     public void show() {
+        
         List<String> imageList = new ArrayList<>(PUZZLES.keySet());
         Random rand = new Random();
         String chosenImage = imageList.get(rand.nextInt(imageList.size()));
@@ -53,12 +54,15 @@ public class ChessPuzzleView {
         imageView.setFitWidth(500);
 
         Label instruction = new Label("Velg riktig trekk for å vinne:");
-        instruction.setStyle("-fx-font-weight: bold;");
+        instruction.getStyleClass().add("chess-label"); 
 
         Label resultLabel = new Label();
-        resultLabel.setStyle("-fx-font-weight: bold;");
+        resultLabel.getStyleClass().add("chess-label");
 
+/*         resultLabel.setStyle("-fx-font-weight: bold;");
+ */
         VBox buttonBox = new VBox(10);
+        buttonBox.getStyleClass().add("puzzle-button-box"); 
         buttonBox.setAlignment(Pos.CENTER);
 
         List<String> options = generateOptions(correctMove);
@@ -67,6 +71,7 @@ public class ChessPuzzleView {
 
         for (String option : options) {
             Button optionButton = new Button(option);
+            optionButton.getStyleClass().add("puzzle-button-option"); 
             optionButton.setOnAction(e -> {
                 Stage stage = (Stage) optionButton.getScene().getWindow();
 
@@ -98,10 +103,13 @@ public class ChessPuzzleView {
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 
+        Scene scene = new Scene(layout, 850, 850);
+        scene.getStylesheets().add(getClass().getResource("/styles/ladderGame.css").toExternalForm()); // ← HER
+
         Stage stage = new Stage();
         stage.setResizable(false);
         stage.setTitle("Chess Puzzle");
-        stage.setScene(new Scene(layout, 850, 850));
+        stage.setScene(scene);
         stage.show();
     }
 

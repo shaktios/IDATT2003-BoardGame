@@ -60,9 +60,12 @@ public class LadderGameScreen {
         messageLabel.getStyleClass().add("message-label");
 
         throwDiceButton = new Button("Kast Terning");
+        throwDiceButton.getStyleClass().add("game-button");
         nextTurnButton = new Button("Neste tur");
+        nextTurnButton.getStyleClass().add("game-button");
 
         messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton));
+        VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
         messageBox.setPadding(new Insets(15));
         messageBox.setPrefWidth(400);
         messageBox.setPrefHeight(200);
