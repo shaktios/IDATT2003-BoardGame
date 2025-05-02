@@ -40,11 +40,11 @@ public class StartScreenController {
         Boardgame boardgame;
 
         switch (view.getSelectedGameVariant()) {
-            case "Classic" ->
-                boardgame = BoardGameFactory.createClassicGame();
-            case "Mini" ->
+            case "Liten Stigespill" ->
                 boardgame = BoardGameFactory.createMiniGame();
-            case "Fra JSON-fil" -> {
+            case "Stort Stigespill" ->
+                boardgame = BoardGameFactory.createClassicGame();
+            case "Importer eget brett (.json)" -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Velg JSON-fil");
                 File selectedFile = fileChooser.showOpenDialog(stage);
@@ -57,6 +57,10 @@ public class StartScreenController {
                     view.showAlert("Feil ved lasting av fil", ex.getMessage());
                     return;
                 }
+            }
+            case "Tic Tac Toe" -> {
+                view.showAlert("Ikke implementert enda", "Tic Tac Toe kommer snart!");
+                return;
             }
             default -> {
                 view.showAlert("Feil", "Ugyldig spillvariant valgt.");

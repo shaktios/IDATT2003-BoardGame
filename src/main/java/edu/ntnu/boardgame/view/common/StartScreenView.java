@@ -1,8 +1,14 @@
+/**
+ * View class for the Start Screen. Responsible for displaying inputs, buttons,
+ * and layout for starting the game.
+ */
 package edu.ntnu.boardgame.view.common;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -10,13 +16,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- * View class for the Start Screen. Only responsible for showing buttons,
- * inputs, alerts etc.
- */
 public class StartScreenView {
 
     private VBox root;
@@ -27,28 +32,45 @@ public class StartScreenView {
     private List<TextField> playerNameFields = new ArrayList<>();
     private List<ComboBox<String>> playerTokenChoices = new ArrayList<>();
 
-    // Beholder handlers så de kan gjenbrukes etter restart
     private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
     private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
 
+    /**
+     * Creates the initial start screen layout and scene.
+     *
+     * @param stage the current JavaFX stage
+     * @return a fully constructed Scene for the start screen
+     */
     public Scene createScene(Stage stage) {
         root = new VBox();
         root.setSpacing(20);
+        root.setPadding(new Insets(40));
+        root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("start-screen-root");
 
-        Label titleLabel = new Label("Velkommen til Brettspillet");
+        Label titleLabel = new Label("Velkommen til Spillplattformen!");
+        titleLabel.getStyleClass().add("title-label");
 
         gameSelector = new ComboBox<>();
-        gameSelector.getItems().addAll("Classic", "Mini", "Fra JSON-fil");
-        gameSelector.setValue("Classic");
-        Label gameLabel = new Label("Velg spillvariant:");
+        gameSelector.getItems().addAll("Liten Stigespill", "Stort Stigespill", "Importer eget brett (.json)", "Tic Tac Toe");
+        gameSelector.setValue("Liten Stigespill");
+        gameSelector.getStyleClass().add("custom-combo");
+
+        Label gameLabel = new Label("\uD83D\uDC64 Velg spillvariant:");
+        gameLabel.getStyleClass().add("section-label");
 
         playerCountSpinner = new Spinner<>(1, 5, 2);
-        Label playerLabel = new Label("Velg antall spillere:");
+        playerCountSpinner.getStyleClass().add("custom-spinner");
+
+        Label playerLabel = new Label("\uD83D\uDC64 Velg antall spillere:");
+        playerLabel.getStyleClass().add("section-label");
 
         nextButton = new Button("Neste");
-        startGameButton = new Button("Start spill");
+        nextButton.getStyleClass().add("start-button");
 
-        // Gjenoppretter tidligere EventHandler hvis satt
+        startGameButton = new Button("Start spill");
+        startGameButton.getStyleClass().add("start-button");
+
         if (nextButtonHandler != null) {
             nextButton.setOnAction(nextButtonHandler);
         }
@@ -56,14 +78,11 @@ public class StartScreenView {
             startGameButton.setOnAction(startGameButtonHandler);
         }
 
-        root.getChildren().addAll(
-                titleLabel,
-                gameLabel, gameSelector,
-                playerLabel, playerCountSpinner,
-                nextButton
-        );
+        root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner, nextButton);
 
-        return new Scene(root, 1200, 800);
+        Scene scene = new Scene(root, 1200, 800);
+        scene.getStylesheets().add(getClass().getResource("/styles/startScreen.css").toExternalForm());
+        return scene;
     }
 
     /**
@@ -110,40 +129,62 @@ public class StartScreenView {
         return playerCountSpinner.getValue();
     }
 
-    /**
+
+ 
+
+ /**
      * Generates input fields for the specified number of players. Each player
-     * is given a name field and a combo box for selecting a token. Also ensures
-     * the "Start Game" button is included and properly wired.
+     * is given a name field and a combo box for selecting a token. Ensures the
+     * "Start Game" button is present and functional.
      *
      * @param numberOfPlayers the number of players to generate inputs for
      */
     public void generatePlayerInputs(int numberOfPlayers) {
-        root.getChildren().clear();
-        playerNameFields.clear();
-        playerTokenChoices.clear();
+    root.getChildren().clear();
+    playerNameFields.clear();
+    playerTokenChoices.clear();
 
-        for (int i = 1; i <= numberOfPlayers; i++) {
-            Label playerLabel = new Label("Spiller " + i);
-            TextField nameField = new TextField();
-            nameField.setPromptText("Navn til spiller " + i);
-            playerNameFields.add(nameField);
+    for (int i = 1; i <= numberOfPlayers; i++) {
+        Label playerLabel = new Label("Spiller " + i);
+        playerLabel.getStyleClass().add("section-label");
 
-            ComboBox<String> tokenChoice = new ComboBox<>();
-            tokenChoice.getItems().addAll("Bishop", "Horse", "Pawn", "Queen", "Rook");
-            tokenChoice.setValue("Bishop");
-            playerTokenChoices.add(tokenChoice);
+        TextField nameField = new TextField();
+        nameField.setPromptText("Navn til spiller " + i);
+        nameField.getStyleClass().add("player-textfield");
 
-            root.getChildren().addAll(playerLabel, nameField, tokenChoice);
-        }
+        ComboBox<String> tokenChoice = new ComboBox<>();
+        tokenChoice.getItems().addAll("Bishop", "Horse", "Pawn", "Queen", "Rook");
+        tokenChoice.setValue("Bishop");
+        tokenChoice.getStyleClass().add("custom-combo");
 
-        // Start-knappen må alltid legges til med handler
-        if (!root.getChildren().contains(startGameButton)) {
-            if (startGameButtonHandler != null) {
-                startGameButton.setOnAction(startGameButtonHandler);
-            }
-            root.getChildren().add(startGameButton);
-        }
+        // Live image preview
+        ImageView tokenPreview = new ImageView(new Image(getClass().getResourceAsStream("/images/Bishop.png")));
+        tokenPreview.setFitHeight(88);
+        tokenPreview.setPreserveRatio(true);
+        tokenPreview.getStyleClass().add("token-preview");
+
+        tokenChoice.setOnAction(e -> {
+            String selected = tokenChoice.getValue();
+            tokenPreview.setImage(new Image(getClass().getResourceAsStream("/images/" + selected + ".png")));
+        });
+
+        HBox playerRow = new HBox(10, tokenPreview, nameField, tokenChoice);
+        playerRow.setAlignment(Pos.CENTER);
+        playerRow.getStyleClass().add("player-row");
+
+        playerNameFields.add(nameField);
+        playerTokenChoices.add(tokenChoice);
+
+        root.getChildren().addAll(playerLabel, playerRow);
     }
+
+    if (!root.getChildren().contains(startGameButton)) {
+        if (startGameButtonHandler != null) {
+            startGameButton.setOnAction(startGameButtonHandler);
+        }
+        root.getChildren().add(startGameButton);
+    }
+}
 
     /**
      * Displays a warning alert dialog with a title and message.
@@ -166,7 +207,6 @@ public class StartScreenView {
     public List<TextField> getPlayerNameFields() {
         return playerNameFields;
     }
-
 
     /**
      * Returns the list of combo boxes for selecting player tokens.

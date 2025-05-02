@@ -1,0 +1,58 @@
+/* startScreen.css  */
+
+.start-screen-root {
+    -fx-background-color: linear-gradient(to bottom right, #2E003E, #40004F);
+    -fx-alignment: center;
+    -fx-spacing: 25;
+    -fx-padding: 80;
+}
+
+.title-label {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FF6B81;
+    /* Soft coral */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.5, 0, 2);
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.section-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #F0F0F0;
+    /* Lys tekst for mørk bakgrunn */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.combo-box,
+.spinner,
+.text-field {
+    -fx-font-size: 16px;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-padding: 8 16 8 16;
+    -fx-min-width: 240px;
+}
+
+.start-button {
+    -fx-background-color: #FF6B81;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 10 24 10 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 6, 0, 0, 3);
+}
+
+.start-button:hover {
+    -fx-background-color: #FFA4A4;
+    -fx-text-fill: #3B0A2B;
+}
+
+.token-preview {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);
+    -fx-padding: 5;
+}
