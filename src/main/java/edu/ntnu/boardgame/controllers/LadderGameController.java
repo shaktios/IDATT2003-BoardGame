@@ -178,7 +178,7 @@ public class LadderGameController {
             stage.setScene(freshStartScene);
         });
 
-        alert.show(); // IKKE showAndWait her heller
+        alert.show(); // IKKE showAndWait
     }
 
         private class GameObserver implements BoardGameObserver {

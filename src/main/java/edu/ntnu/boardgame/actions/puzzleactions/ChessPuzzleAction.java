@@ -9,35 +9,40 @@ import edu.ntnu.boardgame.controllers.ChessPuzzleViewController;
 /**
  * Action that triggers a chess puzzle when a player lands on the tile.
  */
-public class ChessPuzzleAction implements PuzzleTileAction, TileAction { // 
+public class ChessPuzzleAction implements PuzzleTileAction, TileAction {
 
     private Boardgame boardgame;
-    
 
     /**
      * Constructs a ChessPuzzleAction linked to the main boardgame.
      *
-     * @param boardgame the main Boardgame instance to update the game after
-     * puzzle
+     * @param boardgame the boardgame this action belongs to
      */
     public ChessPuzzleAction(Boardgame boardgame) {
         this.boardgame = boardgame;
     }
 
     /**
-     * Executes the chess puzzle view when a player lands on the tile.
+     * Executes the chess puzzle view when a player lands on the tile. This
+     * version is used when no specific callback is needed.
      *
      * @param player the player who landed on the tile
      * @param board the board the player is playing on
      */
     @Override
     public void execute(Player player, Board board) {
-        // Siden TileAction krever denne execute-metoden
-        // Vi bare kaller execute(...) med en dummy
         execute(player, board, () -> {
         });
     }
 
+    /**
+     * Executes the chess puzzle view with a callback after the puzzle is
+     * solved. Checks for win after the puzzle is completed.
+     *
+     * @param player the player who landed on the tile
+     * @param board the board the player is playing on
+     * @param onPuzzleComplete the callback to run after puzzle is done
+     */
     @Override
     public void execute(Player player, Board board, Runnable onPuzzleComplete) {
         Runnable callback = () -> {
@@ -55,9 +60,9 @@ public class ChessPuzzleAction implements PuzzleTileAction, TileAction { //
     }
 
     /**
-     * Chess puzzles do not have a fixed destination like ladders/snakes.
+     * Chess puzzles do not lead to a fixed destination.
      *
-     * @return -1 (no destination)
+     * @return -1 to indicate no destination
      */
     @Override
     public int getDestination() {
@@ -65,12 +70,11 @@ public class ChessPuzzleAction implements PuzzleTileAction, TileAction { //
     }
 
     /**
-     * Sets Boardgame after an action is made (for JSON-import).
+     * Sets boardgame after deserialization from JSON.
      *
-     * @param boardgame the boardgame to link
+     * @param boardgame the boardgame to assign
      */
     public void setBoardgame(Boardgame boardgame) {
         this.boardgame = boardgame;
     }
-
 }
