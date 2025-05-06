@@ -1,6 +1,7 @@
 package edu.ntnu.boardgame.controllers;
 
 import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.model.laddergame.chesspuzzle.ChessPuzzleModel;
 import edu.ntnu.boardgame.view.laddergame.chesspuzzle.ChessPuzzleView;
@@ -16,6 +17,7 @@ public class ChessPuzzleViewController {
     private final Board board;
     private final Runnable onPuzzleComplete;
     private final ChessPuzzleModel model;
+    private final Boardgame boardgame; 
     private ChessPuzzleView view;
 
     private static final int CORRECT_MOVE_FORWARD = 5;
@@ -28,10 +30,11 @@ public class ChessPuzzleViewController {
      * @param board the board being played on
      * @param onPuzzleComplete callback to execute after the puzzle finishes
      */
-    public ChessPuzzleViewController(Player player, Board board, Runnable onPuzzleComplete) {
+    public ChessPuzzleViewController(Player player, Board board, Runnable onPuzzleComplete, Boardgame boardgame) {
         this.player = player;
         this.board = board;
         this.onPuzzleComplete = onPuzzleComplete;
+        this.boardgame = boardgame;
         this.model = new ChessPuzzleModel();
     }
 
@@ -77,5 +80,6 @@ public class ChessPuzzleViewController {
         int newPosition = Math.max(1, Math.min(player.getPosition() + offset, board.getSize()));
         player.setPosition(newPosition, board);
         player.setCurrentTile(board.getTile(newPosition));
+        boardgame.checkForWin(player);
     }
 }

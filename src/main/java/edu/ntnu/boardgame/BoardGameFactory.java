@@ -67,14 +67,14 @@ public class BoardGameFactory {
         Board board = new Board(10,2);
         Boardgame boardgame = new Boardgame(board, 1, 6);
         //Stiger
-        board.getTile(2).setAction(new LadderAction(18));   // Tidlig stige
-        board.getTile(3).setAction(new LadderAction(18));   // Tidlig stige(skal egt være 8)
+        board.getTile(2).setAction(new LadderAction(20));   // Tidlig stige
+        board.getTile(3).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
         //Stiger
-        board.getTile(4).setAction(new LadderAction(18));   // Tidlig stige
-        board.getTile(5).setAction(new LadderAction(18));   // Tidlig stige(skal egt være 8)
+        board.getTile(4).setAction(new LadderAction(20));   // Tidlig stige
+        board.getTile(5).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
         //Stiger
-        board.getTile(6).setAction(new LadderAction(11));   // Tidlig stige
-        board.getTile(7).setAction(new LadderAction(14));   // Tidlig stige(skal egt være 8)
+        board.getTile(6).setAction(new LadderAction(20));   // Tidlig stige
+        board.getTile(7).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
 
 
         // Slanger

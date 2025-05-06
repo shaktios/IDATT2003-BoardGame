@@ -1,17 +1,24 @@
 package edu.ntnu.boardgame.actions.tileactions;
 
 import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 
 public class ResetAction implements TileAction {
 
+    private final int destination = 1;  // Startfeltet
+    private Boardgame boardgame;
 
-    //actionen flytter spilleren tilbake til første tile. 
-    private final int destination = 1;  // Startfeltet er alltid posisjon 1
+    public void setBoardgame(Boardgame boardgame) {
+        this.boardgame = boardgame;
+    }
 
     @Override
     public void execute(Player player, Board board) {
-        player.setPosition(destination, board);  // Flytt til start
+        player.setPosition(destination, board);
+        if (boardgame != null) {
+            boardgame.checkForWin(player);
+        }
     }
 
     @Override

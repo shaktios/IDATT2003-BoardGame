@@ -166,4 +166,13 @@ public class Boardgame {
       round++;
     }
   }
+
+  public void checkForWin(Player player) {
+    System.out.println("Sjekker om " + player.getName() + " har vunnet..."); // ← Debug
+    if (player.getCurrentTile().getPosition() == board.getSize()) {
+        System.out.println(player.getName() + " har vunnet!"); // ← Debug
+        notifyGameWon(player);
+    }
+}
+
 }

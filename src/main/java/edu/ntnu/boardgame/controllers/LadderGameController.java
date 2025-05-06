@@ -166,17 +166,20 @@ public class LadderGameController {
 
 
     public void showWinnerMessage(Player winner) {
-            view.updateMessage(winner.getName() + " vant spillet!");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Spillet er ferdig");
-            alert.setHeaderText(winner.getName() + " har vunnet spillet!");
-            alert.setContentText("Du sendes tilbake til startskjermen.");
-            alert.showAndWait();
+        view.updateMessage(winner.getName() + " vant spillet!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spillet er ferdig");
+        alert.setHeaderText(winner.getName() + " har vunnet spillet!");
+        alert.setContentText("Du sendes tilbake til startskjermen.");
 
+        alert.setOnHidden(e -> {
             Stage stage = (Stage) view.getCanvas().getScene().getWindow();
             Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
             stage.setScene(freshStartScene);
-        }
+        });
+
+        alert.show(); // IKKE showAndWait her heller
+    }
 
         private class GameObserver implements BoardGameObserver {
         @Override

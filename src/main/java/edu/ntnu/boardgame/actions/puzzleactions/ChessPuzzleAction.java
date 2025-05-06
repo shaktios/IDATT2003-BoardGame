@@ -40,7 +40,17 @@ public class ChessPuzzleAction implements PuzzleTileAction, TileAction { //
 
     @Override
     public void execute(Player player, Board board, Runnable onPuzzleComplete) {
-        ChessPuzzleViewController controller = new ChessPuzzleViewController(player, board, onPuzzleComplete);
+        Runnable callback = () -> {
+            onPuzzleComplete.run();
+            boardgame.checkForWin(player);
+        };
+
+        ChessPuzzleViewController controller = new ChessPuzzleViewController(
+                player,
+                board,
+                callback,
+                boardgame
+        );
         controller.startPuzzle();
     }
 
@@ -62,5 +72,5 @@ public class ChessPuzzleAction implements PuzzleTileAction, TileAction { //
     public void setBoardgame(Boardgame boardgame) {
         this.boardgame = boardgame;
     }
-    
+
 }

@@ -114,18 +114,19 @@ public class LadderGameScreen {
         drawBoard();
     }
 
-
-
     public void showWinMessage(Player winner, Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Spillet er ferdig");
         alert.setHeaderText(winner.getName() + " har vunnet spillet!");
         alert.setContentText("Du sendes tilbake til startskjermen.");
-        alert.showAndWait();
 
-        // Gå tilbake til StartScreenView
-        Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
-        stage.setScene(freshStartScene);
+        // Når brukeren lukker vinduet, gå til startskjermen
+        alert.setOnHidden(e -> {
+            Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
+            stage.setScene(freshStartScene);
+        });
+
+        alert.show(); // VIKTIG: IKKE bruk showAndWait her
     }
 
     private void drawBoard() {
