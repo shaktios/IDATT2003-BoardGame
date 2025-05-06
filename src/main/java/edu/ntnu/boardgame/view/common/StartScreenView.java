@@ -56,7 +56,7 @@ public class StartScreenView {
         gameSelector.setValue("Liten Stigespill");
         gameSelector.getStyleClass().add("custom-combo");
 
-        Label gameLabel = new Label("\uD83D\uDC64 Velg spillvariant:");
+        Label gameLabel = new Label("\ud83c\udfb2 Velg spillvariant:");
         gameLabel.getStyleClass().add("section-label");
 
         playerCountSpinner = new Spinner<>(1, 5, 2);
@@ -217,3 +217,7 @@ public class StartScreenView {
         return playerTokenChoices;
     }
 }
+
+
+
+
