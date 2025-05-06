@@ -10,6 +10,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
+import edu.ntnu.boardgame.actions.tileactions.BackAction;
+import edu.ntnu.boardgame.actions.tileactions.LadderAction;
+import edu.ntnu.boardgame.actions.tileactions.ResetAction;
+import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
+import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 
@@ -45,6 +51,35 @@ public class BoardFileReaderGson implements BoardFileReader {
                     if (tileObj.has("y")) {
                         tile.setY(tileObj.get("y").getAsInt());
                     }
+                    if (tileObj.has("action")) {
+                    JsonObject actionObj = tileObj.getAsJsonObject("action");
+                    String type = actionObj.get("type").getAsString();
+
+                    switch (type) {
+                        case "LADDER":
+                            int destUp = actionObj.get("destination").getAsInt();
+                            tile.setAction(new LadderAction(destUp));
+                            break;
+                        case "BACK":
+                            int destDown = actionObj.get("destination").getAsInt();
+                            tile.setAction(new BackAction(destDown));
+                            break;
+                        case "RESET":
+                            tile.setAction(new ResetAction());
+                            break;
+                        case "SKIP":
+                            tile.setAction(new SkipTurnAction());
+                            break;
+                        case "TELEPORT_RANDOM":
+                            tile.setAction(new TeleportRandomAction());
+                            break;
+                        case "CHESSPUZZLE":
+                            tile.setAction(new ChessPuzzleAction(null)); 
+                            break;
+                        default:
+                            System.out.println("Ukjent action-type: " + type);
+                    }
+                }
 
                     
                 }

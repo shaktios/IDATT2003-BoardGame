@@ -7,6 +7,7 @@ package edu.ntnu.boardgame.view.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -56,7 +57,7 @@ public class StartScreenView {
         gameSelector.setValue("Liten Stigespill");
         gameSelector.getStyleClass().add("custom-combo");
 
-        Label gameLabel = new Label("\uD83D\uDC64 Velg spillvariant:");
+        Label gameLabel = new Label("\ud83c\udfb2 Velg spillvariant:");
         gameLabel.getStyleClass().add("section-label");
 
         playerCountSpinner = new Spinner<>(1, 5, 2);
@@ -193,10 +194,12 @@ public class StartScreenView {
      * @param message the warning message to display
      */
     public void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(title);
+            alert.setHeaderText(message);
+            alert.showAndWait();
+        });
     }
 
     /**
@@ -217,3 +220,7 @@ public class StartScreenView {
         return playerTokenChoices;
     }
 }
+
+
+
+

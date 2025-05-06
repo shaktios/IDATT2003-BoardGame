@@ -166,4 +166,11 @@ public class Boardgame {
       round++;
     }
   }
+
+  public void checkForWin(Player player) {
+    if (player.getCurrentTile().getPosition() == board.getSize()) {
+        notifyGameWon(player);
+    }
+}
+
 }

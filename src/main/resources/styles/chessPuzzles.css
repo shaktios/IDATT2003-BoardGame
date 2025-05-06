@@ -1,0 +1,44 @@
+.root {
+    -fx-background-color: #fdfdfd;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Bilde av sjakkoppgaven */
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 4);
+}
+
+/* Overskrift */
+.chess-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #333333;
+}
+
+/* Boksen som holder på knappene */
+.puzzle-button-box {
+    -fx-background-color: transparent;
+    /* ← Ikke farge på hover */
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+
+/* Knapper */
+.puzzle-option-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-background-color: #ffffff;
+    -fx-padding: 10 24 10 24;
+    -fx-border-color: #b0bec5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+/* Hovereffekt */
+.puzzle-option-button:hover {
+    -fx-background-color: #bbdefb;
+    -fx-border-color: #90caf9;
+}
