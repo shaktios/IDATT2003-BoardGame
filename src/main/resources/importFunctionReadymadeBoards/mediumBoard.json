@@ -1,0 +1,25 @@
+{
+  "size": 70,
+  "rows": 10,
+  "columns": 7,
+  "tiles": [
+    { "position": 5, "action": { "type": "LADDER", "destination": 15 } },
+    { "position": 9, "action": { "type": "BACK", "destination": 3 } },
+    { "position": 13, "action": { "type": "CHESSPUZZLE" } },
+    { "position": 18, "action": { "type": "LADDER", "destination": 27 } },
+    { "position": 22, "action": { "type": "SKIP" } },
+    { "position": 25, "action": { "type": "RESET" } },
+    { "position": 29, "action": { "type": "TELEPORT_RANDOM" } },
+    { "position": 33, "action": { "type": "CHESSPUZZLE" } },
+    { "position": 36, "action": { "type": "BACK", "destination": 20 } },
+    { "position": 39, "action": { "type": "LADDER", "destination": 49 } },
+    { "position": 43, "action": { "type": "SKIP" } },
+    { "position": 47, "action": { "type": "CHESSPUZZLE" } },
+    { "position": 50, "action": { "type": "BACK", "destination": 32 } },
+    { "position": 54, "action": { "type": "RESET" } },
+    { "position": 57, "action": { "type": "TELEPORT_RANDOM" } },
+    { "position": 60, "action": { "type": "CHESSPUZZLE" } },
+    { "position": 63, "action": { "type": "LADDER", "destination": 69 } },
+    { "position": 66, "action": { "type": "BACK", "destination": 44 } }
+  ]
+}

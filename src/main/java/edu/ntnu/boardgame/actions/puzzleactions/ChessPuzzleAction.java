@@ -12,6 +12,7 @@ import edu.ntnu.boardgame.controllers.ChessPuzzleViewController;
 public class ChessPuzzleAction implements PuzzleTileAction, TileAction { // 
 
     private Boardgame boardgame;
+    
 
     /**
      * Constructs a ChessPuzzleAction linked to the main boardgame.
@@ -52,4 +53,14 @@ public class ChessPuzzleAction implements PuzzleTileAction, TileAction { //
     public int getDestination() {
         return -1;
     }
+
+    /**
+     * Sets Boardgame after an action is made (for JSON-import).
+     *
+     * @param boardgame the boardgame to link
+     */
+    public void setBoardgame(Boardgame boardgame) {
+        this.boardgame = boardgame;
+    }
+    
 }
