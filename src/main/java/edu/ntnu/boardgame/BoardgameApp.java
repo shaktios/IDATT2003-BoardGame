@@ -1,6 +1,8 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.controllers.MainPageController;
 import edu.ntnu.boardgame.controllers.StartScreenController;
+import edu.ntnu.boardgame.view.common.MainPage;
 import edu.ntnu.boardgame.view.common.StartScreenView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,12 +33,15 @@ public class BoardgameApp extends Application {
      * @return a fresh start screen scene
      */
     public static Scene createFreshStartScene(Stage stage) {
-        StartScreenView startScreenView = new StartScreenView();
-        StartScreenController startScreenController = new StartScreenController(stage, startScreenView);
-        return startScreenController.getStartScene();
+        MainPage mainPage = new MainPage();
+        MainPageController controller = new MainPageController(stage, mainPage);
+        Scene mainScene = controller.getMainScene();
+
+        stage.setScene(mainScene);
+        return mainScene;
     }
 
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         launch(args);
     }
 }

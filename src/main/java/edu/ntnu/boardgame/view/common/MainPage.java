@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 public class MainPage {
   private VBox layout;
   private Button startGameButton;
-  private Button settingsButton;
   private Button exitButton;
 
   public MainPage() {
@@ -38,14 +37,14 @@ public class MainPage {
 
       //Button Layouts
       startGameButton = new Button("Start Game");
-      settingsButton = new Button("Settings");
       exitButton = new Button("Exit");
 
-      VBox buttonBox = new VBox(10, startGameButton, settingsButton, exitButton);
+      VBox buttonBox = new VBox(10, startGameButton, exitButton);
       buttonBox.setAlignment(Pos.CENTER);
 
       layout.getChildren().addAll(title, imageBox, buttonBox);
     }
+
 
     private ImageView createImageView(String imageName) {
         Image image = new Image(getClass().getResource("/images/" + imageName).toExternalForm());
@@ -63,10 +62,6 @@ public class MainPage {
     // Getters so controller can attach actions
     public Button getStartGameButton() {
         return startGameButton;
-    }
-
-    public Button getSettingsButton() {
-        return settingsButton;
     }
 
     public Button getExitButton() {
