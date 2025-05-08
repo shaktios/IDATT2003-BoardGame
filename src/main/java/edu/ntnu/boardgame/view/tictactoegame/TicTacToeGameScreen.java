@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 public class TicTacToeGameScreen {
     private final GridPane grid;
     private final Label messageLabel;
+    private final Label scoreboardLabel;
     private final Button[][] buttons = new Button[3][3];
     private final VBox layout;
     private TicTacToeController controller;
@@ -26,6 +27,10 @@ public class TicTacToeGameScreen {
         messageLabel = new Label("Welcome to Tic Tac Toe!");
         messageLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #333;");
         messageLabel.setFont(Font.font("Arial"));
+
+        scoreboardLabel = new Label("Scoreboard");
+        scoreboardLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #444;");
+        scoreboardLabel.setFont(Font.font("Arial"));
 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -52,7 +57,7 @@ public class TicTacToeGameScreen {
         resetBtn.setFont(Font.font("Arial", 18));
         resetBtn.setOnAction(e -> controller.resetGame());
 
-        layout = new VBox(30, messageLabel, grid, resetBtn);
+        layout = new VBox(20, messageLabel, scoreboardLabel, grid, resetBtn);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: linear-gradient(to bottom, #faf0ff, #e5d4f4); -fx-padding: 40px;");
         VBox.setVgrow(grid, Priority.ALWAYS);
@@ -109,5 +114,9 @@ public class TicTacToeGameScreen {
 
     public void setController(TicTacToeController controller) {
         this.controller = controller;
+    }
+
+    public void setScoreboard(String name1, int score1, String name2, int score2) {
+        scoreboardLabel.setText(name1 + ": " + score1 + "  |  " + name2 + ": " + score2);
     }
 }

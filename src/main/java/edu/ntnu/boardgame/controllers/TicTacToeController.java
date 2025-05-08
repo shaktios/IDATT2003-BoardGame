@@ -1,12 +1,10 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.TicTacToe;
 import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 /**
  * Controller for handling Tic Tac Toe game logic and interactions between view and model.
@@ -17,14 +15,9 @@ public class TicTacToeController {
     private final Player player2;
     private final TicTacToe logic;
     private final TicTacToeGameScreen view;
+    private int player1Score = 0;
+    private int player2Score = 0;
 
-    /**
-     * Constructs the controller.
-     *
-     * @param player1 the first player
-     * @param player2 the second player
-     * @param view the view (screen) associated with the game
-     */
     public TicTacToeController(Player player1, Player player2, TicTacToeGameScreen view) {
         this.player1 = player1;
         this.player2 = player2;
@@ -34,21 +27,14 @@ public class TicTacToeController {
         player1.setToken("X");
         player2.setToken("O");
 
-        // Assign user-friendly names if not already set
         if (player1.getName() == null || player1.getName().isEmpty()) player1.setName("Player 1");
         if (player2.getName() == null || player2.getName().isEmpty()) player2.setName("Player 2");
 
-        view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
+        view.setScoreboard(player1.getName(), player1Score, player2.getName(), player2Score);
+        view.updateMessage("Turn: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
     }
 
-    /**
-     * Handles when a player clicks on a tile at a given row and column.
-     *
-     * @param row the row index (0–2)
-     * @param col the column index (0–2)
-     * @param stage the JavaFX stage (for showing end screen)
-     */
-    public void handleMove(int row, int col, Stage stage) {
+    public void handleMove(int row, int col, javafx.stage.Stage stage) {
         if (!logic.makeMove(row, col)) {
             view.updateMessage("Not valid move");
             return;
@@ -58,12 +44,26 @@ public class TicTacToeController {
 
         String winner = logic.checkWinner();
         if (winner != null) {
-            showWinnerMessage(logic.getCurrentPlayer().getName(), stage);
+            Player current = logic.getCurrentPlayer();
+            if ("X".equals(winner)) {
+                player1Score++;
+            } else {
+                player2Score++;
+            }
+            view.setScoreboard(player1.getName(), player1Score, player2.getName(), player2Score);
+            view.updateMessage(current.getName() + " har vunnet!");
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(e -> resetGame());
+            pause.play();
             return;
         }
 
         if (logic.isBoardFull()) {
-            showDrawMessage(stage);
+            view.updateMessage("Uavgjort! Ingen fikk tre på rad.");
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(e -> resetGame());
+            pause.play();
             return;
         }
 
@@ -72,34 +72,9 @@ public class TicTacToeController {
         view.updateMessage("Turn: " + next.getName() + " (" + next.getToken() + ")");
     }
 
-    /**
-     * Resets the game.
-     */
     public void resetGame() {
         logic.resetBoard();
         view.clearBoard();
         view.updateMessage("Turn: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
-    }
-
-    private void showWinnerMessage(String winnerName, Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("We have a winner of ");
-        alert.setHeaderText(winnerName + " has done it!!!!");
-        alert.setOnHidden(e -> {
-            Scene startScene = BoardgameApp.createFreshStartScene(stage);
-            stage.setScene(startScene);
-        });
-        alert.show();
-    }
-
-    private void showDrawMessage(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tie!");
-        alert.setHeaderText("No Champion here! Both are equally strong");
-        alert.setOnHidden(e -> {
-            Scene startScene = BoardgameApp.createFreshStartScene(stage);
-            stage.setScene(startScene);
-        });
-        alert.show();
     }
 }
