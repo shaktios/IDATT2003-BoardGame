@@ -11,10 +11,10 @@ import java.util.Random;
 public class ChessPuzzleModel {
 
     private static final Map<String, String> PUZZLES = Map.of(
-            "chess_puzzle1.png", "Qh4#",
-            "chess_puzzle2.png", "Rg8#",
-            "chess_puzzle3.png", "Rc8#",
-            "chess_puzzle4.png", "Rc1#"
+            "chess_puzzle1.png", "Qb5#",
+            "chess_puzzle2.png", "Qc2#",
+            "chess_puzzle3.png", "Qh5#",
+            "chess_puzzle4.png", "Qh7#"
     );
 
     private String selectedImage;
@@ -56,7 +56,7 @@ public class ChessPuzzleModel {
      */
     public List<String> generateOptions() {
         List<String> allMoves = new ArrayList<>(List.of(
-                "Qh4#", "Rg8#", "Rc8#", "Rc1#", "Qd8#", "e4#", "Bb5#", "Nh5#", "Bd3#", "Rd1#", "Qe7#", "Nd5#"
+                "Qb5#", "Qh2#", "Qh4#", "Rg8#", "Rc8#", "Rc1#", "Qd8#", "e4#", "Bb5#", "Nh5#", "Bd3#", "Rd1#", "Qe7#", "Nd5#"
         ));
         allMoves.remove(correctMove);
         Collections.shuffle(allMoves);
