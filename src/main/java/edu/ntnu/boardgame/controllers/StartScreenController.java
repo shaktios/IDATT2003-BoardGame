@@ -58,10 +58,6 @@ public class StartScreenController {
                     return;
                 }
             }
-            case "Tic Tac Toe" -> {
-                view.showAlert("Ikke implementert enda", "Tic Tac Toe kommer snart!");
-                return;
-            }
             default -> {
                 view.showAlert("Feil", "Ugyldig spillvariant valgt.");
                 return;

@@ -55,7 +55,7 @@ public class StartScreenView {
         titleLabel.getStyleClass().add("title-label");
 
         gameSelector = new ComboBox<>();
-        gameSelector.getItems().addAll("Liten Stigespill", "Stort Stigespill", "Importer eget brett (.json)", "Tic Tac Toe");
+        gameSelector.getItems().addAll("Liten Stigespill", "Stort Stigespill", "Importer eget brett (.json)");
         gameSelector.setValue("Liten Stigespill");
         gameSelector.getStyleClass().add("custom-combo");
 
@@ -235,7 +235,7 @@ public class StartScreenView {
             gameSelector.setValue(variant);
         }
     }
-    
+
     public Button getBackToMainMenuButton() {
         return backToMainMenuButton;
     }
