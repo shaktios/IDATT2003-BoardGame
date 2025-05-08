@@ -1,16 +1,19 @@
 package edu.ntnu.boardgame.view.common;
 
+import java.util.function.Consumer;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.util.function.Consumer;
 
 public class MainPage {
     private final BorderPane layout;
@@ -36,8 +39,7 @@ public class MainPage {
         imageBox.setPadding(new Insets(60, 30, 30, 30));
 
         imageBox.getChildren().addAll(
-                createGameImage("game1.png", "Liten Stigespill"),
-                createGameImage("game2.png", "Stort Stigespill"),
+                createGameImage("game2.png", "Stigespill"),
                 createGameImage("game3.png", "Tic Tac Toe")
         );
         layout.setCenter(imageBox);
@@ -87,7 +89,7 @@ public class MainPage {
         return box;
     }
 
-    private void handleGameClick(String gameName) {
+    public void handleGameClick(String gameName) {
         if (onGameSelected != null) {
             onGameSelected.accept(gameName);
         }

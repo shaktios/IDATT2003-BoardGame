@@ -1,15 +1,10 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.BoardgameApp;
-import edu.ntnu.boardgame.BoardGameFactory;
 import edu.ntnu.boardgame.view.common.MainPage;
-import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
+import edu.ntnu.boardgame.view.common.StartScreenView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import edu.ntnu.boardgame.constructors.Player;
-import edu.ntnu.boardgame.controllers.LadderGameController;
 
 public class MainPageController {
 
@@ -19,27 +14,18 @@ public class MainPageController {
     public MainPageController(Stage stage) {
         this.stage = stage;
 
-        // Build main page and connect game selection
         this.mainPage = new MainPage(selectedGame -> {
             switch (selectedGame) {
-                case "Liten Stigespill" -> {
-                    Boardgame game = BoardGameFactory.createMiniGame();
-                    LadderGameScreen view = new LadderGameScreen();
-                    LadderGameController controller = new LadderGameController(game, view);
-                    Scene scene = view.createScene(stage, game, game.getBoard(), game.getPlayers());
-                    stage.setScene(scene);
-                }
-
-                case "Stort Stigespill" -> {
-                    Boardgame game = BoardGameFactory.createClassicGame();
-                    LadderGameScreen view = new LadderGameScreen();
-                    LadderGameController controller = new LadderGameController(game, view);
-                    Scene scene = view.createScene(stage, game, game.getBoard(), game.getPlayers());
+                case "Stigespill" -> {
+                    StartScreenView startView = new StartScreenView();
+                    startView.setSelectedGameVariant("Liten Stigespill"); //første alternativet som dukker opp
+                    StartScreenController controller = new StartScreenController(stage, startView);
+                    Scene scene = controller.getStartScene();
                     stage.setScene(scene);
                 }
 
                 case "Tic Tac Toe" -> {
-                    BoardgameApp.openTicTacToe(stage); // You must implement this method
+                    BoardgameApp.openTicTacToe(stage);
                 }
 
                 default -> {
@@ -57,5 +43,9 @@ public class MainPageController {
 
     public Scene getMainScene() {
         return new Scene(mainPage.getRoot(), 1280, 800); // Correct place to set size
+    }
+
+    public MainPage getMainPage() {
+        return mainPage;
     }
 }

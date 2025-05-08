@@ -1,16 +1,14 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Player;
+import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.controllers.MainPageController;
-import edu.ntnu.boardgame.controllers.StartScreenController;
+import edu.ntnu.boardgame.controllers.TicTacToeController;
 import edu.ntnu.boardgame.view.common.MainPage;
-import edu.ntnu.boardgame.view.common.StartScreenView;
+import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import edu.ntnu.boardgame.constructors.Tile;
-import edu.ntnu.boardgame.constructors.Player;
-import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
-import edu.ntnu.boardgame.controllers.TicTacToeController;
 
 /**
  * Entry point for the Boardgame application.
@@ -59,7 +57,7 @@ public class BoardgameApp extends Application {
     }
 
     public static void openTicTacToe(Stage stage) {
-        Tile dummyTile = new Tile(1); // ✅ must be positive
+        Tile dummyTile = new Tile(1); // must be positive
         Player player1 = new Player("Spiller 1", dummyTile);
         Player player2 = new Player("Spiller 2", dummyTile);
 

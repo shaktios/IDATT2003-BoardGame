@@ -95,7 +95,8 @@ public class StartScreenController {
 
         LadderGameScreen gameScreen = new LadderGameScreen();
         Scene ladderGameScene = gameScreen.createScene(stage, boardgame, boardgame.getBoard(), players);
-        LadderGameController ladderGameController = new LadderGameController(boardgame, gameScreen);
+        String selectedVariant = view.getSelectedGameVariant();
+        LadderGameController ladderGameController = new LadderGameController(boardgame, gameScreen, stage, selectedVariant);
 
         gameScreen.disableNextTurnButton();
         gameScreen.enableDiceButton();      
