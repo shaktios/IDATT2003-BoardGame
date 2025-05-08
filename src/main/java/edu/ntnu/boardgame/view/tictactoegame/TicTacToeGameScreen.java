@@ -17,15 +17,13 @@ public class TicTacToeGameScreen {
     private final Label messageLabel;
     private final Button[][] buttons = new Button[3][3];
     private final VBox layout;
-    private final TicTacToeController controller;
+    private TicTacToeController controller;
 
     /**
      * Constructs the TicTacToe screen.
      *
-     * @param controller the controller that handles game logic and state
      */
-    public TicTacToeGameScreen(TicTacToeController controller) {
-        this.controller = controller;
+    public TicTacToeGameScreen() {
 
         messageLabel = new Label("Velkommen til Tic Tac Toe!");
         messageLabel.setStyle("-fx-font-size: 16px;");
@@ -96,4 +94,9 @@ public class TicTacToeGameScreen {
             for (int c = 0; c < 3; c++)
                 buttons[r][c].setText("");
     }
+
+    public void setController(TicTacToeController controller) {
+        this.controller = controller;
+    }
+
 }

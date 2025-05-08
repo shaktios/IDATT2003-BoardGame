@@ -7,6 +7,10 @@ import edu.ntnu.boardgame.view.common.StartScreenView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import edu.ntnu.boardgame.constructors.Tile;
+import edu.ntnu.boardgame.constructors.Player;
+import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
+import edu.ntnu.boardgame.controllers.TicTacToeController;
 
 /**
  * Entry point for the Boardgame application.
@@ -20,9 +24,12 @@ public class BoardgameApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        Scene startScene = createFreshStartScene(primaryStage);
-        primaryStage.setScene(startScene);
-        primaryStage.setTitle("Boardgame");
+        MainPageController controller = new MainPageController(primaryStage);
+        Scene scene = controller.getMainScene();
+
+        primaryStage.setTitle("BoardGame");
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true); // Optional: full screen
         primaryStage.show();
     }
 
@@ -33,15 +40,45 @@ public class BoardgameApp extends Application {
      * @return a fresh start screen scene
      */
     public static Scene createFreshStartScene(Stage stage) {
-        MainPage mainPage = new MainPage();
-        MainPageController controller = new MainPageController(stage, mainPage);
-        Scene mainScene = controller.getMainScene();
+        MainPage mainPage = new MainPage(gameName -> {
+            switch (gameName) {
+                case "Liten Stigespill" -> openMiniGame();
+                case "Stort Stigespill" -> openClassicGame();
+                case "Tic Tac Toe" -> openTicTacToe(stage);
+            }
+        });
 
-        stage.setScene(mainScene);
-        return mainScene;
+        Scene scene = new Scene(mainPage.getRoot(), 1280, 720);
+        stage.setScene(scene);
+        stage.setFullScreen(true); // Optional for fullscreen
+        return null;
     }
 
         public static void main(String[] args) {
         launch(args);
     }
+
+    public static void openTicTacToe(Stage stage) {
+        Tile dummyTile = new Tile(1); // ✅ must be positive
+        Player player1 = new Player("Spiller 1", dummyTile);
+        Player player2 = new Player("Spiller 2", dummyTile);
+
+        TicTacToeGameScreen view = new TicTacToeGameScreen();
+        TicTacToeController controller = new TicTacToeController(player1, player2, view);
+        view.setController(controller); // if your view has setController()
+
+        Scene scene = new Scene(view.getRoot(), 600, 700);
+        stage.setScene(scene);
+        stage.setTitle("Tic Tac Toe");
+    }
+
+
+    public static void openClassicGame() {
+        BoardGameFactory.createClassicGame();
+    }
+
+    public static void openMiniGame() {
+        BoardGameFactory.createMiniGame();
+    }
+
 }

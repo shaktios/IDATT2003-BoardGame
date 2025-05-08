@@ -31,6 +31,7 @@ public class Player {
         
     this.name = name; 
     this.currentTile = startTile;
+    this.token = token;
   }
 
   /*
@@ -157,5 +158,7 @@ public class Player {
         return skipNextTurn;
     }
 
-
+  public void setName(String name) {
+    this.name = name;
+  }
 }
