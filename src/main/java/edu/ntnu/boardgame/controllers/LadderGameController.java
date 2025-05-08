@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.ntnu.boardgame.Board;
 import edu.ntnu.boardgame.Boardgame;
-import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.TileAction;
 import edu.ntnu.boardgame.constructors.Dice;
@@ -24,32 +23,36 @@ import javafx.util.Duration;
  */
 public class LadderGameController {
 
-    private Boardgame boardgame;
-    private Board board;
-    private List<Player> players;
+    private final Boardgame boardgame;
+    private final Board board;
+    private final List<Player> players;
     private int currentPlayerIndex;
-    private LadderGameScreen view;
-    
-    
+    private final LadderGameScreen view;
+    private final Stage stage;
+    private final String gameVariant;
 
     /**
      * Constructs the LadderGameController.
      *
      * @param boardgame the Boardgame instance
      * @param view the LadderGameScreen view
+     * @param stage the JavaFX stage
+     * @param gameVariant the selected game variant name
      */
-    public LadderGameController(Boardgame boardgame, LadderGameScreen view) {
+    public LadderGameController(Boardgame boardgame, LadderGameScreen view, Stage stage, String gameVariant) {
         this.boardgame = boardgame;
         this.board = boardgame.getBoard();
         this.players = boardgame.getPlayers();
         this.currentPlayerIndex = 0;
         this.view = view;
+        this.stage = stage;
+        this.gameVariant = gameVariant;
+
         boardgame.registerObserver(new GameObserver());
     }
+
     /**
      * Handles the dice roll and player movement.
-     *
-     * @param stage the current stage (for potential scene changes)
      */
     public void handleDiceRoll(Stage stage) {
         Player player = players.get(currentPlayerIndex);
@@ -57,9 +60,7 @@ public class LadderGameController {
         int roll = dice.roll();
         view.setLastRoll(roll);
 
-        int tempPosition = player.getPosition() + roll;
-        final int newPosition = Math.min(tempPosition, board.getSize());
-
+        int newPosition = Math.min(player.getPosition() + roll, board.getSize());
         player.setPosition(newPosition, board);
         Tile newTile = board.getTile(newPosition);
         player.setCurrentTile(newTile);
@@ -73,9 +74,8 @@ public class LadderGameController {
                 boardgame.notifyPlayerMoved(player);
                 view.redrawBoard();
 
-                view.updateMessage(player.getName() + " flyttet til rute " + player.getPosition() + " etter svaret på sjakkoppgaven ");
                 if (player.getPosition() == board.getSize()) {
-                    view.showWinMessage(player, stage);
+                    showWinMessage(player);
                 } else {
                     view.enableNextTurnButton();
                 }
@@ -89,17 +89,15 @@ public class LadderGameController {
             view.updateMessage(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
             boardgame.notifyPlayerMoved(player);
             if (player.getPosition() == board.getSize()) {
-                view.showWinMessage(player, stage);
+                showWinMessage(player);
             }
             view.disableDiceButton();
             view.enableNextTurnButton();
         }
     }
+
     /**
      * Handles when the player lands on a special tile.
-     *
-     * @param player the player
-     * @param tile the tile
      */
     public void handleTileAction(Player player, Tile tile) {
         view.disableDiceAndNextTurnButtons();
@@ -115,7 +113,7 @@ public class LadderGameController {
             case "ResetAction" ->
                 " og må tilbake til start";
             case "TeleportRandomAction" ->
-                " og blir teleportert til et tilfeldig sted på brettet";
+                " og blir teleportert til et tilfeldig sted";
             default ->
                 " og ble påvirket av en handling";
         };
@@ -124,19 +122,15 @@ public class LadderGameController {
 
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(e -> {
-            TileAction tileAction = (TileAction) tile.getAction();
-            tileAction.execute(player, board);
+            TileAction action = (TileAction) tile.getAction();
+            action.execute(player, board);
 
-            // Først etter flytt: nå kan vi notere flyttingen
             boardgame.notifyPlayerMoved(player);
             view.redrawBoard();
-
-            // Nå skriver vi "er nå på rute X" (hvis ønskelig)
             view.updateMessage(player.getName() + " er nå på rute " + player.getPosition());
 
             if (player.getPosition() == board.getSize()) {
-                Stage currentStage = (Stage) view.getCanvas().getScene().getWindow();
-                view.showWinMessage(player, currentStage);
+                showWinMessage(player);
             } else {
                 view.enableNextTurnButton();
             }
@@ -145,7 +139,7 @@ public class LadderGameController {
     }
 
     /**
-     * Handles switching to the next player.
+     * Switches to the next player's turn.
      */
     public void handleNextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -164,24 +158,28 @@ public class LadderGameController {
         }
     }
 
-
-    public void showWinnerMessage(Player winner) {
-        view.updateMessage(winner.getName() + " vant spillet!");
+    /**
+     * Displays a win message and redirects to StartScreenView.
+     */
+    public void showWinMessage(Player winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Spillet er ferdig");
         alert.setHeaderText(winner.getName() + " har vunnet spillet!");
-        alert.setContentText("Du sendes tilbake til startskjermen.");
+        alert.setContentText("Du sendes tilbake til menyen for stigespill.");
 
         alert.setOnHidden(e -> {
-            Stage stage = (Stage) view.getCanvas().getScene().getWindow();
-            Scene freshStartScene = BoardgameApp.createFreshStartScene(stage);
-            stage.setScene(freshStartScene);
+            edu.ntnu.boardgame.view.common.StartScreenView startView = new edu.ntnu.boardgame.view.common.StartScreenView();
+            startView.setSelectedGameVariant(gameVariant);
+            StartScreenController controller = new StartScreenController(stage, startView);
+            Scene scene = controller.getStartScene();
+            stage.setScene(scene);
         });
 
-        alert.show(); // IKKE showAndWait
+        alert.show();
     }
 
-        private class GameObserver implements BoardGameObserver {
+    private class GameObserver implements BoardGameObserver {
+
         @Override
         public void onPlayerMove(Player player) {
             view.redrawBoard();
@@ -189,8 +187,7 @@ public class LadderGameController {
 
         @Override
         public void onGameWon(Player winner) {
-            showWinnerMessage(winner); 
+            showWinMessage(winner);
         }
     }
-
 }

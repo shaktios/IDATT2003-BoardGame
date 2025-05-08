@@ -7,6 +7,7 @@ package edu.ntnu.boardgame.view.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ntnu.boardgame.controllers.MainPageController;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,6 +33,7 @@ public class StartScreenView {
     private Button startGameButton;
     private List<TextField> playerNameFields = new ArrayList<>();
     private List<ComboBox<String>> playerTokenChoices = new ArrayList<>();
+    private Button backToMainMenuButton; // Ny knapp
 
     private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
     private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
@@ -53,7 +55,7 @@ public class StartScreenView {
         titleLabel.getStyleClass().add("title-label");
 
         gameSelector = new ComboBox<>();
-        gameSelector.getItems().addAll("Liten Stigespill", "Stort Stigespill", "Importer eget brett (.json)", "Tic Tac Toe");
+        gameSelector.getItems().addAll("Liten Stigespill", "Stort Stigespill", "Importer eget brett (.json)");
         gameSelector.setValue("Liten Stigespill");
         gameSelector.getStyleClass().add("custom-combo");
 
@@ -78,8 +80,16 @@ public class StartScreenView {
         if (startGameButtonHandler != null) {
             startGameButton.setOnAction(startGameButtonHandler);
         }
+        backToMainMenuButton = new Button("Tilbake til Hovedmeny");
+        backToMainMenuButton.getStyleClass().add("start-button");
 
-        root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner, nextButton);
+        backToMainMenuButton.setOnAction(e -> {
+            MainPageController controller = new MainPageController(stage);
+            Scene mainScene = controller.getMainScene();
+            stage.setScene(mainScene);
+        });
+
+        root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner, nextButton, backToMainMenuButton);
 
         Scene scene = new Scene(root, 1200, 800);
         scene.getStylesheets().add(getClass().getResource("/styles/startScreen.css").toExternalForm());
@@ -218,6 +228,16 @@ public class StartScreenView {
      */
     public List<ComboBox<String>> getPlayerTokenChoices() {
         return playerTokenChoices;
+    }
+
+    public void setSelectedGameVariant(String variant) {
+        if (gameSelector != null) {
+            gameSelector.setValue(variant);
+        }
+    }
+
+    public Button getBackToMainMenuButton() {
+        return backToMainMenuButton;
     }
 }
 
