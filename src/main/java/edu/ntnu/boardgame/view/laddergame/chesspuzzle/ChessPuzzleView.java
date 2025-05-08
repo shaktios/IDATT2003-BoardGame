@@ -45,7 +45,7 @@ public class ChessPuzzleView {
      * Displays the chess puzzle window.
      */
     public void show() {
-        Image image = new Image(getClass().getResourceAsStream("/images/" + imageFile));
+        Image image = new Image(getClass().getResource("/images/" + imageFile).toExternalForm());
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(500);

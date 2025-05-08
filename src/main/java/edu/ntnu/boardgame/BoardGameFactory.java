@@ -64,7 +64,7 @@ public class BoardGameFactory {
     public static Boardgame createMiniGame() {
         Board board = new Board(10,2);
         Boardgame boardgame = new Boardgame(board, 1, 6);
-        //Stiger
+        /* //Stiger
         board.getTile(2).setAction(new LadderAction(20));   // Tidlig stige
         board.getTile(3).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
         //Stiger
@@ -78,7 +78,16 @@ public class BoardGameFactory {
         // Slanger
         board.getTile(8).setAction(new BackAction(2));   // Midt i spillet
         board.getTile(9).setAction(new BackAction(6));   // Midt-sent
-        board.getTile(10).setAction(new BackAction(1));   // Rett før mål
+        board.getTile(10).setAction(new BackAction(1));   // Rett før mål */
+
+        board.getTile(2).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(3).setAction(new ChessPuzzleAction(boardgame));
+        board.getTile(4).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(5).setAction(new ChessPuzzleAction(boardgame));
+        board.getTile(6).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(7).setAction(new ChessPuzzleAction(boardgame));
+        board.getTile(8).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        board.getTile(9).setAction(new ChessPuzzleAction(boardgame));
         return boardgame; 
     }
 
