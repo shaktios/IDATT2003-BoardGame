@@ -3,21 +3,27 @@ package edu.ntnu.boardgame.constructors;
 public class TicTacToe {
     private final String[][] board;
     private final int SIZE = 3;
-    private Player playerX;
-    private Player playerO;
+    private final Player player1;
+    private final Player player2;
     private Player currentPlayer;
 
-    public TicTacToe(Player playerX, Player playerO) {
-        if (playerX == null || playerO == null) {
+    public TicTacToe(Player player1, Player player2) {
+        if (player1 == null || player2 == null) {
             throw new IllegalArgumentException("Spillere kan ikke være null.");
         }
 
-        this.playerX = playerX;
-        this.playerO = playerO;
+        this.player1 = player1;
+        this.player2 = player2;
         this.board = new String[SIZE][SIZE];
-        this.currentPlayer = playerX;
-        playerX.setToken("X");
-        playerO.setToken("O");
+
+        // Set fixed names and tokens – cannot be changed later
+        player1.setName("Spiller 1");
+        player1.setToken("X");
+
+        player2.setName("Spiller 2");
+        player2.setToken("O");
+
+        this.currentPlayer = player1;
     }
 
     public boolean makeMove(int row, int col) {
@@ -33,13 +39,11 @@ public class TicTacToe {
     }
 
     public String checkWinner() {
-        // Rader og kolonner
         for (int i = 0; i < SIZE; i++) {
             if (equal(board[i][0], board[i][1], board[i][2])) return board[i][0];
             if (equal(board[0][i], board[1][i], board[2][i])) return board[0][i];
         }
 
-        // Diagonaler
         if (equal(board[0][0], board[1][1], board[2][2])) return board[0][0];
         if (equal(board[0][2], board[1][1], board[2][0])) return board[0][2];
 
@@ -54,7 +58,7 @@ public class TicTacToe {
     }
 
     public void switchTurn() {
-        currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
     }
 
     public Player getCurrentPlayer() {
@@ -69,7 +73,7 @@ public class TicTacToe {
         for (int r = 0; r < SIZE; r++)
             for (int c = 0; c < SIZE; c++)
                 board[r][c] = null;
-        currentPlayer = playerX;
+        currentPlayer = player1;
     }
 
     private boolean equal(String a, String b, String c) {

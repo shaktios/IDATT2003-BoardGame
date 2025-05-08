@@ -13,26 +13,30 @@ import javafx.stage.Stage;
  */
 public class TicTacToeController {
 
-    private final Player playerX;
-    private final Player playerO;
+    private final Player player1;
+    private final Player player2;
     private final TicTacToe logic;
     private final TicTacToeGameScreen view;
 
     /**
      * Constructs the controller.
      *
-     * @param playerX the first player
-     * @param playerO the second player
+     * @param player1 the first player
+     * @param player2 the second player
      * @param view the view (screen) associated with the game
      */
-    public TicTacToeController(Player playerX, Player playerO, TicTacToeGameScreen view) {
-        this.playerX = playerX;
-        this.playerO = playerO;
-        this.logic = new TicTacToe(playerX, playerO);
+    public TicTacToeController(Player player1, Player player2, TicTacToeGameScreen view) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.logic = new TicTacToe(player1, player2);
         this.view = view;
 
-        playerX.setToken("X");
-        playerO.setToken("O");
+        player1.setToken("X");
+        player2.setToken("O");
+
+        // Assign user-friendly names if not already set
+        if (player1.getName() == null || player1.getName().isEmpty()) player1.setName("Spiller 1");
+        if (player2.getName() == null || player2.getName().isEmpty()) player2.setName("Spiller 2");
 
         view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
     }

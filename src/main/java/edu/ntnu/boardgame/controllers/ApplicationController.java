@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.view.common.StartScreenView;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -14,12 +14,13 @@ public class ApplicationController extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        StartScreenView startScreenView = new StartScreenView();
-        StartScreenController startScreenController = new StartScreenController(primaryStage, startScreenView);
+    public void start(Stage stage) {
+        MainPageController controller = new MainPageController(stage);
+        Scene scene = controller.getMainScene();
 
-        primaryStage.setScene(startScreenController.getStartScene());
-        primaryStage.setTitle("BoardGame");
-        primaryStage.show();
+        stage.setTitle("BoardGame");
+        stage.setScene(scene);
+        stage.setMaximized(true); // Optional: full screen
+        stage.show();
     }
 }
