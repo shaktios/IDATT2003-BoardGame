@@ -69,7 +69,7 @@ public class TicTacToeController {
 
         logic.switchTurn();
         Player next = logic.getCurrentPlayer();
-        view.updateMessage("Round: " + next.getName() + " (" + next.getToken() + ")");
+        view.updateMessage("Turn: " + next.getName() + " (" + next.getToken() + ")");
     }
 
     /**
@@ -78,7 +78,7 @@ public class TicTacToeController {
     public void resetGame() {
         logic.resetBoard();
         view.clearBoard();
-        view.updateMessage("Round: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
+        view.updateMessage("Turn: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
     }
 
     private void showWinnerMessage(String winnerName, Stage stage) {
