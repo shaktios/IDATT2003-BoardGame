@@ -35,8 +35,8 @@ public class TicTacToeController {
         player2.setToken("O");
 
         // Assign user-friendly names if not already set
-        if (player1.getName() == null || player1.getName().isEmpty()) player1.setName("Spiller 1");
-        if (player2.getName() == null || player2.getName().isEmpty()) player2.setName("Spiller 2");
+        if (player1.getName() == null || player1.getName().isEmpty()) player1.setName("Player 1");
+        if (player2.getName() == null || player2.getName().isEmpty()) player2.setName("Player 2");
 
         view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
     }
@@ -50,7 +50,7 @@ public class TicTacToeController {
      */
     public void handleMove(int row, int col, Stage stage) {
         if (!logic.makeMove(row, col)) {
-            view.updateMessage("Ugyldig trekk – feltet er opptatt.");
+            view.updateMessage("Not valid move");
             return;
         }
 
@@ -69,7 +69,7 @@ public class TicTacToeController {
 
         logic.switchTurn();
         Player next = logic.getCurrentPlayer();
-        view.updateMessage("Tur: " + next.getName() + " (" + next.getToken() + ")");
+        view.updateMessage("Round: " + next.getName() + " (" + next.getToken() + ")");
     }
 
     /**
@@ -78,14 +78,13 @@ public class TicTacToeController {
     public void resetGame() {
         logic.resetBoard();
         view.clearBoard();
-        view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
+        view.updateMessage("Round: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
     }
 
     private void showWinnerMessage(String winnerName, Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Vi har en vinner!");
-        alert.setHeaderText(winnerName + " har vunnet spillet!");
-        alert.setContentText("Du sendes tilbake til startsiden.");
+        alert.setTitle("We have a winner of ");
+        alert.setHeaderText(winnerName + " has done it!!!!");
         alert.setOnHidden(e -> {
             Scene startScene = BoardgameApp.createFreshStartScene(stage);
             stage.setScene(startScene);
@@ -95,9 +94,8 @@ public class TicTacToeController {
 
     private void showDrawMessage(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Uavgjort");
-        alert.setHeaderText("Ingen vant – brettet er fullt.");
-        alert.setContentText("Du sendes tilbake til startsiden.");
+        alert.setTitle("Tie!");
+        alert.setHeaderText("No Champion here! Both are equally strong");
         alert.setOnHidden(e -> {
             Scene startScene = BoardgameApp.createFreshStartScene(stage);
             stage.setScene(startScene);

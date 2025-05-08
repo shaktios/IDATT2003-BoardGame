@@ -21,7 +21,7 @@ public class MainPage {
         this.onGameSelected = onGameSelected;
 
         layout = new BorderPane();
-        layout.setStyle("-fx-background-color: linear-gradient(to bottom, #e8eaf6, #ffffff);");
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom, #d8c6f1, #f3eaff);");
 
         // Title
         Text title = new Text("🎲 Velkommen til Board Games!");
