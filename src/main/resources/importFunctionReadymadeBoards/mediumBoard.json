@@ -2,6 +2,10 @@
   "size": 70,
   "rows": 10,
   "columns": 7,
+  "dice":{
+    "count":679,
+    "sides":6
+  }, 
   "tiles": [
     { "position": 5, "action": { "type": "LADDER", "destination": 15 } },
     { "position": 9, "action": { "type": "BACK", "destination": 3 } },

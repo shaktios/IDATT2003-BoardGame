@@ -92,7 +92,7 @@ public class BoardGameFactory {
     public static Boardgame createGameFromFile(Path path) throws IOException, InvalidBoardFileException {
         BoardFileReader reader = new BoardFileReaderGson();
         Board board = reader.readBoard(path);
-        Boardgame boardgame = new Boardgame(board, 2, 6);
+        Boardgame boardgame = reader.readBoardgame(path);
 
         // Setter riktig Boardgame-objekt i alle ChessPuzzleActions
         for (int i = 1; i <= board.getSize(); i++) {
