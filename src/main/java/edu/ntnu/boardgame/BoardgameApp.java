@@ -58,8 +58,8 @@ public class BoardgameApp extends Application {
 
     public static void openTicTacToe(Stage stage) {
         Tile dummyTile = new Tile(1); // must be positive
-        Player player1 = new Player("Spiller 1", dummyTile);
-        Player player2 = new Player("Spiller 2", dummyTile);
+        Player player1 = new Player("Spiller 1", dummyTile,20); //lagt til noen randomme aldere fordi tictactoe ikke har noe med å gjøre med alderen til spilleren
+        Player player2 = new Player("Spiller 2", dummyTile,21); //lagt til noen randomme aldere fordi tictactoe ikke har noe med å gjøre med alderen til spilleren
 
         TicTacToeGameScreen view = new TicTacToeGameScreen();
         TicTacToeController controller = new TicTacToeController(player1, player2, view);

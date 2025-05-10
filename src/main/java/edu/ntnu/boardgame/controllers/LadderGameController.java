@@ -39,11 +39,11 @@ public class LadderGameController {
      * @param stage the JavaFX stage
      * @param gameVariant the selected game variant name
      */
-    public LadderGameController(Boardgame boardgame, LadderGameScreen view, Stage stage, String gameVariant) {
+    public LadderGameController(Boardgame boardgame, LadderGameScreen view, Stage stage, String gameVariant, int startingPlayerIndex) {
         this.boardgame = boardgame;
         this.board = boardgame.getBoard();
         this.players = boardgame.getPlayers();
-        this.currentPlayerIndex = 0;
+        this.currentPlayerIndex = startingPlayerIndex;
         this.view = view;
         this.stage = stage;
         this.gameVariant = gameVariant;
@@ -56,9 +56,10 @@ public class LadderGameController {
      */
     public void handleDiceRoll(Stage stage) {
         Player player = players.get(currentPlayerIndex);
-        Dice dice = new Dice(6, 1);
+        Dice dice = boardgame.getDice(); 
         int roll = dice.roll();
         view.setLastRoll(roll);
+    
 
         int newPosition = Math.min(player.getPosition() + roll, board.getSize());
         player.setPosition(newPosition, board);
