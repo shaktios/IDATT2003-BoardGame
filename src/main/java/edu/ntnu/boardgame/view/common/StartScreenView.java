@@ -141,6 +141,25 @@ public class StartScreenView {
     }
 
 
+
+    /**
+     * A list of text fields where the user enters the age of each player. Each
+     * index in the list corresponds to a player in the same order as name and
+     * token selection.
+     */
+    private List<TextField> playerAgeFields = new ArrayList<>();
+
+
+    /**
+     * Returns the list of text fields for player ages. This is used in the
+     * controller to retrieve and store each player's age input.
+     *
+     * @return a list of TextField objects containing player age inputs
+     */
+    public List<TextField> getPlayerAgeFields() {
+        return playerAgeFields;
+    }
+
  
 
  /**
@@ -163,6 +182,10 @@ public class StartScreenView {
         nameField.setPromptText("Navn til spiller " + i);
         nameField.getStyleClass().add("player-textfield");
 
+        TextField ageField = new TextField();
+        ageField.setPromptText("Alder til spiller " + i);
+        ageField.getStyleClass().add("player-textfield");
+
         ComboBox<String> tokenChoice = new ComboBox<>();
         tokenChoice.getItems().addAll("Bishop", "Horse", "Pawn", "Queen", "Rook");
         tokenChoice.setValue("Bishop");
@@ -177,14 +200,20 @@ public class StartScreenView {
         tokenChoice.setOnAction(e -> {
             String selected = tokenChoice.getValue();
             tokenPreview.setImage(new Image(getClass().getResourceAsStream("/images/" + selected + ".png")));
+            
         });
 
-        HBox playerRow = new HBox(10, tokenPreview, nameField, tokenChoice);
+        HBox playerRow = new HBox(10, tokenPreview, nameField, ageField, tokenChoice);
         playerRow.setAlignment(Pos.CENTER);
         playerRow.getStyleClass().add("player-row");
 
+        
+
         playerNameFields.add(nameField);
         playerTokenChoices.add(tokenChoice);
+        playerAgeFields.add(ageField);
+
+
 
         root.getChildren().addAll(playerLabel, playerRow);
     }

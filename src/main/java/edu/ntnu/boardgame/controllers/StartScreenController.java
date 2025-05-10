@@ -15,6 +15,7 @@ import edu.ntnu.boardgame.utils.InputValidator;
 import edu.ntnu.boardgame.view.common.StartScreenView;
 import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -51,6 +52,7 @@ public class StartScreenController {
                 if (selectedFile == null) {
                     return;
                 }
+
                 try {
                     boardgame = BoardGameFactory.createGameFromFile(Paths.get(selectedFile.getAbsolutePath()));
                 } catch (IOException | InvalidBoardFileException ex) {
@@ -79,27 +81,48 @@ public class StartScreenController {
 
         List<Player> players = new ArrayList<>();
         Tile startTile = boardgame.getBoard().getTile(1);
+        List<TextField> ageFields = view.getPlayerAgeFields();
+
+        int youngestAge = Integer.MAX_VALUE;
+        int youngestIndex = 0;
 
         for (int i = 0; i < view.getPlayerNameFields().size(); i++) {
             String name = view.getPlayerNameFields().get(i).getText();
             String token = view.getPlayerTokenChoices().get(i).getValue();
-            Player player = new Player(name, startTile);
+            int age;
+
+            try {
+                age = Integer.parseInt(ageFields.get(i).getText());
+            } catch (NumberFormatException e) {
+                view.showAlert("Ugyldig alder", "Alder må være et heltall for spiller " + (i + 1));
+                return;
+            }
+
+            Player player = new Player(name, startTile, age);
             player.setToken(token);
             players.add(player);
             boardgame.addExistingPlayer(player);
+
+            if (age < youngestAge) {
+                youngestAge = age;
+                youngestIndex = i;
+            }
         }
 
         LadderGameScreen gameScreen = new LadderGameScreen();
         Scene ladderGameScene = gameScreen.createScene(stage, boardgame, boardgame.getBoard(), players);
         String selectedVariant = view.getSelectedGameVariant();
-        LadderGameController ladderGameController = new LadderGameController(boardgame, gameScreen, stage, selectedVariant);
+
+        LadderGameController ladderGameController = new LadderGameController(
+                boardgame, gameScreen, stage, selectedVariant, youngestIndex
+        );
 
         gameScreen.disableNextTurnButton();
-        gameScreen.enableDiceButton();      
+        gameScreen.enableDiceButton();
 
         gameScreen.getThrowDiceButton().setOnAction(e -> ladderGameController.handleDiceRoll(stage));
         gameScreen.getNextTurnButton().setOnAction(e -> ladderGameController.handleNextTurn());
-        
+
         stage.setScene(ladderGameScene);
     }
 

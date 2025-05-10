@@ -60,42 +60,39 @@ public class BoardGameFactory {
         return boardgame; // standard terninger
     }
 
-    // 2. Kort variant for testing/demonstrasjon
     public static Boardgame createMiniGame() {
-        Board board = new Board(10,2);
-        Boardgame boardgame = new Boardgame(board, 1, 6);
-        /* //Stiger
-        board.getTile(2).setAction(new LadderAction(20));   // Tidlig stige
-        board.getTile(3).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
-        //Stiger
-        board.getTile(4).setAction(new LadderAction(20));   // Tidlig stige
-        board.getTile(5).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
-        //Stiger
-        board.getTile(6).setAction(new LadderAction(20));   // Tidlig stige
-        board.getTile(7).setAction(new LadderAction(20));   // Tidlig stige(skal egt være 8)
+        Board board = new Board(6, 5); // 6 kolonner × 5 rader = 30 ruter
+        Boardgame boardgame = new Boardgame(board, 1, 6); // 1 terning
+        // Ladder (opp)
+        board.getTile(3).setAction(new LadderAction(12));
+        board.getTile(14).setAction(new LadderAction(25));
 
+        // BackAction (slanger)
+        board.getTile(17).setAction(new BackAction(9));
+        board.getTile(29).setAction(new BackAction(18));
 
-        // Slanger
-        board.getTile(8).setAction(new BackAction(2));   // Midt i spillet
-        board.getTile(9).setAction(new BackAction(6));   // Midt-sent
-        board.getTile(10).setAction(new BackAction(1));   // Rett før mål */
+        // Reset
+        board.getTile(21).setAction(new ResetAction());
 
-        board.getTile(2).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
-        board.getTile(3).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(4).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
+        // Skip turn
+        board.getTile(7).setAction(new SkipTurnAction());
+
+        // Teleport
+        board.getTile(10).setAction(new TeleportRandomAction());
+        board.getTile(27).setAction(new TeleportRandomAction());
+
+        // Chess puzzle
         board.getTile(5).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(6).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
-        board.getTile(7).setAction(new ChessPuzzleAction(boardgame));
-        board.getTile(8).setAction(new ChessPuzzleAction(boardgame)); //chesspuzzle
-        board.getTile(9).setAction(new ChessPuzzleAction(boardgame));
-        return boardgame; 
+        board.getTile(20).setAction(new ChessPuzzleAction(boardgame));
+
+        return boardgame;
     }
 
     // 3. Les spillbrett fra JSON-fil
     public static Boardgame createGameFromFile(Path path) throws IOException, InvalidBoardFileException {
         BoardFileReader reader = new BoardFileReaderGson();
         Board board = reader.readBoard(path);
-        Boardgame boardgame = new Boardgame(board, 2, 6);
+        Boardgame boardgame = reader.readBoardgame(path);
 
         // Setter riktig Boardgame-objekt i alle ChessPuzzleActions
         for (int i = 1; i <= board.getSize(); i++) {

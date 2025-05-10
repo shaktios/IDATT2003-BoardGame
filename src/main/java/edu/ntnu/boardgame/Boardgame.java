@@ -46,17 +46,23 @@ public class Boardgame {
   /*
     * Adds a player to the game.
     * @param name The name of the player.
+    * @param age The age of the player
     * @throws IllegalArgumentException if the name is null or empty.
+    @ @throws IllegalArgumentException if the age is less than or equal to 0. 
    */
-  public void addPlayer(String name) {
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Navnet kan ikke være tomt eller null.");
-    }
+  
+  public void addPlayer(String name, int age) {
+      if (name == null || name.trim().isEmpty()) {
+          throw new IllegalArgumentException("Navnet kan ikke være tomt eller null.");
+      }
+      if (age <= 0) {
+          throw new IllegalArgumentException("Alderen må være større enn 0.");
+      }
 
-    Tile startTile = board.getTile(1);
-    players.add(new Player(name, startTile));
-    System.out.println("Spiller " + name + " har blitt lagt til i spillet på felt " + startTile.getPosition());
-  }
+      Tile startTile = board.getTile(1);
+      players.add(new Player(name, startTile, age));
+      System.out.println("Spiller " + name + " med alder " + age + " har blitt lagt til på felt " + startTile.getPosition());
+    }
 
   /*
     * @return A list of the players in the game.

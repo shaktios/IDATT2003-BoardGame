@@ -12,26 +12,32 @@ public class Player {
   private Tile currentTile;
   private String token;
   private boolean skipNextTurn = false; //for skipaction-actionen
+  private int age ; //for å kunne sortere mellom alder fra start
 
 
   /*
     * Constructor for the Player class.
     * @param name The name of the player.
-    * @param startTile The tile the player starts on.
-    * @throws IllegalArgumentException if the name is null or empty, or if the startTile is null.
+    * @param startTile The tile the player starts on
+    * @param age The players age
+    * @throws IllegalArgumentException if the name is null or empty, if the startTile is null or the age is negative
     * 
   */
-  public Player(String name, Tile startTile) {
+  public Player(String name, Tile startTile, int age) {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Spillernavnet kan ikke være tomt.");
     }
     if (startTile == null) { 
       throw new IllegalArgumentException("Startfelt kan ikke være tomt/Null(null ≠ tallverdien).");
     }
+    if (age < 0 ){
+      throw new IllegalArgumentException("Alderen kan ikke være tom eller 0"); 
+    }
         
     this.name = name; 
     this.currentTile = startTile;
     this.token = token;
+    this.age = age; 
   }
 
   /*
@@ -47,6 +53,27 @@ public class Player {
   public Tile getCurrentTile() {
     return currentTile;
   } 
+
+   
+
+  /**
+  * Sets the age of the player.
+  *
+  * @param age the age to assign
+  */
+  public void setAge(int age) {
+      this.age = age;
+  }
+
+  /**
+  * Returns the age of the player.
+  *
+  * @return the player's age
+  */
+  public int getAge() {
+      return age;
+  }
+
 
   /*
     * Moves the player a given number of steps on the board.
