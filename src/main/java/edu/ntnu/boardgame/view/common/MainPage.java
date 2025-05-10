@@ -30,7 +30,7 @@ public class MainPage {
         Text title = new Text("🎲 Velkommen til Board Games!");
         title.setFont(Font.font("Arial", 40));
         BorderPane.setAlignment(title, Pos.CENTER);
-        BorderPane.setMargin(title, new Insets(40, 0, 0, 0));
+        BorderPane.setMargin(title, new Insets(120, 0, 0, 0));
         layout.setTop(title);
 
         // Game image row
