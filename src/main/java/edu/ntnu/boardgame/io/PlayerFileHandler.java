@@ -1,54 +1,61 @@
 package edu.ntnu.boardgame.io;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 
-/*
-    * A class for reading and writing player data to and from a CSV file.
-    * The class has a method for reading player data from a CSV file.
-    * The class has a method for writing player data to a CSV file.
+/**
+ * A utility class for reading and writing player data to and from JSON files
+ * using Gson.
  */
 public class PlayerFileHandler {
 
-    public static List<Player> readFromCSV(File file) throws IOException {
-        List<Player> players = new ArrayList<>();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (tokens.length != 3) {
-                    continue; // Hopper over ugyldige linjer
-                }
+    /**
+     * Reads a list of players from a JSON file.
+     *
+     * @param file the file to read from
+     * @return a list of Player objects
+     * @throws IOException if an I/O error occurs
+     */
+    public static List<Player> readFromJSON(File file) throws IOException {
+        try (FileReader reader = new FileReader(file)) {
+            Type playerListType = new TypeToken<ArrayList<Player>>() {
+            }.getType();
+            List<Player> players = gson.fromJson(reader, playerListType);
 
-                String name = tokens[0].trim();
-                String token = tokens[1].trim();
-                int age = Integer.parseInt(tokens[2].trim());
-
-                Player player = new Player(name, new Tile(1), age); // startTile settes senere i BoardGame, har bare satt den som 1 nå for å unngå feil.
-                player.setToken(token); // spillerens brikke (TopHat, RaceCar, osv.)
-                players.add(player);
+            // Midlertidig tile for å unngå null (kan tilpasses ved bruk av faktisk spillstart)
+            Tile startTile = new Tile(1);
+            for (Player player : players) {
+                player.setCurrentTile(startTile);
             }
-        }
 
-        return players;
+            return players;
+        }
     }
 
-    public static void writeToCSV(File file, List<Player> players) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (Player player : players) {
-                writer.write(player.getName() + "," + player.getToken() + "," + player.getAge());
-                writer.newLine();
-            }
+    /**
+     * Writes a list of players to a JSON file.
+     *
+     * @param file the file to write to
+     * @param players the list of Player objects
+     * @throws IOException if an I/O error occurs
+     */
+    public static void writeToJSON(File file, List<Player> players) throws IOException {
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(players, writer);
         }
     }
 }
