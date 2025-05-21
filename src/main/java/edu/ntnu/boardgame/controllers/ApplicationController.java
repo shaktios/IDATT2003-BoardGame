@@ -9,18 +9,18 @@ import javafx.stage.Stage;
  */
 public class ApplicationController extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+  public static void main(String[] args) {
+    launch(args);
+  }
 
-    @Override
-    public void start(Stage stage) {
-        MainPageController controller = new MainPageController(stage);
-        Scene scene = controller.getMainScene();
+  @Override
+  public void start(Stage stage) {
+    MainPageController controller = new MainPageController(stage);
+    Scene scene = controller.getMainScene();
 
-        stage.setTitle("BoardGame");
-        stage.setScene(scene);
-        stage.setMaximized(true); // Optional: full screen
-        stage.show();
-    }
+    stage.setTitle("BoardGame");
+    stage.setScene(scene);
+    stage.setMaximized(true); // Optional: full screen
+      stage.show();
+  }
 }

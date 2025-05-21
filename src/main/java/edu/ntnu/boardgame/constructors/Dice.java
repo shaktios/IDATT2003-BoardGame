@@ -44,7 +44,7 @@ public class Dice extends Die {
     return sides;
 }
 
-public int getNumberOfDice() {
+  public int getNumberOfDice() {
     return numberOfDice;
   }
 
