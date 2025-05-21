@@ -34,6 +34,8 @@ public class StartScreenView {
     private List<TextField> playerNameFields = new ArrayList<>();
     private List<ComboBox<String>> playerTokenChoices = new ArrayList<>();
     private Button backToMainMenuButton; // Ny knapp
+    private Button readPlayersFromCsvButton; //knapp for å lese spillere fra csv fil
+    private Runnable importPlayersHandler;
 
     private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
     private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
@@ -65,6 +67,15 @@ public class StartScreenView {
         playerCountSpinner = new Spinner<>(1, 5, 2);
         playerCountSpinner.getStyleClass().add("custom-spinner");
 
+        readPlayersFromCsvButton = new Button("Importer spillere inn fra en CSV-fil");
+        readPlayersFromCsvButton.getStyleClass().add("start-button");
+
+        readPlayersFromCsvButton.setOnAction(e -> {
+            if (importPlayersHandler != null) {
+                importPlayersHandler.run();
+            }
+        });
+
         Label playerLabel = new Label("\uD83D\uDC64 Velg antall spillere:");
         playerLabel.getStyleClass().add("section-label");
 
@@ -89,7 +100,7 @@ public class StartScreenView {
             stage.setScene(mainScene);
         });
 
-        root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner, nextButton, backToMainMenuButton);
+        root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner,readPlayersFromCsvButton, nextButton, backToMainMenuButton);
 
         Scene scene = new Scene(root, 1200, 800);
         scene.getStylesheets().add(getClass().getResource("/styles/startScreen.css").toExternalForm());
@@ -267,6 +278,10 @@ public class StartScreenView {
 
     public Button getBackToMainMenuButton() {
         return backToMainMenuButton;
+    }
+
+    public void setImportPlayersHandler(Runnable handler) {
+        this.importPlayersHandler = handler;
     }
 }
 

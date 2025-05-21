@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame.view.laddergame;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class LadderGameScreen {
     private Board board;
     private List<Player> players;
     private int lastRoll;
+    private Button saveBoardButton;
 
     public Scene createScene(Stage stage, Boardgame boardgame, Board board, List<Player> players) {
         this.board = board;
@@ -63,8 +65,24 @@ public class LadderGameScreen {
         throwDiceButton.getStyleClass().add("game-button");
         nextTurnButton = new Button("Neste tur");
         nextTurnButton.getStyleClass().add("game-button");
+        saveBoardButton = new Button("Lagre brett");
+        saveBoardButton.getStyleClass().add("game-button");
+        saveBoardButton.setOnAction(e -> {
+            try {
+                edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
+                java.nio.file.Path path = java.nio.file.Paths.get("saved_board.json");
 
-        messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton));
+                // Debug-utskrift: hvor lagres filen?
+                System.out.println("Lagrer brett til: " + path.toAbsolutePath());
+
+                writer.writeBoardgame(path, boardgame);
+                updateMessage("Brett lagret til saved_board.json");
+            } catch (IOException ex) {
+                updateMessage(" Kunne ikke lagre brettet: " + ex.getMessage());
+            }
+        });
+
+        messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton, saveBoardButton));
         VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
         messageBox.setPadding(new Insets(15));
         messageBox.setPrefWidth(400);
