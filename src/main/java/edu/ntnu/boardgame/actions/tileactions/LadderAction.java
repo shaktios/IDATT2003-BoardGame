@@ -6,27 +6,27 @@ import edu.ntnu.boardgame.constructors.Player;
 
 public class LadderAction implements TileAction {
 
-    private final int destination;
-    private Boardgame boardgame; // Ikke final
+  private final int destination;
+  private Boardgame boardgame; // Ikke final
 
-    public LadderAction(int destination) {
+  public LadderAction(int destination) {
         this.destination = destination;
     }
 
-    public void setBoardgame(Boardgame boardgame) {
+  public void setBoardgame(Boardgame boardgame) {
         this.boardgame = boardgame;
     }
 
-    @Override
-    public void execute(Player player, Board board) {
-        player.setPosition(destination, board);
-        if (boardgame != null) {
-            boardgame.checkForWin(player);
-        }
+  @Override
+  public void execute(Player player, Board board) {
+    player.setPosition(destination, board);
+    if (boardgame != null) {
+      boardgame.checkForWin(player);
     }
+  }
 
-    @Override
-    public int getDestination() {
+  @Override
+  public int getDestination() {
         return destination;
     }
 }
