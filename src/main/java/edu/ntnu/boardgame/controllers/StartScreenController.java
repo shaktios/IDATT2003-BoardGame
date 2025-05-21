@@ -32,6 +32,31 @@ public class StartScreenController {
         view.setNextButtonAction(e -> handleNextButton());
         view.setStartGameButtonAction(e -> handleStartGameButton());
         view.setImportPlayersHandler(this::handleImportPlayers);
+
+        view.setSavePlayersHandler(() -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Lagre spillere som CSV");
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                try {
+                    List<Player> playersToSave = new ArrayList<>();
+                    for (int i = 0; i < view.getPlayerNameFields().size(); i++) {
+                        String name = view.getPlayerNameFields().get(i).getText();
+                        String token = view.getPlayerTokenChoices().get(i).getValue();
+                        int age = Integer.parseInt(view.getPlayerAgeFields().get(i).getText());
+                        Player p = new Player(name, new Tile(1), age);
+                        p.setToken(token);
+                        playersToSave.add(p);
+                    }
+
+                    PlayerFileHandler.writeToCSV(file, playersToSave);
+                    view.showAlert("Suksess", "Spillere lagret til " + file.getName());
+                } catch (Exception ex) {
+                    view.showAlert("Feil", "Kunne ikke lagre spillere:\n" + ex.getMessage());
+                }
+            }
+        });
+
     }
 
     private void handleNextButton() {
