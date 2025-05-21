@@ -13,7 +13,7 @@ public class TileCoordinatesJsonTest {
     void testWriteAndReadCoordinates() throws Exception {
 
         //Lager et brett med koordinater
-        Board board = new Board(3);
+        Board board = new Board(3, 3);
         board.getTile(1).setX(0);
         board.getTile(1).setY(0);
         board.getTile(2).setX(1);

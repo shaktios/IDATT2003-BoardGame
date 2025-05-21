@@ -15,7 +15,7 @@ public class BoardgameTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board(10); // Anta at Board har en konstruktør med størrelse
+        board = new Board(10, 10); // Anta at Board har en konstruktør med størrelse
         boardGame = new Boardgame(board, 2, 6);
     }
 
@@ -30,7 +30,7 @@ public class BoardgameTest {
     // Tester at man kan legge en spiller til
     @Test
     void testAddPlayerValid() {
-        boardGame.addPlayer("Abdi");
+        boardGame.addPlayer("Abdi", 10);
         List<Player> players = boardGame.getPlayers();
         assertEquals(1, players.size(), "Antall spillere burde være 1");
         assertEquals("Abdi", players.get(0).getName(), "Navnet på spilleren burde være Abdi");
@@ -39,8 +39,8 @@ public class BoardgameTest {
     // Tester at ugyldige navn kaster unntak
     @Test
     void testAddPlayerInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> boardGame.addPlayer(null), "Navnet kan ikke være null");
-        assertThrows(IllegalArgumentException.class, () -> boardGame.addPlayer(""), "Navnet kan ikke være tomt");
+        assertThrows(IllegalArgumentException.class, () -> boardGame.addPlayer(null, 10), "Navnet kan ikke være null");
+        assertThrows(IllegalArgumentException.class, () -> boardGame.addPlayer(null, 10), "Navnet kan ikke være tomt");
     }
 
     // Tester at terningen blir riktig satt opp

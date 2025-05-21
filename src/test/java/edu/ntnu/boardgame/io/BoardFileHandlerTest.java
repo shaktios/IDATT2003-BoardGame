@@ -15,7 +15,7 @@ public class BoardFileHandlerTest {
     @Test
     void testWriteAndReadBoard() throws Exception {
         // 1. Lager et Board-objekt
-        Board originalBoard = new Board(10);
+        Board originalBoard = new Board(10, 10);
 
         // 2. Definer sti til midlertidig fil
         Path path = Path.of("src/test/resources/temp_board.json");
