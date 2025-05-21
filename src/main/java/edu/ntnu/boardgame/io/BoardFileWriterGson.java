@@ -15,7 +15,7 @@ import edu.ntnu.boardgame.constructors.Tile;
 
 /**
  * Writes a full boardgame configuration to a JSON file. Includes board size,
- * rows, columns, dice settings, and tile positions.
+ * rows, columns, dice settings, tile positions, and tile actions.
  */
 public class BoardFileWriterGson implements BoardFileWriter {
 
@@ -35,16 +35,7 @@ public class BoardFileWriterGson implements BoardFileWriter {
         root.addProperty("rows", board.getRows());
         root.addProperty("columns", board.getColumns());
 
-        JsonArray tilesArray = new JsonArray();
-        for (int i = 1; i <= board.getSize(); i++) {
-            Tile tile = board.getTile(i);
-            JsonObject tileObj = new JsonObject();
-            tileObj.addProperty("position", tile.getPosition());
-            tileObj.addProperty("x", tile.getX());
-            tileObj.addProperty("y", tile.getY());
-            tilesArray.add(tileObj);
-        }
-
+        JsonArray tilesArray = serializeTiles(board);
         root.add("tiles", tilesArray);
 
         try (FileWriter writer = new FileWriter(path.toFile())) {
@@ -72,19 +63,60 @@ public class BoardFileWriterGson implements BoardFileWriter {
         diceObj.addProperty("sides", boardgame.getDice().getNumSides());
         root.add("dice", diceObj);
 
-        JsonArray tilesArray = new JsonArray();
-        for (int i = 1; i <= board.getSize(); i++) {
-            Tile tile = board.getTile(i);
-            JsonObject tileObj = new JsonObject();
-            tileObj.addProperty("position", tile.getPosition());
-            tileObj.addProperty("x", tile.getX());
-            tileObj.addProperty("y", tile.getY());
-            tilesArray.add(tileObj);
-        }
+        JsonArray tilesArray = serializeTiles(board);
         root.add("tiles", tilesArray);
 
         try (FileWriter writer = new FileWriter(path.toFile())) {
             gson.toJson(root, writer);
         }
+    }
+
+    /**
+     * Serializes all tiles from a board, including actions if they exist.
+     *
+     * @param board the board to serialize tiles from
+     * @return a JsonArray representing all tiles
+     */
+    private JsonArray serializeTiles(Board board) {
+        JsonArray tilesArray = new JsonArray();
+
+        for (int i = 1; i <= board.getSize(); i++) {
+            Tile tile = board.getTile(i);
+            JsonObject tileObj = new JsonObject();
+
+            tileObj.addProperty("position", tile.getPosition());
+            tileObj.addProperty("x", tile.getX());
+            tileObj.addProperty("y", tile.getY());
+
+            if (tile.getAction() != null) {
+                JsonObject actionObj = new JsonObject();
+                String actionType = tile.getAction().getClass().getSimpleName();
+
+                switch (actionType) {
+                    case "LadderAction" -> {
+                        actionObj.addProperty("type", "LADDER");
+                        actionObj.addProperty("destination", tile.getAction().getDestination());
+                    }
+                    case "BackAction" -> {
+                        actionObj.addProperty("type", "BACK");
+                        actionObj.addProperty("destination", tile.getAction().getDestination());
+                    }
+                    case "ResetAction" ->
+                        actionObj.addProperty("type", "RESET");
+                    case "SkipTurnAction" ->
+                        actionObj.addProperty("type", "SKIP");
+                    case "TeleportRandomAction" ->
+                        actionObj.addProperty("type", "TELEPORT_RANDOM");
+                    case "ChessPuzzleAction" ->
+                        actionObj.addProperty("type", "CHESSPUZZLE");
+                }
+
+                tileObj.add("action", actionObj);
+            }
+
+            tilesArray.add(tileObj);
+        }
+
+        return tilesArray;
     }
 }
