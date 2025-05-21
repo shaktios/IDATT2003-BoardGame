@@ -31,8 +31,8 @@ class PlayerFileHandlerTest {
 
         // 1. Lager en liste med spillere
         List<Player> originalPlayers = List.of(
-                new Player("Test1", new Tile(1)), //tile kan ikke være null så vi bare lager en dummytile rn
-                new Player("Test2", new Tile(1)) //tile kan ikke være null så vi bare lager en dummytile rn
+                new Player("Test1", new Tile(1), 10), //tile kan ikke være null så vi bare lager en dummytile rn
+                new Player("Test2", new Tile(1), 10) //tile kan ikke være null så vi bare lager en dummytile rn
         );
         originalPlayers.get(0).setToken("Icon1");
         originalPlayers.get(1).setToken("Icon2");

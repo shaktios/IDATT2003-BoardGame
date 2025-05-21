@@ -10,9 +10,9 @@ public class BoardGameObserverTest {
         @Test
         void testObserverReceivesCallbacks() {
             // Setter opp spillet
-            Board board = new Board(10);
+            Board board = new Board(10, 10);
             Boardgame game = new Boardgame(board, 1, 6);
-            game.addPlayer("Abdi");
+            game.addPlayer("Abdi", 23);
 
             // Registrerer observeren
             TestObserver observer = new TestObserver();

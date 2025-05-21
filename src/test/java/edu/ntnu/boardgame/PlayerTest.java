@@ -14,8 +14,8 @@ public class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board(10); // Brett med 10 felt
-        player = new Player("Abdi", board.getTile(1)); // Starter på felt 1
+        board = new Board(10, 10); // Brett med 10 felt
+        player = new Player("Abdi", board.getTile(1), 23); // Starter på felt 1
     }
 
     @Test
@@ -26,11 +26,11 @@ public class PlayerTest {
 
     @Test
     void testInvalidPlayerCreation() {
-        assertThrows(IllegalArgumentException.class, () -> new Player("", board.getTile(1)),
+        assertThrows(IllegalArgumentException.class, () -> new Player("", board.getTile(1), 23),
                 "Bør kaste exception for tomt navn.");
-        assertThrows(IllegalArgumentException.class, () -> new Player(null, board.getTile(1)),
+        assertThrows(IllegalArgumentException.class, () -> new Player(null, board.getTile(1), 10),
                 "Bør kaste exception for null navn.");
-        assertThrows(IllegalArgumentException.class, () -> new Player("Abdi", null),
+        assertThrows(IllegalArgumentException.class, () -> new Player("Abdi", null, 10),
                 "Bør kaste exception for null startfelt.");
     }
 
