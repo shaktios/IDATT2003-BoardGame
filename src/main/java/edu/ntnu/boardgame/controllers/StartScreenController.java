@@ -11,6 +11,7 @@ import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
+import edu.ntnu.boardgame.io.PlayerFileHandler;
 import edu.ntnu.boardgame.utils.InputValidator;
 import edu.ntnu.boardgame.view.common.StartScreenView;
 import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
@@ -30,6 +31,7 @@ public class StartScreenController {
 
         view.setNextButtonAction(e -> handleNextButton());
         view.setStartGameButtonAction(e -> handleStartGameButton());
+        view.setImportPlayersHandler(this::handleImportPlayers);
     }
 
     private void handleNextButton() {
@@ -129,4 +131,34 @@ public class StartScreenController {
     public Scene getStartScene() {
         return view.createScene(stage);
     }
+
+
+    private void handleImportPlayers() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Velg CSV-fil med spillere");
+    File file = fileChooser.showOpenDialog(stage);
+
+    if (file == null) return;
+
+    try {
+        List<Player> importedPlayers = PlayerFileHandler.readFromCSV(file);
+        if (importedPlayers.isEmpty()) {
+            view.showAlert("Feil", "Fant ingen spillere i CSV-filen.");
+            return;
+        }
+
+        view.generatePlayerInputs(importedPlayers.size());
+
+        for (int i = 0; i < importedPlayers.size(); i++) {
+            Player p = importedPlayers.get(i);
+            view.getPlayerNameFields().get(i).setText(p.getName());
+            view.getPlayerAgeFields().get(i).setText(String.valueOf(p.getAge()));
+            view.getPlayerTokenChoices().get(i).setValue(p.getToken());
+        }
+
+    } catch (IOException | NumberFormatException ex) {
+        view.showAlert("Feil", "Kunne ikke laste spillere fra fil:\n" + ex.getMessage());
+    }
+}
+
 }

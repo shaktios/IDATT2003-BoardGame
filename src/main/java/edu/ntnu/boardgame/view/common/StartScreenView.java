@@ -34,6 +34,8 @@ public class StartScreenView {
     private List<TextField> playerNameFields = new ArrayList<>();
     private List<ComboBox<String>> playerTokenChoices = new ArrayList<>();
     private Button backToMainMenuButton; // Ny knapp
+    private Button readPlayersFromCsvButton; //knapp for å lese spillere fra csv fil
+    private Runnable importPlayersHandler;
 
     private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
     private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
@@ -173,7 +175,16 @@ public class StartScreenView {
     root.getChildren().clear();
     playerNameFields.clear();
     playerTokenChoices.clear();
+    Button readPlayersFromCsvButton = new Button("Importer spillere inn fra en CSV-fil");
 
+    readPlayersFromCsvButton.setOnAction(e ->{
+        if(importPlayersHandler != null){
+            importPlayersHandler.run();
+        }
+    });
+
+    root.getChildren().add(readPlayersFromCsvButton);
+    
     for (int i = 1; i <= numberOfPlayers; i++) {
         Label playerLabel = new Label("Spiller " + i);
         playerLabel.getStyleClass().add("section-label");
@@ -267,6 +278,10 @@ public class StartScreenView {
 
     public Button getBackToMainMenuButton() {
         return backToMainMenuButton;
+    }
+
+    public void setImportPlayersHandler(Runnable handler) {
+        this.importPlayersHandler = handler;
     }
 }
 
