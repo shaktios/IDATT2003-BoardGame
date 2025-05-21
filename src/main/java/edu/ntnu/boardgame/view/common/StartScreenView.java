@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 public class StartScreenView {
 
     private VBox root;
+    private Stage stage;
     private ComboBox<String> gameSelector;
     private Spinner<Integer> playerCountSpinner;
     private Button nextButton;
@@ -36,6 +37,9 @@ public class StartScreenView {
     private Button backToMainMenuButton; // Ny knapp
     private Button readPlayersFromCsvButton; //knapp for å lese spillere fra csv fil
     private Runnable importPlayersHandler;
+    private Button savePlayersToCsvButton; //knapp for å lagre en csv fil med spillerne også 
+    private Runnable savePlayersHandler;
+    private Button backToGameMenuButton; 
 
     private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
     private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
@@ -47,6 +51,7 @@ public class StartScreenView {
      * @return a fully constructed Scene for the start screen
      */
     public Scene createScene(Stage stage) {
+        this.stage = stage; 
         root = new VBox();
         root.setSpacing(20);
         root.setPadding(new Insets(40));
@@ -223,13 +228,34 @@ public class StartScreenView {
         playerNameFields.add(nameField);
         playerTokenChoices.add(tokenChoice);
         playerAgeFields.add(ageField);
-
+        
 
 
         root.getChildren().addAll(playerLabel, playerRow);
     }
 
-    if (!root.getChildren().contains(startGameButton)) {
+        Button backToGameMenuButton = new Button("Tilbake til hovedmenyen");
+        backToGameMenuButton.getStyleClass().add("start-button");
+        backToGameMenuButton.setOnAction(e -> {
+            MainPageController controller = new MainPageController(stage);
+            Scene mainScene = controller.getMainScene();
+            stage.setScene(mainScene);
+        });
+
+        root.getChildren().add(backToGameMenuButton);
+
+        savePlayersToCsvButton = new Button("Lagre spillere til CSV-fil");
+        savePlayersToCsvButton.getStyleClass().add("start-button");
+
+        savePlayersToCsvButton.setOnAction(e -> {
+            if (savePlayersHandler != null) {
+                savePlayersHandler.run();
+            }
+        });
+
+        root.getChildren().add(savePlayersToCsvButton);
+
+        if (!root.getChildren().contains(startGameButton)) {
         if (startGameButtonHandler != null) {
             startGameButton.setOnAction(startGameButtonHandler);
         }
@@ -283,6 +309,18 @@ public class StartScreenView {
     public void setImportPlayersHandler(Runnable handler) {
         this.importPlayersHandler = handler;
     }
+
+    /**
+     * Sets a handler to be executed when the user clicks the button to save the
+     * players to a CSV file.
+     *
+     * @param handler a Runnable containing the logic for saving player data
+     */
+    public void setSavePlayersHandler(Runnable handler) {
+        this.savePlayersHandler = handler;
+    }
+
+    
 }
 
 
