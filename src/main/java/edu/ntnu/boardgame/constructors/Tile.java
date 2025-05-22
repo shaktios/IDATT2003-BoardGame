@@ -16,6 +16,8 @@ public class Tile {
     private int y = -1;
     private Tile nextTile;
     private TileAction action; // Nytt felt for tile-effekt
+    private String token; //  TicTacToe for å lagre "X" eller "O"
+
 
     /**
      * Constructs a new Tile with the given position.
@@ -124,6 +126,24 @@ public class Tile {
         if (action != null) {
             action.execute(player, board);
         }
+    }
+
+    /**
+     * Returns the token assigned to this tile (e.g., "X" or "O").
+     *
+     * @return the token or null if tile is empty
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * Sets the token for this tile.
+     *
+     * @param token the token string ("X", "O", or null)
+     */
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

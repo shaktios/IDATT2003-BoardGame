@@ -2,6 +2,7 @@ package edu.ntnu.boardgame.constructors;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +61,30 @@ public class TileTest {
         Tile tile = new Tile(1);
         // Should not throw even if no action is set
         assertDoesNotThrow(() -> tile.executeAction(null, null));
+    }
+
+
+/**
+ * Unit tests for token handling in the Tile class.
+     */
+    @Test
+    void testSetAndGetToken() {
+        Tile tile = new Tile(1);
+
+        // Initially, token should be null
+        assertNull(tile.getToken(), "Token should initially be null");
+
+        // Set token to "X" and check
+        tile.setToken("X");
+        assertEquals("X", tile.getToken(), "Token should be 'X'");
+
+        // Change token to "O" and check
+        tile.setToken("O");
+        assertEquals("O", tile.getToken(), "Token should be 'O'");
+
+        // Reset token to null and check
+        tile.setToken(null);
+        assertNull(tile.getToken(), "Token should be null again");
     }
 
 
