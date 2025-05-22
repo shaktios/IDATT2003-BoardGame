@@ -79,7 +79,17 @@ public class TicTacToeController {
     view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-    private void showWinnerMessage(String winnerName, Stage stage) {
+
+
+  
+
+/**
+ * Displays a popup alert indicating that a player has won the game.
+ *
+ * @param winnerName the name of the player who won
+ * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
+ */
+  private void showWinnerMessage(String winnerName, Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Vi har en vinner!");
         alert.setHeaderText(winnerName + " har vunnet spillet!");
@@ -87,7 +97,13 @@ public class TicTacToeController {
         alert.show(); 
     }
 
-    private void showDrawMessage(Stage stage) {
+  
+/**
+ * Displays a popup alert indicating that the game ended in a draw.
+ *
+ * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
+ */
+  private void showDrawMessage(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Uavgjort");
         alert.setHeaderText("Ingen vant – brettet er fullt.");
