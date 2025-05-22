@@ -66,10 +66,14 @@ public class BoardgameApp extends Application {
         view.setController(controller);
 
         Scene scene = new Scene(view.getRoot(), 600, 700);
-        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm()); // ← Legg til denne
+        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm()); 
 
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe");
+
+        
+        stage.setResizable(false);
+        stage.sizeToScene(); 
     }
 
 
