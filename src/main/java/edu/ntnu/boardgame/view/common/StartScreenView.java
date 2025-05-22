@@ -107,7 +107,7 @@ public class StartScreenView {
 
     root.getChildren().addAll(titleLabel, gameLabel, gameSelector, playerLabel, playerCountSpinner,readPlayersFromCsvButton, nextButton, backToMainMenuButton);
 
-    Scene scene = new Scene(root, 1200, 800);
+    Scene scene = new Scene(root, 1250, 1050);
     scene.getStylesheets().add(getClass().getResource("/styles/startScreen.css").toExternalForm());
     return scene;
   }
