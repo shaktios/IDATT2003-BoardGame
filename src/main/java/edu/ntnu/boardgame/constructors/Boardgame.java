@@ -1,12 +1,9 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ntnu.boardgame.constructors.Dice;
-import edu.ntnu.boardgame.constructors.Player;
-import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
 
 /*

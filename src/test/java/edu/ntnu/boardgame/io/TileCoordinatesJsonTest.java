@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import edu.ntnu.boardgame.Board;
+import edu.ntnu.boardgame.constructors.Board;
 import edu.ntnu.boardgame.constructors.Tile;
 
 public class TileCoordinatesJsonTest {

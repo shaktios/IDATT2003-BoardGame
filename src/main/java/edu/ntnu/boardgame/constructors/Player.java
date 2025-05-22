@@ -1,13 +1,5 @@
 package edu.ntnu.boardgame.constructors;
 
-
-/**
- * Represents a player in the game. A player has a name, a token, an age, and a
- * position on the board represented by a Tile. The player can move around the
- * board and may be subject to effects like skipping a turn.
- */
-import edu.ntnu.boardgame.Board;
-
 public class Player {
   private String name; 
   private Tile currentTile;

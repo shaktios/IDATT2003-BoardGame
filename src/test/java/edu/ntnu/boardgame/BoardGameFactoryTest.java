@@ -1,7 +1,9 @@
 package edu.ntnu.boardgame;
 
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
-import edu.ntnu.boardgame.BoardGameFactory; 
+import edu.ntnu.boardgame.factory.BoardGameFactory;
+import edu.ntnu.boardgame.constructors.Boardgame;
+
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;

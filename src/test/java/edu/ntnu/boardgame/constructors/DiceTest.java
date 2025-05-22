@@ -1,9 +1,7 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-
-import edu.ntnu.boardgame.constructors.Dice;
 
 
 

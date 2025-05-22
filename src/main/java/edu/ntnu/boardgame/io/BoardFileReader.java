@@ -3,8 +3,8 @@ package edu.ntnu.boardgame.io;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 
 public interface BoardFileReader {

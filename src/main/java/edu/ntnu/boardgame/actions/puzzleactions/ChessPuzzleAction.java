@@ -1,8 +1,8 @@
 package edu.ntnu.boardgame.actions.puzzleactions;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.actions.tileactions.TileAction;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.controllers.ChessPuzzleViewController;
 

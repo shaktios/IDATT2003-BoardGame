@@ -9,14 +9,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.actions.puzzleactions.ChessPuzzleAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
 import edu.ntnu.boardgame.actions.tileactions.LadderAction;
 import edu.ntnu.boardgame.actions.tileactions.ResetAction;
 import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 

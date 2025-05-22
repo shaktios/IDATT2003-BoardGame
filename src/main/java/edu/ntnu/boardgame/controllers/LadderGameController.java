@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.TileAction;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Dice;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;

@@ -1,7 +1,8 @@
 package edu.ntnu.boardgame.io;
 
-import edu.ntnu.boardgame.Board;
 import org.junit.jupiter.api.Test;
+
+import edu.ntnu.boardgame.constructors.Board;
 
 import java.nio.file.Path;
 

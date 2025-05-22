@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.model.laddergame.chesspuzzle.ChessPuzzleModel;
 import edu.ntnu.boardgame.view.laddergame.chesspuzzle.ChessPuzzleView;

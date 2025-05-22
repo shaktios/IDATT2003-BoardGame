@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
 import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.BackAction;
@@ -13,6 +11,8 @@ import edu.ntnu.boardgame.actions.tileactions.LadderAction;
 import edu.ntnu.boardgame.actions.tileactions.ResetAction;
 import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import javafx.geometry.Insets;

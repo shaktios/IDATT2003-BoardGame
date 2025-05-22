@@ -1,9 +1,7 @@
-package edu.ntnu.boardgame;
+package edu.ntnu.boardgame.constructors;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.ntnu.boardgame.constructors.Tile;
 
 /**
  * A class representing a board in a board game. The board consists of a number
