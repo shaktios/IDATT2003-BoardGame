@@ -89,7 +89,7 @@ public class LadderGameScreen {
     fileChooser.setTitle("Velg hvor du vil lagre brettet");
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-filer", "*.json"));
 
-    File file = fileChooser.showSaveDialog(stage); // Husk å ha tilgang til 'stage'
+    File file = fileChooser.showSaveDialog(stage); 
 
     if (file != null) {
         try {
