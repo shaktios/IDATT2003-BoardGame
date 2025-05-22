@@ -12,12 +12,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Entry point for the Boardgame application.
+ * Entry point for the board game application. Responsible for initializing and
+ * displaying the main menu and launching individual games.
  */
 public class BoardgameApp extends Application {
 
     /**
-     * Launches the application by displaying the start screen.
+     * Starts the JavaFX application by showing the main page.
      *
      * @param primaryStage the primary JavaFX window
      */
@@ -33,10 +34,10 @@ public class BoardgameApp extends Application {
     }
 
     /**
-     * Creates a new, fully wired-up start screen with view and controller.
+     * Creates a new main menu scene with game options.
      *
-     * @param stage the current stage to bind the scene to
-     * @return a fresh start screen scene
+     * @param stage the stage to attach the new scene to
+     * @return the main menu scene
      */
     public static Scene createFreshStartScene(Stage stage) {
         MainPage mainPage = new MainPage(gameName -> {
@@ -49,14 +50,27 @@ public class BoardgameApp extends Application {
 
         Scene scene = new Scene(mainPage.getRoot(), 1280, 720);
         stage.setScene(scene);
-        stage.setFullScreen(true); // Optional for fullscreen
+        stage.setResizable(false); 
+        stage.setTitle("BoardGame");
+        stage.sizeToScene(); 
         return scene;
     }
 
-        public static void main(String[] args) {
+    /**
+     * Launches the application.
+     *
+     * @param args command-line arguments (not used)
+     */
+    public static void main(String[] args) {
         launch(args);
     }
 
+
+    /**
+     * Initializes and displays the Tic Tac Toe game screen.
+     *
+     * @param stage the current JavaFX stage to load the game into
+     */
     public static void openTicTacToe(Stage stage) {
         Tile dummyTile = new Tile(1); // must be positive
         Player player1 = new Player("Spiller 1", dummyTile, 20);
@@ -78,10 +92,16 @@ public class BoardgameApp extends Application {
     }
 
 
+    /**
+     * Launches the classic board game (full version).
+     */
     public static void openClassicGame() {
         BoardGameFactory.createClassicGame();
     }
 
+    /**
+     * Launches the mini version of the board game.
+     */
     public static void openMiniGame() {
         BoardGameFactory.createMiniGame();
     }
