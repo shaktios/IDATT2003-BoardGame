@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame.factory;
+package edu.ntnu.boardgame.constructors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,7 +11,6 @@ import edu.ntnu.boardgame.actions.tileactions.LadderAction;
 import edu.ntnu.boardgame.actions.tileactions.ResetAction;
 import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
-import edu.ntnu.boardgame.constructors.Boardgame;
 
 /**
  * Unit tests for the {@link BoardGameFactory} class. Verifies correct creation

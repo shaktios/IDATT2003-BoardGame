@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame.factory;
+package edu.ntnu.boardgame.constructors;
 
 
 
@@ -11,8 +11,6 @@ import edu.ntnu.boardgame.actions.tileactions.LadderAction;
 import edu.ntnu.boardgame.actions.tileactions.ResetAction;
 import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
-import edu.ntnu.boardgame.constructors.Board;
-import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 import edu.ntnu.boardgame.io.BoardFileReader;
 import edu.ntnu.boardgame.io.BoardFileReaderGson;

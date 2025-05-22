@@ -1,10 +1,10 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.BoardGameFactory;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.controllers.MainPageController;
 import edu.ntnu.boardgame.controllers.TicTacToeController;
-import edu.ntnu.boardgame.factory.BoardGameFactory;
 import edu.ntnu.boardgame.view.common.MainPage;
 import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
 import javafx.application.Application;
