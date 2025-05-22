@@ -1,5 +1,7 @@
 package edu.ntnu.boardgame.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import edu.ntnu.boardgame.Board;
@@ -14,6 +16,7 @@ import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -30,6 +33,7 @@ public class LadderGameController {
   private final LadderGameScreen view;
   private final Stage stage;
   private final String gameVariant;
+ 
 
   /**
    * Constructs the LadderGameController.
@@ -49,6 +53,10 @@ public class LadderGameController {
     this.gameVariant = gameVariant;
 
     boardgame.registerObserver(new GameObserver());
+
+    view.setSaveBoardAction(this::handleSaveBoard);
+    view.setReturnHomeAction(this::handleReturnHome);
+
   }
 
   /**
@@ -177,6 +185,33 @@ public class LadderGameController {
 
     alert.show();
   }
+
+  public void handleSaveBoard() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Velg hvor du vil lagre brettet");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-filer", "*.json"));
+    File file = fileChooser.showSaveDialog(stage);
+
+    if (file != null) {
+        try {
+            edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
+            writer.writeBoardgame(file.toPath(), boardgame);
+            view.updateMessage("Brett lagret til: " + file.getName());
+        } catch (IOException ex) {
+            view.updateMessage("Kunne ikke lagre brettet: " + ex.getMessage());
+        }
+    } else {
+        view.updateMessage("Lagring avbrutt.");
+    }
+}
+
+public void handleReturnHome() {
+    MainPageController controller = new MainPageController(stage);
+    Scene mainScene = controller.getMainScene();
+    stage.setScene(mainScene);
+}
+
+
 
   private class GameObserver implements BoardGameObserver {
 

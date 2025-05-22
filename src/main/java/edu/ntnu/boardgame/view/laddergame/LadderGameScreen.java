@@ -1,7 +1,5 @@
 package edu.ntnu.boardgame.view.laddergame;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,6 @@ import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
-import edu.ntnu.boardgame.controllers.MainPageController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -31,7 +28,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class LadderGameScreen {
@@ -77,36 +73,6 @@ public class LadderGameScreen {
 
     returnHomeButton = new Button("Tilbake til hovedmenyen");
     returnHomeButton.getStyleClass().add("game-button");
-    returnHomeButton.setOnAction(e -> {
-        MainPageController controller = new MainPageController(stage);
-        Scene mainScene = controller.getMainScene();
-        stage.setScene(mainScene);
-    });
-
-
-    saveBoardButton.setOnAction(e -> {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Velg hvor du vil lagre brettet");
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-filer", "*.json"));
-
-    File file = fileChooser.showSaveDialog(stage); 
-
-    if (file != null) {
-        try {
-            edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
-            writer.writeBoardgame(file.toPath(), boardgame);
-
-            updateMessage("Brett lagret til: " + file.getName());
-        } catch (IOException ex) {
-            updateMessage("Kunne ikke lagre brettet: " + ex.getMessage());
-        }
-    } else {
-        updateMessage("Lagring avbrutt.");
-    }
-
-    
-});
-
 
     messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton, saveBoardButton, returnHomeButton));
     VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
@@ -355,4 +321,14 @@ public class LadderGameScreen {
   public void setLastRoll(int roll) {
         this.lastRoll = roll;
     }
+
+  public void setSaveBoardAction(Runnable handler) {
+      saveBoardButton.setOnAction(e -> handler.run());
+  }
+
+
+  public void setReturnHomeAction(Runnable handler) {
+      returnHomeButton.setOnAction(e -> handler.run());
+  }
+
 }
