@@ -3,6 +3,8 @@ package edu.ntnu.boardgame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.observer.TestObserver;
 
 public class BoardGameObserverTest {

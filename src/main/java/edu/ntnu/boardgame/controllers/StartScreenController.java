@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ntnu.boardgame.BoardGameFactory;
-import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.constructors.BoardGameFactory;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
@@ -186,5 +186,5 @@ public class StartScreenController {
   }
 
 
-  
+
 }

@@ -1,7 +1,7 @@
 package edu.ntnu.boardgame.actions.tileactions;
 
-import edu.ntnu.boardgame.Board;
-import edu.ntnu.boardgame.Boardgame;
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
 
 public class BackAction implements TileAction {

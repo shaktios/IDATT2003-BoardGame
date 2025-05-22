@@ -1,22 +1,16 @@
 package edu.ntnu.boardgame.constructors;
 
-/* Representerer en spiller i spillet. En spiller har et navn, og «bor» til enhver tid på et felt. En spiller
-kan bli plassert på et felt og kan også bevege seg et antall steg på spillbrettet. Når spilleren når
-siste felt eller passerer siste felt, har spilleren nådd slutten av spillet (mål).
- */
-
-import edu.ntnu.boardgame.Board;
-
 public class Player {
   private String name; 
   private Tile currentTile;
   private String token;
-  private boolean skipNextTurn = false; //for skipaction-actionen
-  private int age ; //for å kunne sortere mellom alder fra start
+  private boolean skipNextTurn = false; 
+  private int age ; 
 
 
-  /*
+  /**
     * Constructor for the Player class.
+    *
     * @param name The name of the player.
     * @param startTile The tile the player starts on
     * @param age The players age
@@ -40,15 +34,18 @@ public class Player {
     this.age = age; 
   }
 
-  /*
-    * @return The name of the player. 
+  /**
+  * Returns the player's name.
+  *
+  * @return The name of the player. 
   */
   public String getName() {
     return name;
   }
   
-  /*
-    * @return The current tile the player is on.
+  /**
+  * Returns the current tile the player is standing on.
+  * @return The current tile 
   */
   public Tile getCurrentTile() {
     return currentTile;
@@ -75,7 +72,7 @@ public class Player {
   }
 
 
-  /*
+  /**
     * Moves the player a given number of steps on the board.
     * @param steps The number of steps to move the player.
     * @param board The board the player is moving on.
@@ -179,13 +176,22 @@ public class Player {
 
 
     /**
-     * Returns true if the player have to stand over his turn. 
+     * Checks whether the player is supposed to skip their next turn.
+     * @return true if the player have to stand over his turn. 
      */
     public boolean shouldSkipTurn() {
         return skipNextTurn;
     }
 
+
+    /**
+     * Sets the player's name.
+     *
+     * @param name the new name to assign
+     */
   public void setName(String name) {
     this.name = name;
   }
+
+
 }
