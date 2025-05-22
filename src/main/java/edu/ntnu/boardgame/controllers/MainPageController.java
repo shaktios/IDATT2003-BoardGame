@@ -42,7 +42,9 @@ public class MainPageController {
   }
 
   public Scene getMainScene() {
-    return new Scene(mainPage.getRoot(), 1280, 800); // Correct place to set size
+    Scene scene = new Scene(mainPage.getRoot(), 1280, 800);
+    scene.getStylesheets().add(getClass().getResource("/styles/mainPage.css").toExternalForm());
+    return scene;
   }
 
   public MainPage getMainPage() {
