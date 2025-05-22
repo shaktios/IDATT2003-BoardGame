@@ -184,4 +184,7 @@ public class StartScreenController {
       view.showAlert("Feil", "Kunne ikke laste spillere fra fil:\n" + ex.getMessage());
     }
   }
+
+
+  
 }
