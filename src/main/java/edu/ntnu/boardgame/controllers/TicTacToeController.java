@@ -40,20 +40,19 @@ public class TicTacToeController {
     view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-  /**
-   * Handles when a player clicks on a tile at a given row and column.
-   *
-   * @param row the row index (0–2)
-   * @param col the column index (0–2)
-   * @param stage the JavaFX stage (for showing end screen)
-   */
+    /**
+     * Handles when a player clicks on a specific tile. Checks if the move is
+     * valid, updates the view, and checks for win/draw.
+     *
+     * @param tile the tile that was clicked
+     */
   public void handleMove(Tile tile) {
   int position = tile.getPosition(); // 1–9
   int row = (position - 1) / 3;
   int col = (position - 1) % 3;
 
   if (!logic.makeMove(row, col)) {
-    view.updateMessage("Ugyldig trekk – feltet er opptatt.");
+    view.updateMessage("Ugyldig trekk - feltet er opptatt.");
     return;
   }
 
@@ -84,12 +83,12 @@ public class TicTacToeController {
     view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-/**
- * Displays a popup alert indicating that a player has won the game.
- *
- * @param winnerName the name of the player who won
- * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
- */
+    /**
+     * Displays a popup alert indicating that a player has won the game.
+     *
+     * @param winnerName the name of the winning player
+     * @param stage unused, kept for compatibility
+     */
   private void showWinnerMessage(String winnerName, Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Vi har en vinner!");

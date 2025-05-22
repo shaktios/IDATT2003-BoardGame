@@ -26,3 +26,13 @@
     -fx-background-color: linear-gradient(to bottom, #eeeeee, #cccccc);
     -fx-text-fill: black;
 }
+
+.grid-pane {
+    -fx-padding: 20px;
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+}
+
+.layout-root {
+    -fx-padding: 30px;
+}

@@ -106,7 +106,11 @@ public class TicTacToe {
      * Switches turn to the other player.
      */
     public void switchTurn() {
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        if (currentPlayer.equals(player1)) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
     }
 
     /**
@@ -153,7 +157,10 @@ public class TicTacToe {
      * Helper method for checking if 3 strings are non-null and equal.
      */
     private boolean equal(String a, String b, String c) {
-        return a != null && a.equals(b) && a.equals(c);
+        if (a == null || b == null || c == null) {
+            return false;
+        }
+        return a.equals(b) && a.equals(c);
     }
 
 

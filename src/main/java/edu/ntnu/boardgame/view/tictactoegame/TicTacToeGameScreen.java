@@ -44,7 +44,7 @@ public class TicTacToeGameScreen {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
         grid.setVgap(5);
-        grid.setStyle("-fx-padding: 20px;");
+        grid.getStyleClass().add("grid-pane");
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -77,17 +77,35 @@ public class TicTacToeGameScreen {
 
         layout = new VBox(15, messageLabel, grid, resetBtn, backBtn);
         layout.setAlignment(Pos.CENTER);
-        layout.setStyle("-fx-padding: 30px;");
+        layout.getStyleClass().add("layout-root");
     }
 
+    /**
+     * Returns the root node of the view layout to be displayed in the scene.
+     *
+     * @return the root VBox container
+     */
     public Pane getRoot() {
         return layout;
     }
 
+
+    /**
+     * Updates the message label above the board.
+     *
+     * @param message the message to display
+     */
     public void updateMessage(String message) {
         messageLabel.setText(message);
     }
 
+
+    /**
+     * Updates the visual content of a given tile on the board.
+     *
+     * @param tile the tile whose button should be updated
+     * @param text the text to display on the tile (typically "X" or "O")
+     */
     public void updateTile(Tile tile, String text) {
         Button btn = tileButtonMap.get(tile);
         if (btn != null) {
@@ -95,6 +113,11 @@ public class TicTacToeGameScreen {
         }
     }
 
+
+    /**
+     * Clears the entire board visually and logically by resetting all tile
+     * tokens.
+     */
     public void clearBoard() {
         for (Tile tile : tileButtonMap.keySet()) {
             tile.setToken(null);
@@ -102,6 +125,11 @@ public class TicTacToeGameScreen {
         }
     }
 
+    /**
+     * Sets the controller for this view. Required to delegate user actions.
+     *
+     * @param controller the controller responsible for handling game logic
+     */
     public void setController(TicTacToeController controller) {
         this.controller = controller;
     }
