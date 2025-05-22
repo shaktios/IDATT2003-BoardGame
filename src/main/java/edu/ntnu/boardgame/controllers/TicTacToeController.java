@@ -1,10 +1,8 @@
 package edu.ntnu.boardgame.controllers;
 
-import edu.ntnu.boardgame.BoardgameApp;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.TicTacToe;
 import edu.ntnu.boardgame.view.tictactoegame.TicTacToeGameScreen;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
@@ -81,27 +79,37 @@ public class TicTacToeController {
     view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-  private void showWinnerMessage(String winnerName, Stage stage) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Vi har en vinner!");
-    alert.setHeaderText(winnerName + " har vunnet spillet!");
-    alert.setContentText("Du sendes tilbake til startsiden.");
-    alert.setOnHidden(e -> {
-      Scene startScene = BoardgameApp.createFreshStartScene(stage);
-      stage.setScene(startScene);
-    });
-    alert.show();
-  }
 
+
+  
+
+/**
+ * Displays a popup alert indicating that a player has won the game.
+ *
+ * @param winnerName the name of the player who won
+ * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
+ */
+  private void showWinnerMessage(String winnerName, Stage stage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Vi har en vinner!");
+        alert.setHeaderText(winnerName + " har vunnet spillet!");
+        alert.setContentText("Trykk OK for å fortsette.");
+        alert.show(); 
+    }
+
+  
+/**
+ * Displays a popup alert indicating that the game ended in a draw.
+ *
+ * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
+ */
   private void showDrawMessage(Stage stage) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Uavgjort");
-    alert.setHeaderText("Ingen vant – brettet er fullt.");
-    alert.setContentText("Du sendes tilbake til startsiden.");
-    alert.setOnHidden(e -> {
-      Scene startScene = BoardgameApp.createFreshStartScene(stage);
-      stage.setScene(startScene);
-    });
-    alert.show();
-  }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Uavgjort");
+        alert.setHeaderText("Ingen vant – brettet er fullt.");
+        alert.setContentText("Trykk OK for å fortsette.");
+        alert.show();
+    }
+
+  
 }

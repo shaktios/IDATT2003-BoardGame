@@ -1,18 +1,22 @@
 package edu.ntnu.boardgame.view.tictactoegame;
 
+import edu.ntnu.boardgame.controllers.MainPageController;
 import edu.ntnu.boardgame.controllers.TicTacToeController;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
- * View for displaying the Tic Tac Toe game board and messages.
- * Can be embedded in the main scene or switched to via scene management.
+ * View for displaying the Tic Tac Toe game board and messages. Can be embedded
+ * in the main scene or switched to via scene management.
  */
 public class TicTacToeGameScreen {
+
     private final GridPane grid;
     private final Label messageLabel;
     private final Button[][] buttons = new Button[3][3];
@@ -22,11 +26,12 @@ public class TicTacToeGameScreen {
     /**
      * Constructs the TicTacToe screen.
      *
+     * @param stage the JavaFX stage used to switch scenes
      */
-    public TicTacToeGameScreen() {
+    public TicTacToeGameScreen(Stage stage) {
 
         messageLabel = new Label("Velkommen til Tic Tac Toe!");
-        messageLabel.setStyle("-fx-font-size: 16px;");
+        messageLabel.getStyleClass().add("label");
 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -38,7 +43,7 @@ public class TicTacToeGameScreen {
             for (int col = 0; col < 3; col++) {
                 Button btn = new Button();
                 btn.setPrefSize(100, 100);
-                btn.setStyle("-fx-font-size: 24px;");
+                btn.getStyleClass().add("button");
                 int r = row;
                 int c = col;
 
@@ -52,9 +57,21 @@ public class TicTacToeGameScreen {
         Button resetBtn = new Button("Start på nytt");
         resetBtn.setOnAction(e -> controller.resetGame());
 
-        layout = new VBox(15, messageLabel, grid, resetBtn);
+        Button backBtn = new Button("Tilbake til hovedmenyen");
+        backBtn.setOnAction(e -> {
+            MainPageController controller = new MainPageController(stage);
+            Scene mainScene = controller.getMainScene();
+            stage.setScene(mainScene);
+        });
+
+        resetBtn.getStyleClass().add("button");
+        backBtn.getStyleClass().add("button");
+
+        layout = new VBox(15, messageLabel, grid, resetBtn, backBtn);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-padding: 30px;");
+
+        
     }
 
     /**
@@ -90,13 +107,14 @@ public class TicTacToeGameScreen {
      * Clears the board visually.
      */
     public void clearBoard() {
-        for (int r = 0; r < 3; r++)
-            for (int c = 0; c < 3; c++)
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
                 buttons[r][c].setText("");
+            }
+        }
     }
 
     public void setController(TicTacToeController controller) {
         this.controller = controller;
     }
-
 }

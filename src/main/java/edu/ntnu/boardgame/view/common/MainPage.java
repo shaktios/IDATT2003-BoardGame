@@ -24,7 +24,7 @@ public class MainPage {
     this.onGameSelected = onGameSelected;
 
     layout = new BorderPane();
-    layout.setStyle("-fx-background-color: linear-gradient(to bottom, #e8eaf6, #ffffff);");
+    layout.getStyleClass().add("main-layout");
 
     // Title
     Text title = new Text("🎲 Velkommen til Board Games!");
@@ -47,6 +47,7 @@ public class MainPage {
     // Exit button
     exitButton = new Button("Avslutt");
     exitButton.setFont(Font.font("Arial", 18));
+    exitButton.getStyleClass().add("exit-button");
     BorderPane.setAlignment(exitButton, Pos.CENTER);
     BorderPane.setMargin(exitButton, new Insets(20));
     layout.setBottom(exitButton);
@@ -67,7 +68,7 @@ public class MainPage {
     view.setPreserveRatio(false); // Force size equality
     view.setSmooth(true);
     view.setCursor(Cursor.HAND);
-    view.setStyle("-fx-effect: dropshadow(gaussian, gray, 10, 0.5, 0, 0);");
+    view.getStyleClass().add("game-image");
 
     Text label = new Text(gameName);
     label.setFont(Font.font("Arial", 20));

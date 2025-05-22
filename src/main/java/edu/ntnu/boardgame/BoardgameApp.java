@@ -49,7 +49,7 @@ public class BoardgameApp extends Application {
         Scene scene = new Scene(mainPage.getRoot(), 1280, 720);
         stage.setScene(scene);
         stage.setFullScreen(true); // Optional for fullscreen
-        return null;
+        return scene;
     }
 
         public static void main(String[] args) {
@@ -58,14 +58,16 @@ public class BoardgameApp extends Application {
 
     public static void openTicTacToe(Stage stage) {
         Tile dummyTile = new Tile(1); // must be positive
-        Player player1 = new Player("Spiller 1", dummyTile,20); //lagt til noen randomme aldere fordi tictactoe ikke har noe med å gjøre med alderen til spilleren
-        Player player2 = new Player("Spiller 2", dummyTile,21); //lagt til noen randomme aldere fordi tictactoe ikke har noe med å gjøre med alderen til spilleren
+        Player player1 = new Player("Spiller 1", dummyTile, 20);
+        Player player2 = new Player("Spiller 2", dummyTile, 21);
 
-        TicTacToeGameScreen view = new TicTacToeGameScreen();
+        TicTacToeGameScreen view = new TicTacToeGameScreen(stage);
         TicTacToeController controller = new TicTacToeController(player1, player2, view);
-        view.setController(controller); // if your view has setController()
+        view.setController(controller);
 
         Scene scene = new Scene(view.getRoot(), 600, 700);
+        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm()); // ← Legg til denne
+
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe");
     }
