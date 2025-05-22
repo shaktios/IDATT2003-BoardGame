@@ -30,6 +30,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+/**
+ * View class for displaying the main game screen for ladder-style board games
+ * (e.g., Snake & Ladder). Handles rendering the board, showing player
+ * positions, drawing special tiles (ladders, snakes, etc.), and providing
+ * interactive buttons like "Throw Dice", "Next Turn", "Save Board", and "Return
+ * Home".
+ *
+ * This class does not control game logic; it is purely for GUI rendering and
+ * event binding.
+ */
 public class LadderGameScreen {
 
   private static final int TILE_SIZE = 90;
@@ -47,6 +58,15 @@ public class LadderGameScreen {
   private Button saveBoardButton;
   private Button returnHomeButton; 
 
+    /**
+     * Creates and returns the full JavaFX scene for the ladder game.
+     *
+     * @param stage the current JavaFX stage
+     * @param boardgame the game logic object
+     * @param board the game board
+     * @param players the list of players in the game
+     * @return a complete JavaFX Scene for the ladder game
+     */
   public Scene createScene(Stage stage, Boardgame boardgame, Board board, List<Player> players) {
     this.board = board;
     this.players = players;
@@ -100,30 +120,66 @@ public class LadderGameScreen {
     return scene;
   }
 
+    /**
+     * Updates the text shown in the message label.
+     *
+     * @param text the message to display
+     */
   public void updateMessageLabel(String text) {
         messageLabel.setText(text);
     }
 
+    /**
+     * Enables or disables the "Throw Dice" button.
+     *
+     * @param enabled true to enable, false to disable
+     */
   public void setThrowDiceButtonEnabled(boolean enabled) {
         throwDiceButton.setDisable(!enabled);
     }
 
+    /**
+     * Enables or disables the "Next Turn" button.
+     *
+     * @param enabled true to enable, false to disable
+     */
   public void setNextTurnButtonEnabled(boolean enabled) {
         nextTurnButton.setDisable(!enabled);
     }
 
+    /**
+     * Returns the "Throw Dice" button, so external controllers can bind
+     * actions.
+     *
+     * @return the throwDiceButton
+     */
   public Button getThrowDiceButton() {
         return throwDiceButton;
     }
 
+    /**
+     * Returns the "Next Turn" button, so external controllers can bind actions.
+     *
+     * @return the nextTurnButton
+     */
   public Button getNextTurnButton() {
         return nextTurnButton;
     }
 
+    /**
+     * Redraws the board and all player positions. Called whenever player
+     * positions or board visuals change.
+     */
   public void updateBoard() {
         drawBoard();
     }
 
+    /**
+     * Displays a win popup and returns the user to the main menu when closed.
+     *
+     * @param winner the player who won the game
+     * @param stage the current stage to reset
+     */
   public void showWinMessage(Player winner, Stage stage) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Spillet er ferdig");
@@ -139,6 +195,21 @@ public class LadderGameScreen {
     alert.show(); // VIKTIG: IKKE bruk showAndWait her
   }
 
+    /**
+     * Draws the entire game board onto the canvas, including:
+     * <ul>
+     * <li>Tiles in zigzag order based on rows and columns</li>
+     * <li>Colored tiles based on their associated TileAction</li>
+     * <li>Arrows from action tiles (like ladders or snakes) showing
+     * destination</li>
+     * <li>Highlighting target tiles of ladders (light green) and snakes (light
+     * salmon)</li>
+     * <li>Rendering all player tokens on their current positions</li>
+     * </ul>
+     * <p>
+     * This method is automatically called when the board needs to be refreshed,
+     * such as after a player moves or an action is triggered.
+     */
   private void drawBoard() {
     GraphicsContext gc = canvas.getGraphicsContext2D();
     gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -248,6 +319,13 @@ public class LadderGameScreen {
     }
   }
 
+    /**
+     * Creates a legend (forklaring) for the different tile types used in the
+     * game. Each tile type is represented with a color and label, rendered onto
+     * a canvas.
+     *
+     * @return a VBox containing the rendered legend canvas
+     */
   private VBox createLegend() {
     Canvas legendCanvas = new Canvas(500, 400);
     GraphicsContext gc = legendCanvas.getGraphicsContext2D();
@@ -268,6 +346,17 @@ public class LadderGameScreen {
     return new VBox(legendCanvas);
   }
 
+    /**
+     * Draws a single legend item on the given canvas context. This includes a
+     * colored square and its corresponding label.
+     *
+     * @param gc the GraphicsContext to draw on
+     * @param tileSize size of the square representing a tile
+     * @param y array containing current y-position, updated after drawing
+     * @param spacing vertical spacing between items
+     * @param color the color to fill the square with
+     * @param text the label describing the tile type
+     */
   private void drawLegendItem(GraphicsContext gc, int tileSize, int[] y, int spacing, javafx.scene.paint.Color color, String text) {
     gc.setFill(color);
     gc.fillRect(0, y[0], tileSize, tileSize);
@@ -278,6 +367,11 @@ public class LadderGameScreen {
     y[0] += spacing;
   }
 
+    /**
+     * Creates a vertical spacer region for layout padding in the message box.
+     *
+     * @return a Region with fixed height and grow priority set
+     */
   private Region createSpacer() {
     Region spacer = new Region();
     spacer.setPrefHeight(30);
@@ -285,48 +379,99 @@ public class LadderGameScreen {
     return spacer;
   }
 
+    /**
+     * Disables both the "Throw Dice" and "Next Turn" buttons. Typically used
+     * mid-turn or when awaiting an event.
+     */
   public void disableDiceAndNextTurnButtons() {
     throwDiceButton.setDisable(true);
     nextTurnButton.setDisable(true);
   }
 
+
+  /**
+     * Disables only the "Throw Dice" button. Used when dice rolling is no
+     * longer allowed in the current turn.
+     */
   public void disableDiceButton() {
         throwDiceButton.setDisable(true);
     }
 
+    /**
+     * Enables the "Next Turn" button. Called after a player completes their
+     * move and is ready to proceed.
+     */
   public void enableNextTurnButton() {
         nextTurnButton.setDisable(false);
     }
 
+
+  /**
+    * Redraws the entire game board and player positions. Typically called
+    * after a player has moved or an action has changed the board.
+    */
   public void redrawBoard() {
         drawBoard();
     }
 
+    /**
+     * Updates the message text shown in the message box.
+     *
+     * @param text the new message to display
+     */
   public void updateMessage(String text) {
         messageLabel.setText(text);
     }
 
+    /**
+     * Enables the "Throw Dice" button. Allows the current player to roll the
+     * dice.
+     */
   public void enableDiceButton() {
         throwDiceButton.setDisable(false);
     }
 
+    /**
+     * Disables the "Next Turn" button. Used to prevent players from ending
+     * their turn prematurely.
+     */
   public void disableNextTurnButton() {
         nextTurnButton.setDisable(true);
     }
 
+    /**
+     * Returns the canvas used for drawing the game board.
+     *
+     * @return the JavaFX Canvas object
+     */
   public Canvas getCanvas() {
         return canvas;
     }
 
+    /**
+     * Stores the result of the player's last dice roll.
+     *
+     * @param roll the result from the dice
+     */
   public void setLastRoll(int roll) {
         this.lastRoll = roll;
     }
 
+    /**
+     * Sets a handler to be called when the "Save Board" button is clicked.
+     *
+     * @param handler the action to run
+     */
   public void setSaveBoardAction(Runnable handler) {
       saveBoardButton.setOnAction(e -> handler.run());
   }
 
 
+    /**
+     * Sets a handler to be called when the "Return Home" button is clicked.
+     *
+     * @param handler the action to run
+     */
   public void setReturnHomeAction(Runnable handler) {
       returnHomeButton.setOnAction(e -> handler.run());
   }

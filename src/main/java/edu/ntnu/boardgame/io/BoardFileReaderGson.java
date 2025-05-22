@@ -21,11 +21,25 @@ import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.exceptions.InvalidBoardFileException;
 
 /**
- * Implementation of BoardFileReader that uses Gson to parse a boardgame JSON
+ * A concrete implementation of the {@link BoardFileReader} interface that uses
+ * the Gson library to read board configuration and boardgame data from a JSON
  * file.
+ * <p>
+ * Supports reading tile positions, actions, and game metadata such as dice
+ * count and sides.
  */
 public class BoardFileReaderGson implements BoardFileReader {
 
+    /**
+     * Reads a {@link Board} from a JSON file. This method parses the board's
+     * row and column count, initializes the tiles, and assigns any defined tile
+     * actions (e.g., LadderAction, BackAction).
+     *
+     * @param path the path to the JSON file
+     * @return the constructed {@link Board} object
+     * @throws InvalidBoardFileException if the file cannot be read or contains
+     * invalid content
+     */
     @Override
     public Board readBoard(Path path) throws InvalidBoardFileException {
         try (FileReader reader = new FileReader(path.toFile())) {
@@ -91,7 +105,16 @@ public class BoardFileReaderGson implements BoardFileReader {
     }
 
     /**
-     * Parses a full Boardgame object (board + dice) from a JSON file.
+     * Reads a complete {@link Boardgame} from a JSON file, including the board
+     * structure and dice configuration.
+     * 
+     * After reading the board, it connects the {@link Boardgame} instance to
+     * any {@link ChessPuzzleAction} instances found in the tiles.
+     *
+     * @param path the path to the JSON file
+     * @return the constructed {@link Boardgame} object
+     * @throws InvalidBoardFileException if the file cannot be parsed or
+     * contains invalid structure
      */
     public Boardgame readBoardgame(Path path) throws InvalidBoardFileException {
         Board board = readBoard(path);

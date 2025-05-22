@@ -1,4 +1,4 @@
-package edu.ntnu.boardgame.model.laddergame.chesspuzzle;
+package edu.ntnu.boardgame.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Model class for handling chess puzzle logic and data.
+ * Model class for handling chess puzzle data and logic. Responsible for
+ * selecting a puzzle, generating answer options, and providing the correct
+ * move.
  */
 public class ChessPuzzleModel {
 
@@ -23,7 +25,8 @@ public class ChessPuzzleModel {
     private final Random random = new Random();
 
     /**
-     * Selects a random puzzle and stores its correct move.
+     * Randomly selects a puzzle from the predefined list. Stores both the image
+     * name and correct move.
      */
     public void selectRandomPuzzle() {
         List<String> keys = new ArrayList<>(PUZZLES.keySet());
@@ -32,9 +35,9 @@ public class ChessPuzzleModel {
     }
 
     /**
-     * Returns the filename of the selected puzzle image.
+     * Returns the filename of the currently selected puzzle image.
      *
-     * @return the image file name
+     * @return the selected image file name
      */
     public String getSelectedImage() {
         return selectedImage;
@@ -43,17 +46,17 @@ public class ChessPuzzleModel {
     /**
      * Returns the correct move for the current puzzle.
      *
-     * @return the correct move string
+     * @return the correct move in standard notation (e.g., "Qb5+#")
      */
     public String getCorrectMove() {
         return correctMove;
     }
 
     /**
-     * Generates a list of answer options including the correct move and three
-     * distractors. Ensures no duplicates of the correct move are present.
+     * Generates four answer options: the correct move and three random
+     * distractors. The list is shuffled before being returned.
      *
-     * @return shuffled list of answer options
+     * @return a shuffled list of answer move strings
      */
     public List<String> generateOptions() {
         List<String> allMoves = new ArrayList<>(List.of(
@@ -61,7 +64,6 @@ public class ChessPuzzleModel {
                 "Bb5#", "Nh5#", "Bd3#", "Rd1#", "Qe7#", "Nd5#"
         ));
 
-      
         allMoves.removeIf(move -> move.equals(correctMove));
 
         // Plukk ut 3 unike feilalternativer

@@ -15,11 +15,35 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The MainPage class represents the initial landing screen where the user
+ * chooses which game to start or exits the application.
+ *
+ * It displays a styled title, two clickable game previews (e.g., Stigespill and
+ * Tic Tac Toe), and an "Avslutt" button.
+ */
 public class MainPage {
+    /**
+     * The main layout container using BorderPane to organize title, game
+     * previews, and exit button.
+     */
   private final BorderPane layout;
+
+    /**
+     * The exit button shown at the bottom of the screen.
+     */
   private final Button exitButton;
+
+    /**
+     * A callback used to notify the controller which game was selected.
+     */
   private final Consumer<String> onGameSelected;
 
+    /**
+     * Constructs the MainPage view with title, game options, and exit button.
+     *
+     * @param onGameSelected a callback function invoked when a game is selected
+     */
   public MainPage(Consumer<String> onGameSelected) {
     this.onGameSelected = onGameSelected;
 
@@ -53,13 +77,16 @@ public class MainPage {
     layout.setBottom(exitButton);
   }
 
-  /**
-   * Creates a clickable image that represents a game.
-   *
-   * @param imageName filename under /resources/images/
-   * @param gameName string passed back to the controller when clicked
-   * @return ImageView wrapped in a VBox for title + interactivity
-   */
+    /**
+     * Creates a visual representation of a game as an image with a label. The
+     * image becomes clickable and invokes a callback when clicked.
+     *
+     * @param imageName the filename of the image (located under
+     * /resources/images/)
+     * @param gameName the name of the game associated with the image
+     * @return a VBox containing the image and its label, styled for
+     * interactivity
+     */
   private VBox createGameImage(String imageName, String gameName) {
     Image image = new Image(getClass().getResource("/images/" + imageName).toExternalForm());
     ImageView view = new ImageView(image);
@@ -90,16 +117,32 @@ public class MainPage {
     return box;
   }
 
+    /**
+     * Handles the click event when a user selects a game. Delegates the game
+     * name to the controller via callback.
+     *
+     * @param gameName the selected game name
+     */
   public void handleGameClick(String gameName) {
     if (onGameSelected != null) {
       onGameSelected.accept(gameName);
     }
   }
 
+    /**
+     * Returns the root layout of this view.
+     *
+     * @return the root BorderPane
+     */
   public Pane getRoot() {
     return layout;
   }
 
+    /**
+     * Returns the exit button for potential controller customization.
+     *
+     * @return the exit button
+     */
   public Button getExitButton() {
     return exitButton;
   }

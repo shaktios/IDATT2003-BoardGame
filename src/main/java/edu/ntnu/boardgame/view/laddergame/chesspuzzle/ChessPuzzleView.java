@@ -15,25 +15,30 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * View class for displaying a chess puzzle and relaying user choice.
+ * View class for displaying a chess puzzle in a separate window and relaying
+ * the selected move back to the controller. Displays an image-based puzzle and
+ * a set of possible moves, disables buttons after one is selected, and allows
+ * feedback to be shown.
  */
 public class ChessPuzzleView {
 
   private final String imageFile;
-  private final String correctMove; // optional, can be removed if View shouldn't know
+  private final String correctMove; 
   private final List<String> options;
   private final Consumer<String> onMoveSelected;
   private Label resultLabel;
   private Stage stage;
 
-  /**
-   * Constructs the ChessPuzzleView.
-   *
-   * @param imageFile the puzzle image filename
-   * @param correctMove the correct move (optional use)
-   * @param options the answer choices to show
-   * @param onMoveSelected callback to pass selected move to controller
-   */
+    /**
+     * Constructs a new ChessPuzzleView instance.
+     *
+     * @param imageFile the filename of the chess puzzle image to display
+     * @param correctMove the correct move for this puzzle 
+     * @param options the list of possible answer moves (including correct and
+     * distractors)
+     * @param onMoveSelected callback to pass the player's selected move to the
+     * controller
+     */
   public ChessPuzzleView(String imageFile, String correctMove, List<String> options, Consumer<String> onMoveSelected) {
     this.imageFile = imageFile;
     this.correctMove = correctMove;
@@ -41,9 +46,12 @@ public class ChessPuzzleView {
     this.onMoveSelected = onMoveSelected;
   }
 
-  /**
-   * Displays the chess puzzle window.
-   */
+    /**
+     * Builds and displays the chess puzzle window. Includes the puzzle image,
+     * move options, and a result label. Disables all answer buttons after a
+     * selection is made and sends the selected move to the controller via the
+     * provided callback. The window cannot be closed manually by the user.
+     */
   public void show() {
     Image image = new Image(getClass().getResource("/images/" + imageFile).toExternalForm());
     ImageView imageView = new ImageView(image);
@@ -95,18 +103,21 @@ public class ChessPuzzleView {
     stage.show();
   }
 
-  /**
-   * Displays the result text after answer is selected.
-   *
-   * @param text the result text to show
-   */
+    /**
+     * Displays a feedback message after the user has selected a move. Typically
+     * used to show whether the move was correct or incorrect.
+     *
+     * @param text the feedback text to display (e.g., "Correct!" or "Wrong
+     * move")
+     */
   public void showResult(String text) {
         resultLabel.setText(text);
     }
 
-  /**
-   * Closes the puzzle stage.
-   */
+    /**
+     * Closes the puzzle window programmatically. Called by the controller after
+     * feedback has been shown and the game continues.
+     */
   public void closeStage() {
     if (stage != null) {
       stage.close();

@@ -44,12 +44,14 @@ public class StartScreenView {
   private javafx.event.EventHandler<javafx.event.ActionEvent> nextButtonHandler;
   private javafx.event.EventHandler<javafx.event.ActionEvent> startGameButtonHandler;
 
-  /**
-   * Creates the initial start screen layout and scene.
-   *
-   * @param stage the current JavaFX stage
-   * @return a fully constructed Scene for the start screen
-   */
+    /**
+     * Builds the entire start screen UI and returns the corresponding scene.
+     * Initializes combo boxes, buttons, labels, and styling. Also sets up
+     * button event handlers if they are already assigned.
+     *
+     * @param stage the current JavaFX stage (main window)
+     * @return the fully constructed Scene for the start screen
+     */
   public Scene createScene(Stage stage) {
     this.stage = stage;
     root = new VBox();
@@ -177,13 +179,15 @@ public class StartScreenView {
 
  
 
- /**
-  * Generates input fields for the specified number of players. Each player
-  * is given a name field and a combo box for selecting a token. Ensures the
-  * "Start Game" button is present and functional.
-  *
-  * @param numberOfPlayers the number of players to generate inputs for
-  */
+    /**
+     * Dynamically creates input fields and controls for the given number of
+     * players. Each row contains a name field, age field, and token selector
+     * with image preview. Also adds buttons for saving players and returning to
+     * the main menu.
+     *
+     * @param numberOfPlayers the number of players to generate UI components
+     * for
+     */
   public void generatePlayerInputs(int numberOfPlayers) {
     root.getChildren().clear();
     playerNameFields.clear();
@@ -295,16 +299,34 @@ public class StartScreenView {
         return playerTokenChoices;
     }
 
+    /**
+     * Sets the selected game variant in the combo box manually.
+     *
+     * @param variant the game variant to preselect (must match one of the combo
+     * box items)
+     */
   public void setSelectedGameVariant(String variant) {
     if (gameSelector != null) {
       gameSelector.setValue(variant);
     }
   }
 
+    /**
+     * Returns the button that brings the user back to the main menu. Can be
+     * used by controllers to attach additional behavior.
+     *
+     * @return the "Back to Main Menu" button
+     */
   public Button getBackToMainMenuButton() {
         return backToMainMenuButton;
     }
 
+    /**
+     * Sets a handler that will be called when the user clicks the "Import
+     * players from CSV" button.
+     *
+     * @param handler the logic to run when the import button is pressed
+     */
   public void setImportPlayersHandler(Runnable handler) {
         this.importPlayersHandler = handler;
     }
