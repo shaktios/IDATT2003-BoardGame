@@ -17,6 +17,7 @@ import edu.ntnu.boardgame.actions.tileactions.SkipTurnAction;
 import edu.ntnu.boardgame.actions.tileactions.TeleportRandomAction;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
+import edu.ntnu.boardgame.controllers.MainPageController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -48,6 +49,7 @@ public class LadderGameScreen {
   private List<Player> players;
   private int lastRoll;
   private Button saveBoardButton;
+  private Button returnHomeButton; 
 
   public Scene createScene(Stage stage, Boardgame boardgame, Board board, List<Player> players) {
     this.board = board;
@@ -65,10 +67,23 @@ public class LadderGameScreen {
 
     throwDiceButton = new Button("Kast Terning");
     throwDiceButton.getStyleClass().add("game-button");
+
     nextTurnButton = new Button("Neste tur");
     nextTurnButton.getStyleClass().add("game-button");
+    
+    
     saveBoardButton = new Button("Lagre brett");
     saveBoardButton.getStyleClass().add("game-button");
+
+    returnHomeButton = new Button("Tilbake til hovedmenyen");
+    returnHomeButton.getStyleClass().add("game-button");
+    returnHomeButton.setOnAction(e -> {
+        MainPageController controller = new MainPageController(stage);
+        Scene mainScene = controller.getMainScene();
+        stage.setScene(mainScene);
+    });
+
+
     saveBoardButton.setOnAction(e -> {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Velg hvor du vil lagre brettet");
@@ -88,9 +103,12 @@ public class LadderGameScreen {
     } else {
         updateMessage("Lagring avbrutt.");
     }
+
+    
 });
 
-    messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton, saveBoardButton));
+
+    messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton, saveBoardButton, returnHomeButton));
     VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
     messageBox.setPadding(new Insets(15));
     messageBox.setPrefWidth(400);
