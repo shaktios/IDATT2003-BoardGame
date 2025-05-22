@@ -20,11 +20,23 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * Controller for handling all logic related to the start screen. Manages user
+ * input, validation, file import/export of players, and initializing the
+ * selected game.
+ */
 public class StartScreenController {
 
   private final Stage stage;
   private final StartScreenView view;
 
+    /**
+     * Constructs a StartScreenController and wires up all necessary handlers
+     * for buttons and actions in the view.
+     *
+     * @param stage the current JavaFX stage
+     * @param view the associated StartScreenView
+     */
   public StartScreenController(Stage stage, StartScreenView view) {
     this.stage = stage;
     this.view = view;
@@ -33,6 +45,7 @@ public class StartScreenController {
     view.setStartGameButtonAction(e -> handleStartGameButton());
     view.setImportPlayersHandler(this::handleImportPlayers);
 
+    // Saves the current player configuration to a CSV file using the PlayerFileHandler
     view.setSavePlayersHandler(() -> {
       FileChooser fileChooser = new FileChooser();
       fileChooser.setTitle("Lagre spillere som CSV");
@@ -58,11 +71,21 @@ public class StartScreenController {
     });
   }
 
+    /**
+     * Called when the user presses the "Next" button. Generates input fields
+     * for the selected number of players.
+     */
   private void handleNextButton() {
     int amountOfPlayers = view.getSelectedPlayerCount();
     view.generatePlayerInputs(amountOfPlayers);
   }
 
+    /**
+     * Called when the user presses the "Start Game" button. Validates all
+     * player inputs and starts the appropriate board game. Loads game from
+     * factory or file based on user selection and transitions to the game
+     * screen.
+     */
   private void handleStartGameButton() {
     Boardgame boardgame;
 
@@ -152,11 +175,21 @@ public class StartScreenController {
     stage.setScene(ladderGameScene);
   }
 
+    /**
+     * Returns the scene for the start screen.
+     *
+     * @return the start screen Scene object
+     */
   public Scene getStartScene() {
     return view.createScene(stage);
   }
 
 
+    /**
+     * Opens a file chooser to import players from a CSV file. Populates the
+     * input fields in the view with the loaded player data. Shows an alert if
+     * the file is invalid or cannot be read.
+     */
   private void handleImportPlayers() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Velg CSV-fil med spillere");

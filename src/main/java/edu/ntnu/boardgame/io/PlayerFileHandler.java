@@ -17,16 +17,31 @@ import com.google.gson.reflect.TypeToken;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 
+
 /**
- * Utility class for reading and writing player data to/from JSON or CSV files.
+ * Utility class for reading and writing {@link Player} data to and from JSON or
+ * CSV files.
+ * <p>
+ * This class provides static methods to handle persistence of player
+ * information, including name, age, and token. Used by the GUI for
+ * import/export functionality.
  */
 public class PlayerFileHandler {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+
     // === JSON ===
+
     /**
-     * Reads a list of players from a JSON file.
+     * Reads a list of {@link Player} objects from a JSON file.
+     * 
+     * Automatically sets each player's {@link Tile} to position 1 as a default
+     * placeholder; this should be updated later in the controller.
+     *
+     * @param file the JSON file to read from
+     * @return a list of Player objects parsed from the file
+     * @throws IOException if reading fails
      */
     public static List<Player> readFromJSON(File file) throws IOException {
         try (FileReader reader = new FileReader(file)) {
@@ -43,7 +58,11 @@ public class PlayerFileHandler {
     }
 
     /**
-     * Writes players to a JSON file.
+     * Writes a list of {@link Player} objects to a JSON file.
+     *
+     * @param file the destination JSON file
+     * @param players the list of players to serialize
+     * @throws IOException if writing fails
      */
     public static void writeToJSON(File file, List<Player> players) throws IOException {
         try (FileWriter writer = new FileWriter(file)) {
@@ -53,7 +72,14 @@ public class PlayerFileHandler {
 
     // === CSV ===
     /**
-     * Reads players from a CSV file. Format: name,age,token
+     * Reads a list of {@link Player} objects from a CSV file.
+     * 
+     * Each line must be in the format: {@code name,age,token}. The player's
+     * tile is initialized to {@code new Tile(1)}.
+     *
+     * @param file the CSV file to read from
+     * @return a list of Player objects
+     * @throws IOException if reading fails or the format is invalid
      */
     public static List<Player> readFromCSV(File file) throws IOException {
         List<Player> players = new ArrayList<>();
@@ -78,7 +104,13 @@ public class PlayerFileHandler {
     }
 
     /**
-     * Writes players to a CSV file in format: name,age,token
+     * Writes a list of {@link Player} objects to a CSV file.
+     * 
+     * Each player is written as a line in the format: {@code name,age,token}.
+     *
+     * @param file the destination CSV file
+     * @param players the players to write
+     * @throws IOException if writing fails
      */
     public static void writeToCSV(File file, List<Player> players) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
