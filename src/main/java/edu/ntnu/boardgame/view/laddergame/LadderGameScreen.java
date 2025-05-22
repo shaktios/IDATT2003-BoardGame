@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame.view.laddergame;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class LadderGameScreen {
@@ -68,19 +70,25 @@ public class LadderGameScreen {
     saveBoardButton = new Button("Lagre brett");
     saveBoardButton.getStyleClass().add("game-button");
     saveBoardButton.setOnAction(e -> {
-      try {
-        edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
-        java.nio.file.Path path = java.nio.file.Paths.get("saved_board.json");
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Velg hvor du vil lagre brettet");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-filer", "*.json"));
 
-        // Debug-utskrift: hvor lagres filen?
-        System.out.println("Lagrer brett til: " + path.toAbsolutePath());
+    File file = fileChooser.showSaveDialog(stage); // Husk å ha tilgang til 'stage'
 
-        writer.writeBoardgame(path, boardgame);
-        updateMessage("Brett lagret til saved_board.json");
-      } catch (IOException ex) {
-        updateMessage(" Kunne ikke lagre brettet: " + ex.getMessage());
-      }
-    });
+    if (file != null) {
+        try {
+            edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
+            writer.writeBoardgame(file.toPath(), boardgame);
+
+            updateMessage("Brett lagret til: " + file.getName());
+        } catch (IOException ex) {
+            updateMessage("Kunne ikke lagre brettet: " + ex.getMessage());
+        }
+    } else {
+        updateMessage("Lagring avbrutt.");
+    }
+});
 
     messageBox = new VBox(messageLabel, createSpacer(), new FlowPane(10, 10, throwDiceButton, nextTurnButton, saveBoardButton));
     VBox.setMargin(messageBox, new Insets(30, 0, 0, 0)); // top, right, bottom, left
