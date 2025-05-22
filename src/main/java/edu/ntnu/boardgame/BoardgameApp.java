@@ -1,5 +1,6 @@
 package edu.ntnu.boardgame;
 
+import edu.ntnu.boardgame.constructors.Board;
 import edu.ntnu.boardgame.constructors.BoardGameFactory;
 import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
@@ -71,24 +72,25 @@ public class BoardgameApp extends Application {
      *
      * @param stage the current JavaFX stage to load the game into
      */
-    public static void openTicTacToe(Stage stage) {
-        Tile dummyTile = new Tile(1); // must be positive
-        Player player1 = new Player("Spiller 1", dummyTile, 20);
-        Player player2 = new Player("Spiller 2", dummyTile, 21);
+    public static void openTicTacToe(Stage stage){
+        Board board = new Board(3,3); 
+        Tile startTile = board.getTile(1);
 
-        TicTacToeGameScreen view = new TicTacToeGameScreen(stage);
+        Player player1 = new Player("Spiller 1", startTile, 20);
+        Player player2 = new Player("Spiller 2", startTile, 21);
+
+        TicTacToeGameScreen view = new TicTacToeGameScreen(stage, board); 
         TicTacToeController controller = new TicTacToeController(player1, player2, view);
         view.setController(controller);
 
         Scene scene = new Scene(view.getRoot(), 600, 700);
-        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm()); 
+        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe");
-
-        
         stage.setResizable(false);
-        stage.sizeToScene(); 
+        stage.sizeToScene();
+
     }
 
 

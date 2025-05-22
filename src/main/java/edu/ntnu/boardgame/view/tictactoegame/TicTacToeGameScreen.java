@@ -1,5 +1,10 @@
 package edu.ntnu.boardgame.view.tictactoegame;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.ntnu.boardgame.constructors.Board;
+import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.controllers.MainPageController;
 import edu.ntnu.boardgame.controllers.TicTacToeController;
 import javafx.geometry.Pos;
@@ -16,19 +21,21 @@ import javafx.stage.Stage;
  * in the main scene or switched to via scene management.
  */
 public class TicTacToeGameScreen {
-
     private final GridPane grid;
     private final Label messageLabel;
-    private final Button[][] buttons = new Button[3][3];
     private final VBox layout;
+    private final Map<Tile, Button> tileButtonMap = new HashMap<>();
     private TicTacToeController controller;
+    private final Board board;
 
     /**
-     * Constructs the TicTacToe screen.
+     * Constructs the Tic Tac Toe game screen.
      *
-     * @param stage the JavaFX stage used to switch scenes
+     * @param stage the JavaFX stage
+     * @param board the 3x3 board used for Tic Tac Toe
      */
-    public TicTacToeGameScreen(Stage stage) {
+    public TicTacToeGameScreen(Stage stage, Board board) {
+        this.board = board;
 
         messageLabel = new Label("Velkommen til Tic Tac Toe!");
         messageLabel.getStyleClass().add("label");
@@ -41,16 +48,17 @@ public class TicTacToeGameScreen {
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
+                int pos = row * 3 + col + 1;
+                Tile tile = board.getTile(pos);
+
                 Button btn = new Button();
                 btn.setPrefSize(100, 100);
                 btn.getStyleClass().add("button");
-                int r = row;
-                int c = col;
 
-                btn.setOnAction(e -> controller.handleMove(r, c, null)); // You pass stage separately if needed
+                btn.setOnAction(e -> controller.handleMove(tile));
 
-                buttons[row][col] = btn;
                 grid.add(btn, col, row);
+                tileButtonMap.put(tile, btn);
             }
         }
 
@@ -70,47 +78,27 @@ public class TicTacToeGameScreen {
         layout = new VBox(15, messageLabel, grid, resetBtn, backBtn);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-padding: 30px;");
-
-        
     }
 
-    /**
-     * Returns the root layout pane to be embedded in a scene.
-     *
-     * @return the main container VBox
-     */
     public Pane getRoot() {
         return layout;
     }
 
-    /**
-     * Updates the label shown above the board.
-     *
-     * @param message the new message
-     */
     public void updateMessage(String message) {
         messageLabel.setText(message);
     }
 
-    /**
-     * Updates the visual state of a tile.
-     *
-     * @param row the row index
-     * @param col the column index
-     * @param text the text to display (X/O)
-     */
-    public void updateTile(int row, int col, String text) {
-        buttons[row][col].setText(text);
+    public void updateTile(Tile tile, String text) {
+        Button btn = tileButtonMap.get(tile);
+        if (btn != null) {
+            btn.setText(text);
+        }
     }
 
-    /**
-     * Clears the board visually.
-     */
     public void clearBoard() {
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
-                buttons[r][c].setText("");
-            }
+        for (Tile tile : tileButtonMap.keySet()) {
+            tile.setToken(null);
+            updateTile(tile, "");
         }
     }
 
