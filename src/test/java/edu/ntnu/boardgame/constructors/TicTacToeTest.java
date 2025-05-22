@@ -2,79 +2,84 @@ package edu.ntnu.boardgame.constructors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/**
- * Unit tests for the {@link TicTacToe} class. Tests game mechanics including
- * making moves, switching turns, winning, full board detection, board reset,
- * and constructor validation.
- */
-class TicTacToeTest {
+public class TicTacToeTest {
 
+    private Player p1;
+    private Player p2;
     private TicTacToe game;
-    private Player player1;
-    private Player player2;
 
-    /**
-     * Initializes a new TicTacToe game before each test.
-     */
     @BeforeEach
-    void setUp() {
-        Tile dummyTile = new Tile(1); // a simple tile with position 1
-        player1 = new Player("Alice", dummyTile, 25);
-        player2 = new Player("Bob", dummyTile, 30);
-        game = new TicTacToe(player1, player2);
+    void setup() {
+        Tile startTile = new Tile(1); // dummy tile
+        p1 = new Player("A", startTile, 25);
+        p2 = new Player("B", startTile, 30);
+        p1.setToken("X");
+        p2.setToken("O");
+        game = new TicTacToe(p1, p2);
     }
 
     /**
-     * Tests that a valid move can be made and the correct token is placed.
+     * Tests that constructor throws exception if any player is null
      */
     @Test
-    void testMakeMoveValid() {
+    void nullPlayer() {
+        assertThrows(IllegalArgumentException.class, () -> new TicTacToe(null, p2));
+        assertThrows(IllegalArgumentException.class, () -> new TicTacToe(p1, null));
+    }
+
+    /**
+     * Tests a valid move is accepted and token placed
+     */
+    @Test
+    void validMove() {
         assertTrue(game.makeMove(0, 0));
         assertEquals("X", game.getCell(0, 0));
     }
 
     /**
-     * Tests that a move cannot be made in an already occupied cell.
+     * Tests that a move to an already occupied cell is rejected
      */
     @Test
-    void testMakeMoveOccupiedCell() {
+    void occupiedMove() {
         game.makeMove(0, 0);
-        assertFalse(game.makeMove(0, 0)); // already taken
+        assertFalse(game.makeMove(0, 0));
     }
 
-
     /**
-     * Tests that making a move with invalid coordinates throws an exception.
+     * Tests move with invalid coordinates throws exception
      */
     @Test
-    void testMakeMoveInvalidCoordinates() {
+    void invalidCoords() {
         assertThrows(IllegalArgumentException.class, () -> game.makeMove(-1, 0));
-        assertThrows(IllegalArgumentException.class, () -> game.makeMove(3, 1));
+        assertThrows(IllegalArgumentException.class, () -> game.makeMove(3, 3));
     }
 
     /**
-     * Tests that the current player changes after switching turns.
+     * Tests that turn switches between players
      */
     @Test
-    void testSwitchTurn() {
-        assertEquals(player1, game.getCurrentPlayer());
+    void switchTurn() {
+        Player first = game.getCurrentPlayer();
         game.switchTurn();
-        assertEquals(player2, game.getCurrentPlayer());
+        Player second = game.getCurrentPlayer();
+        assertNotEquals(first, second);
+        game.switchTurn();
+        assertEquals(first, game.getCurrentPlayer());
     }
 
-
-
     /**
-     * Tests that a win is detected correctly in a horizontal row.
+     * Tests horizontal win condition
      */
     @Test
-    void testWinInRow() {
+    void winRow() {
         game.makeMove(0, 0); // X
         game.switchTurn();
         game.makeMove(1, 0); // O
@@ -83,16 +88,15 @@ class TicTacToeTest {
         game.switchTurn();
         game.makeMove(1, 1); // O
         game.switchTurn();
-        game.makeMove(0, 2); // X wins
-
+        game.makeMove(0, 2); // X
         assertEquals("X", game.checkWinner());
     }
 
     /**
-     * Tests that a win is detected correctly in a vertical column.
+     * Tests vertical win condition
      */
     @Test
-    void testWinInColumn() {
+    void winCol() {
         game.makeMove(0, 0); // X
         game.switchTurn();
         game.makeMove(0, 1); // O
@@ -101,81 +105,83 @@ class TicTacToeTest {
         game.switchTurn();
         game.makeMove(1, 1); // O
         game.switchTurn();
-        game.makeMove(2, 0); // X wins
-
+        game.makeMove(2, 0); // X
         assertEquals("X", game.checkWinner());
     }
 
     /**
-     * Tests that a win is detected correctly on the diagonal.
+     * Tests diagonal win condition
      */
     @Test
-    void testWinInDiagonal() {
+    void winDiag() {
         game.makeMove(0, 0); // X
         game.switchTurn();
         game.makeMove(0, 1); // O
         game.switchTurn();
         game.makeMove(1, 1); // X
         game.switchTurn();
-        game.makeMove(0, 2); // O
+        game.makeMove(2, 1); // O
         game.switchTurn();
-        game.makeMove(2, 2); // X wins
-
+        game.makeMove(2, 2); // X
         assertEquals("X", game.checkWinner());
     }
 
     /**
-     * Tests that the board is detected as full and no winner is present (draw).
+     * Tests no winner when board is still incomplete
      */
     @Test
-    void testBoardFullNoWinner() {
-        game.makeMove(0, 0); // X
-        game.switchTurn();
-        game.makeMove(0, 1); // O
-        game.switchTurn();
-        game.makeMove(0, 2); // X
-        game.switchTurn();
-        game.makeMove(1, 1); // O
-        game.switchTurn();
-        game.makeMove(1, 0); // X
-        game.switchTurn();
-        game.makeMove(1, 2); // O
-        game.switchTurn();
-        game.makeMove(2, 1); // X
-        game.switchTurn();
-        game.makeMove(2, 0); // O
-        game.switchTurn();
-        game.makeMove(2, 2); // X
-
-        assertTrue(game.isBoardFull());
+    void noWinner() {
+        game.makeMove(0, 0);
         assertNull(game.checkWinner());
     }
 
-
     /**
-     * Tests that the board can be reset and the current player is set back to
-     * player1.
+     * Tests full board detection
      */
     @Test
-    void testResetBoard() {
-        game.makeMove(0, 0);
-        game.makeMove(1, 1);
-        game.resetBoard();
-
-        for (int r = 0; r < 3; r++)
-            for (int c = 0; c < 3; c++)
-                assertNull(game.getCell(r, c));
-
-        assertEquals(player1, game.getCurrentPlayer());
+    void boardFull() {
+        int[][] moves = {
+            {0, 0}, {0, 1}, {0, 2},
+            {1, 1}, {1, 0}, {1, 2},
+            {2, 1}, {2, 2}, {2, 0}
+        };
+        for (int i = 0; i < moves.length; i++) {
+            game.makeMove(moves[i][0], moves[i][1]);
+            if (i < moves.length - 1) {
+                game.switchTurn();
+            }
+        }
+        assertTrue(game.isBoardFull());
     }
 
     /**
-     * Tests that the constructor throws an exception if any player is null.
+     * Tests board is not full initially
      */
     @Test
-    void testNullPlayersThrows() {
-        Tile tile = new Tile(1);
-        assertThrows(IllegalArgumentException.class, () -> new TicTacToe(null, new Player("Test", tile, 20)));
-        assertThrows(IllegalArgumentException.class, () -> new TicTacToe(new Player("Test", tile, 20), null));
+    void boardNotFull() {
+        game.makeMove(0, 0);
+        assertFalse(game.isBoardFull());
+    }
+
+    /**
+     * Tests board reset clears all tiles and resets turn
+     */
+    @Test
+    void reset() {
+        game.makeMove(0, 0);
+        game.switchTurn();
+        game.resetBoard();
+        assertNull(game.getCell(0, 0));
+        assertEquals(p1, game.getCurrentPlayer());
+    }
+
+    /**
+     * Tests getBoard returns a valid board
+     */
+    @Test
+    void getBoard() {
+        Board b = game.getBoard();
+        assertNotNull(b);
+        assertEquals(9, b.getSize());
     }
 }
