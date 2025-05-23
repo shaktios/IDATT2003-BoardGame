@@ -8,19 +8,19 @@ import edu.ntnu.boardgame.constructors.Player;
  */
 public interface PuzzleTileAction {
 
-    /**
-     * Executes a puzzle action.
-     *
-     * @param player the player who landed on the tile
-     * @param board the board
-     * @param onPuzzleComplete callback to run when puzzle is solved
-     */
-    void execute(Player player, Board board, Runnable onPuzzleComplete);
+  /**
+   * Executes a puzzle action.
+   *
+   * @param player the player who landed on the tile
+   * @param board the board
+   * @param onPuzzleComplete callback to run when puzzle is solved
+   */
+  void execute(Player player, Board board, Runnable onPuzzleComplete);
 
-    /**
-     * Gets the destination tile if the action moves the player directly.
-     *
-     * @return the destination tile number, or -1 if none
-     */
-    int getDestination();
+  /**
+   * Gets the destination tile if the action moves the player directly.
+   *
+   * @return the destination tile number, or -1 if none
+   */
+  int getDestination();
 }
