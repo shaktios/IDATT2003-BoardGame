@@ -34,6 +34,79 @@ The project follows the **Model-View-Controller (MVC)** pattern:
 - **Factory Pattern**: Used in `BoardGameFactory` to create game objects based on input
 - **Observer Pattern**: Used to notify GUI of game state changes in real-time
 
+## 📁 File Handling (JSON & CSV)
+
+### 🧩 Importing and Exporting Boards (JSON)
+
+The game supports custom board configurations via JSON. To use this feature:
+
+1. Select **`Importer eget brett (JSON)`** from the dropdown menu on the start screen:
+
+   ![Select JSON board](<img width="1229" alt="Skjermbilde 2025-05-23 kl  10 18 21" src="https://github.com/user-attachments/assets/3ed05fe6-04e7-4a30-ba51-e2ed916dd0af" />
+)
+
+2. Set the number of players **or** import from CSV (see next section).
+3. Click **Neste** to proceed to the player setup screen.
+4. Click **Neste** again to open a file dialog and select a valid JSON board file:
+
+   ![Select JSON file](![image](https://github.com/user-attachments/assets/2b006a95-a166-4654-8455-f55cd5b4f36a)
+)
+
+5. If the JSON file structure is invalid, the system will not proceed. Use the included example (`src/main/resources/importfunctionreadymadeboards/`) as a template.
+
+You can also save a board configuration from within the game using the **Lagre brett** button and saving the file where you prefer:
+   ![Save board file](<img width="1272" alt="Skjermbilde 2025-05-23 kl  10 22 56" src="https://github.com/user-attachments/assets/f2cd207f-9240-4fef-9198-f254b7525c6a" />
+)
+
+The included boards (small, medium, large) support all required `TileAction` types and meet the dice specifications from the assignment.
+
+---
+
+### 👥 Importing and Exporting Players (CSV)
+
+#### ✅ Import Players from CSV
+
+To import players:
+
+- Click **`Importer spillere inn fra en CSV-fil`**
+- Ensure the CSV file follows the correct format:
+
+  ```csv
+  name,age,token
+  Arne,22,Horse
+  Ivar,25,Rook
+
+
+### ✅ CSV Token Requirements
+
+- Tokens must match one of the **5 predefined game tokens** available in the application.
+
+📌 **Note:** If you import players from a CSV file, the number-of-players dropdown is **ignored**.
+
+---
+
+### 💾 Export Players to CSV
+
+To export a player setup:
+
+1. Select a board type from the dropdown.
+2. Choose the number of players.
+3. Fill in **name**, **age**, and select a **token** for each player.
+4. Click **Lagre spillere til CSV-fil**.
+
+🛑 **Warning:** The application does not block you from exporting malformed CSV files. Make sure:
+- Each player has a **unique token**
+- Age values are **numeric**
+- All fields follow the required format: `name,age,token`
+
+---
+
+### 💡 Tip
+
+All saved boards and player files can be placed **anywhere** on your local machine. The app uses standard system file dialogs for selecting files, making it flexible to load and save from any path.
+
+---
+
 ## 🧪 Testing
 
 The application includes:
