@@ -42,8 +42,7 @@ The game supports custom board configurations via JSON. To use this feature:
 
 1. Select **`Importer eget brett (JSON)`** from the dropdown menu on the start screen:
 
-   ![Select JSON board](<img width="1229" alt="Skjermbilde 2025-05-23 kl  10 18 21" src="https://github.com/user-attachments/assets/3ed05fe6-04e7-4a30-ba51-e2ed916dd0af" />
-)
+   ![Select JSON board]()
 
 2. Set the number of players **or** import from CSV (see next section).
 3. Click **Neste** to proceed to the player setup screen.
@@ -96,8 +95,8 @@ To export a player setup:
 
 🛑 **Warning:** The application does not block you from exporting malformed CSV files. Make sure:
 - Each player has a **unique token**
-- Age values are **numeric**
 - All fields follow the required format: `name,age,token`
+As it is today, it is possible to export and import csv-files where players have the same tokens, but the game will not start unless you change the tokens. 
 
 ---
 
