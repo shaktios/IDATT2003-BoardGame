@@ -106,6 +106,14 @@ All saved boards and player files can be placed **anywhere** on your local machi
 
 ---
 
+## ⚠️ Limitations
+
+- **Language**: The application interface is only available in Norwegian, which may limit accessibility for non-Norwegian speakers.
+- **CSV Import**: There is only some validation when exporting player data to CSV. This means files may contain invalid data such as:
+  - Duplicate tokens for different players
+  These files will not load correctly on import.
+- **Local-Only Gameplay**: As per the assignment constraints, the game is designed for local use on a single machine. There is no support for online or networked multiplayer.
+
 ## 🧪 Testing
 
 The application includes:
