@@ -117,7 +117,7 @@ All saved boards and player files can be placed **anywhere** on your local machi
 ### ⚠️ TileAction Limitation
 
 The system supports `TileAction` logic but is limited to **one action per turn**.  
-If a player lands on a special tile (e.g., `LadderAction`) that moves them to another tile with an action, **only the first action is executed** — any subsequent actions are ignored.
+If a player lands on a special tile (e.g., `LadderAction`) that moves them to another tile with an action, **only the first action is executed**, any subsequent actions are ignored.
 
 While recursive or iterative handling of chained actions could solve this, it was considered outside the scope of this project.
 
