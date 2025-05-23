@@ -28,7 +28,7 @@ public class PlayerFileHandlerTest {
      * Tests that writeToCSV creates and uses a BufferedWriter without error.
      */
     @Test
-    void testWriteToCSV() throws Exception {
+    void testWriteToCsv() throws Exception {
         Player player = new Player("Abdi", new Tile(1), 22);
         player.setToken("X");
 
@@ -37,7 +37,7 @@ public class PlayerFileHandlerTest {
 
         try (MockedConstruction<FileWriter> mockedWriter = mockConstruction(FileWriter.class); MockedConstruction<BufferedWriter> mockedBuffered = mockConstruction(BufferedWriter.class)) {
 
-            assertDoesNotThrow(() -> PlayerFileHandler.writeToCSV(dummyFile, players));
+            assertDoesNotThrow(() -> PlayerFileHandler.writeToCsv(dummyFile, players));
 
             // Bekreft at BufferedWriter ble brukt
             BufferedWriter writer = mockedBuffered.constructed().get(0);
@@ -59,7 +59,7 @@ public class PlayerFileHandlerTest {
                         .thenReturn(null))) {
 
             File dummyFile = new File("fake.csv");
-            List<Player> players = PlayerFileHandler.readFromCSV(dummyFile);
+            List<Player> players = PlayerFileHandler.readFromCsv(dummyFile);
 
             assertEquals(1, players.size());
             assertEquals("Layla", players.get(0).getName());
@@ -80,7 +80,7 @@ public class PlayerFileHandlerTest {
         File dummyFile = new File("dummy.json");
 
         try (MockedConstruction<FileWriter> mocked = mockConstruction(FileWriter.class)) {
-            assertDoesNotThrow(() -> PlayerFileHandler.writeToJSON(dummyFile, players));
+            assertDoesNotThrow(() -> PlayerFileHandler.writeToJson(dummyFile, players));
         }
     }
 

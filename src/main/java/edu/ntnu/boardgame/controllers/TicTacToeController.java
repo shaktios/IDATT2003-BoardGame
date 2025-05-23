@@ -37,42 +37,43 @@ public class TicTacToeController {
     if (player1.getName() == null || player1.getName().isEmpty()) player1.setName("Spiller 1");
     if (player2.getName() == null || player2.getName().isEmpty()) player2.setName("Spiller 2");
 
-    view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
+    view.updateMessage("Tur: " + logic.getCurrentPlayer().getName()
+                + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-    /**
-     * Handles when a player clicks on a specific tile. Checks if the move is
-     * valid, updates the view, and checks for win/draw.
-     *
-     * @param tile the tile that was clicked
-     */
+  /**
+   * Handles when a player clicks on a specific tile. Checks if the move is
+   * valid, updates the view, and checks for win/draw.
+   *
+   * @param tile the tile that was clicked
+   */
   public void handleMove(Tile tile) {
-  int position = tile.getPosition(); // 1–9
-  int row = (position - 1) / 3;
-  int col = (position - 1) % 3;
+    int position = tile.getPosition(); // 1–9
+    int row = (position - 1) / 3;
+    int col = (position - 1) % 3;
 
-  if (!logic.makeMove(row, col)) {
-    view.updateMessage("Ugyldig trekk - feltet er opptatt.");
-    return;
+    if (!logic.makeMove(row, col)) {
+      view.updateMessage("Ugyldig trekk - feltet er opptatt.");
+      return;
+    }
+
+    view.updateTile(tile, logic.getCell(row, col));
+
+    String winner = logic.checkWinner();
+    if (winner != null) {
+      showWinnerMessage(logic.getCurrentPlayer().getName(), null); // stage not used
+      return;
+    }
+
+    if (logic.isBoardFull()) {
+      showDrawMessage(null);
+      return;
+    }
+
+    logic.switchTurn();
+    Player next = logic.getCurrentPlayer();
+    view.updateMessage("Tur: " + next.getName() + " (" + next.getToken() + ")");
   }
-
-  view.updateTile(tile, logic.getCell(row, col)); 
-
-  String winner = logic.checkWinner();
-  if (winner != null) {
-    showWinnerMessage(logic.getCurrentPlayer().getName(), null); // stage not used
-    return;
-  }
-
-  if (logic.isBoardFull()) {
-    showDrawMessage(null);
-    return;
-  }
-
-  logic.switchTurn();
-  Player next = logic.getCurrentPlayer();
-  view.updateMessage("Tur: " + next.getName() + " (" + next.getToken() + ")");
-}
 
   /**
    * Resets the game.
@@ -80,36 +81,36 @@ public class TicTacToeController {
   public void resetGame() {
     logic.resetBoard();
     view.clearBoard();
-    view.updateMessage("Tur: " + logic.getCurrentPlayer().getName() + " (" + logic.getCurrentPlayer().getToken() + ")");
+    view.updateMessage("Tur: " + logic.getCurrentPlayer().getName()
+            + " (" + logic.getCurrentPlayer().getToken() + ")");
   }
 
-    /**
-     * Displays a popup alert indicating that a player has won the game.
-     *
-     * @param winnerName the name of the winning player
-     * @param stage unused, kept for compatibility
-     */
+  /**
+   * Displays a popup alert indicating that a player has won the game.
+   *
+   * @param winnerName the name of the winning player
+   * @param stage unused, kept for compatibility
+   */
   private void showWinnerMessage(String winnerName, Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Vi har en vinner!");
-        alert.setHeaderText(winnerName + " har vunnet spillet!");
-        alert.setContentText("Trykk OK for å fortsette.");
-        alert.show(); 
-    }
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Vi har en vinner!");
+    alert.setHeaderText(winnerName + " har vunnet spillet!");
+    alert.setContentText("Trykk OK for å fortsette.");
+    alert.show();
+  }
 
   
-/**
- * Displays a popup alert indicating that the game ended in a draw.
- *
- * @param stage the current JavaFX stage (not used in this implementation but kept for consistency)
- */
+  /**
+   * Displays a popup alert indicating that the game ended in a draw.
+   *
+   * @param stage the current JavaFX stage
+   *              (not used in this implementation but kept for consistency)
+   */
   private void showDrawMessage(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Uavgjort");
-        alert.setHeaderText("Ingen vant – brettet er fullt.");
-        alert.setContentText("Trykk OK for å fortsette.");
-        alert.show();
-    }
-
-  
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Uavgjort");
+    alert.setHeaderText("Ingen vant – brettet er fullt.");
+    alert.setContentText("Trykk OK for å fortsette.");
+    alert.show();
+  }
 }

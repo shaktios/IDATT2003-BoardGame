@@ -18,94 +18,94 @@ import javafx.stage.Stage;
  */
 public class BoardgameApp extends Application {
 
-    /**
-     * Starts the JavaFX application by showing the main page.
-     *
-     * @param primaryStage the primary JavaFX window
-     */
-    @Override
-    public void start(Stage primaryStage) {
-        MainPageController controller = new MainPageController(primaryStage);
-        Scene scene = controller.getMainScene();
+  /**
+   * Starts the JavaFX application by showing the main page.
+   *
+   * @param primaryStage the primary JavaFX window
+   */
+  @Override
+  public void start(Stage primaryStage) {
+    MainPageController controller = new MainPageController(primaryStage);
+    Scene scene = controller.getMainScene();
 
-        primaryStage.setTitle("BoardGame");
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(true); // Optional: full screen
-        primaryStage.show();
-    }
+    primaryStage.setTitle("BoardGame");
+    primaryStage.setScene(scene);
+    primaryStage.setMaximized(true); // Optional: full screen
+    primaryStage.show();
+  }
 
-    /**
-     * Creates a new main menu scene with game options.
-     *
-     * @param stage the stage to attach the new scene to
-     * @return the main menu scene
-     */
-    public static Scene createFreshStartScene(Stage stage) {
-        MainPage mainPage = new MainPage(gameName -> {
-            switch (gameName) {
-                case "Liten Stigespill" -> openMiniGame();
-                case "Stort Stigespill" -> openClassicGame();
-                case "Tic Tac Toe" -> openTicTacToe(stage);
-            }
-        });
+  /**
+   * Creates a new main menu scene with game options.
+   *
+   * @param stage the stage to attach the new scene to
+   * @return the main menu scene
+   */
+  public static Scene createFreshStartScene(Stage stage) {
+    MainPage mainPage = new MainPage(gameName -> {
+      switch (gameName) {
+        case "Liten Stigespill" -> openMiniGame();
+        case "Stort Stigespill" -> openClassicGame();
+        case "Tic Tac Toe" -> openTicTacToe(stage);
+      }
+    });
 
-        Scene scene = new Scene(mainPage.getRoot(), 1280, 720);
-        stage.setScene(scene);
-        stage.setResizable(false); 
-        stage.setTitle("BoardGame");
-        stage.sizeToScene(); 
-        return scene;
-    }
+    Scene scene = new Scene(mainPage.getRoot(), 1280, 720);
+    stage.setScene(scene);
+    stage.setResizable(false);
+    stage.setTitle("BoardGame");
+    stage.sizeToScene();
+    return scene;
+  }
 
-    /**
-     * Launches the application.
-     *
-     * @param args command-line arguments (not used)
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-
-    /**
-     * Initializes and displays the Tic Tac Toe game screen.
-     *
-     * @param stage the current JavaFX stage to load the game into
-     */
-    public static void openTicTacToe(Stage stage){
-        Board board = new Board(3,3); 
-        Tile startTile = board.getTile(1);
-
-        Player player1 = new Player("Spiller 1", startTile, 20);
-        Player player2 = new Player("Spiller 2", startTile, 21);
-
-        TicTacToeGameScreen view = new TicTacToeGameScreen(stage, board); 
-        TicTacToeController controller = new TicTacToeController(player1, player2, view);
-        view.setController(controller);
-
-        Scene scene = new Scene(view.getRoot(), 600, 700);
-        scene.getStylesheets().add(BoardgameApp.class.getResource("/styles/tictactoe.css").toExternalForm());
-
-        stage.setScene(scene);
-        stage.setTitle("Tic Tac Toe");
-        stage.setResizable(false);
-        stage.sizeToScene();
-
-    }
+  /**
+   * Launches the application.
+   *
+   * @param args command-line arguments (not used)
+   */
+  public static void main(String[] args) {
+    launch(args);
+  }
 
 
-    /**
-     * Launches the classic board game (full version).
-     */
-    public static void openClassicGame() {
-        BoardGameFactory.createClassicGame();
-    }
+  /**
+   * Initializes and displays the Tic Tac Toe game screen.
+   *
+   * @param stage the current JavaFX stage to load the game into
+   */
+  public static void openTicTacToe(Stage stage) {
+    Board board = new Board(3, 3);
+    Tile startTile = board.getTile(1);
 
-    /**
-     * Launches the mini version of the board game.
-     */
-    public static void openMiniGame() {
-        BoardGameFactory.createMiniGame();
-    }
+    Player player1 = new Player("Spiller 1", startTile, 20);
+    Player player2 = new Player("Spiller 2", startTile, 21);
+    TicTacToeGameScreen view = new TicTacToeGameScreen(stage, board);
+    TicTacToeController controller = new TicTacToeController(player1, player2, view);
+    view.setController(controller);
 
+    Scene scene = new Scene(view.getRoot(), 600, 700);
+    scene.getStylesheets().add(BoardgameApp.class.getResource(
+            "/styles/tictactoe.css"
+    ).toExternalForm());
+
+    stage.setScene(scene);
+    stage.setTitle("Tic Tac Toe");
+    stage.setResizable(false);
+    stage.sizeToScene();
+
+  }
+
+
+  /**
+   * Launches the classic board game (full version).
+   */
+  public static void openClassicGame() {
+    BoardGameFactory.createClassicGame();
+  }
+
+  /**
+   * Launches the mini version of the board game.
+   */
+  public static void openMiniGame() {
+    BoardGameFactory.createMiniGame();
+  }
 }

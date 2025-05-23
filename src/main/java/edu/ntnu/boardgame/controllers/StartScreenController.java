@@ -1,11 +1,5 @@
 package edu.ntnu.boardgame.controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.ntnu.boardgame.constructors.BoardGameFactory;
 import edu.ntnu.boardgame.constructors.Boardgame;
 import edu.ntnu.boardgame.constructors.Player;
@@ -15,6 +9,11 @@ import edu.ntnu.boardgame.io.PlayerFileHandler;
 import edu.ntnu.boardgame.utils.InputValidator;
 import edu.ntnu.boardgame.view.common.StartScreenView;
 import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -30,13 +29,13 @@ public class StartScreenController {
   private final Stage stage;
   private final StartScreenView view;
 
-    /**
-     * Constructs a StartScreenController and wires up all necessary handlers
-     * for buttons and actions in the view.
-     *
-     * @param stage the current JavaFX stage
-     * @param view the associated StartScreenView
-     */
+  /**
+   * Constructs a StartScreenController and wires up all necessary handlers
+   * for buttons and actions in the view.
+   *
+   * @param stage the current JavaFX stage
+   * @param view the associated StartScreenView
+   */
   public StartScreenController(Stage stage, StartScreenView view) {
     this.stage = stage;
     this.view = view;
@@ -62,7 +61,7 @@ public class StartScreenController {
             playersToSave.add(p);
           }
 
-          PlayerFileHandler.writeToCSV(file, playersToSave);
+          PlayerFileHandler.writeToCsv(file, playersToSave);
           view.showAlert("Suksess", "Spillere lagret til " + file.getName());
         } catch (Exception ex) {
           view.showAlert("Feil", "Kunne ikke lagre spillere:\n" + ex.getMessage());
@@ -71,21 +70,21 @@ public class StartScreenController {
     });
   }
 
-    /**
-     * Called when the user presses the "Next" button. Generates input fields
-     * for the selected number of players.
-     */
+  /**
+   * Called when the user presses the "Next" button. Generates input fields
+   * for the selected number of players.
+   */
   private void handleNextButton() {
     int amountOfPlayers = view.getSelectedPlayerCount();
     view.generatePlayerInputs(amountOfPlayers);
   }
 
-    /**
-     * Called when the user presses the "Start Game" button. Validates all
-     * player inputs and starts the appropriate board game. Loads game from
-     * factory or file based on user selection and transitions to the game
-     * screen.
-     */
+  /**
+   * Called when the user presses the "Start Game" button. Validates all
+   * player inputs and starts the appropriate board game. Loads game from
+   * factory or file based on user selection and transitions to the game
+   * screen.
+   */
   private void handleStartGameButton() {
     Boardgame boardgame;
 
@@ -103,7 +102,9 @@ public class StartScreenController {
         }
 
         try {
-          boardgame = BoardGameFactory.createGameFromFile(Paths.get(selectedFile.getAbsolutePath()));
+          boardgame = BoardGameFactory.createGameFromFile(
+                  Paths.get(selectedFile.getAbsolutePath())
+          );
         } catch (IOException | InvalidBoardFileException ex) {
           view.showAlert("Feil ved lasting av fil", ex.getMessage());
           return;
@@ -163,42 +164,42 @@ public class StartScreenController {
     String selectedVariant = view.getSelectedGameVariant();
 
     LadderGameController ladderGameController = new LadderGameController(
-      boardgame, gameScreen, stage, selectedVariant, youngestIndex
+        boardgame, gameScreen, stage, selectedVariant, youngestIndex
     );
-
     gameScreen.disableNextTurnButton();
     gameScreen.enableDiceButton();
-
     gameScreen.getThrowDiceButton().setOnAction(e -> ladderGameController.handleDiceRoll(stage));
     gameScreen.getNextTurnButton().setOnAction(e -> ladderGameController.handleNextTurn());
 
     stage.setScene(ladderGameScene);
   }
 
-    /**
-     * Returns the scene for the start screen.
-     *
-     * @return the start screen Scene object
-     */
+  /**
+   * Returns the scene for the start screen.
+   *
+   * @return the start screen Scene object
+   */
   public Scene getStartScene() {
     return view.createScene(stage);
   }
 
 
-    /**
-     * Opens a file chooser to import players from a CSV file. Populates the
-     * input fields in the view with the loaded player data. Shows an alert if
-     * the file is invalid or cannot be read.
-     */
+  /**
+   * Opens a file chooser to import players from a CSV file. Populates the
+   * input fields in the view with the loaded player data. Shows an alert if
+   * the file is invalid or cannot be read.
+   */
   private void handleImportPlayers() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Velg CSV-fil med spillere");
     File file = fileChooser.showOpenDialog(stage);
 
-    if (file == null) return;
+    if (file == null) {
+      return;
+    }
 
     try {
-      List<Player> importedPlayers = PlayerFileHandler.readFromCSV(file);
+      List<Player> importedPlayers = PlayerFileHandler.readFromCsv(file);
       if (importedPlayers.isEmpty()) {
         view.showAlert("Feil", "Fant ingen spillere i CSV-filen.");
         return;

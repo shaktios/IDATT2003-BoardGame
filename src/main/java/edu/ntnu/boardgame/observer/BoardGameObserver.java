@@ -9,17 +9,17 @@ import edu.ntnu.boardgame.constructors.Player;
  */
 public interface BoardGameObserver {
 
-    /**
-     * Called whenever a player moves to a new tile on the board.
-     *
-     * @param player the player who just moved
-     */
-    void onPlayerMove(Player player);
+  /**
+   * Called whenever a player moves to a new tile on the board.
+   *
+   * @param player the player who just moved
+   */
+  void onPlayerMove(Player player);
     
-    /**
-     * Called when a player wins the game by reaching the final tile.
-     *
-     * @param winner the player who won the game
-     */
-    void onGameWon(Player winner);
+  /**
+   * Called when a player wins the game by reaching the final tile.
+   *
+   * @param winner the player who won the game
+   */
+  void onGameWon(Player winner);
 }
