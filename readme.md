@@ -114,6 +114,13 @@ All saved boards and player files can be placed **anywhere** on your local machi
   These files will not load correctly on import.
 - **Local-Only Gameplay**: As per the assignment constraints, the game is designed for local use on a single machine. There is no support for online or networked multiplayer.
 
+### ⚠️ TileAction Limitation
+
+The system supports `TileAction` logic but is limited to **one action per turn**.  
+If a player lands on a special tile (e.g., `LadderAction`) that moves them to another tile with an action, **only the first action is executed** — any subsequent actions are ignored.
+
+While recursive or iterative handling of chained actions could solve this, it was considered outside the scope of this project.
+
 ## 🧪 Testing
 
 The application includes:
