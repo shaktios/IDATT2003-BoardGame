@@ -13,32 +13,32 @@ public class BackAction implements TileAction {
   private final int destination;
   private Boardgame boardgame;
 
-    /**
-     * Creates a new BackAction that moves the player to the given destination
-     * tile.
-     *
-     * @param destination the tile number the player should move to
-     */
+  /**
+   * Creates a new BackAction that moves the player to the given destination
+   * tile.
+   *
+   * @param destination the tile number the player should move to
+   */
   public BackAction(int destination) {
-        this.destination = destination;
-    }
+    this.destination = destination;
+  }
 
-    /**
-     * Sets the boardgame instance so the action can trigger win checking.
-     *
-     * @param boardgame the boardgame context
-     */
+  /**
+   * Sets the boardgame instance so the action can trigger win checking.
+   *
+   * @param boardgame the boardgame context
+   */
   public void setBoardgame(Boardgame boardgame) {
-        this.boardgame = boardgame;
-    }
+    this.boardgame = boardgame;
+  }
 
-    /**
-     * Moves the player to the destination tile and calls checkForWin if
-     * boardgame is set.
-     *
-     * @param player the player affected by the action
-     * @param board the game board
-     */
+  /**
+   * Moves the player to the destination tile and calls checkForWin if
+   * boardgame is set.
+   *
+   * @param player the player affected by the action
+   * @param board the game board
+   */
   @Override
   public void execute(Player player, Board board) {
     player.setPosition(destination, board);
@@ -49,13 +49,13 @@ public class BackAction implements TileAction {
 
 
 
-    /**
-     * Returns the destination tile number the player will be moved to.
-     *
-     * @return the destination tile number
-     */
+  /**
+   * Returns the destination tile number the player will be moved to.
+   *
+   * @return the destination tile number
+   */
   @Override
   public int getDestination() {
-        return destination;
-    }
+    return destination;
+  }
 }
