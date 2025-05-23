@@ -2,7 +2,7 @@ package edu.ntnu.boardgame.constructors;
 
 import java.util.Random;
 
-/*
+/**
  * Class for representing a single die with a specified number of sides.
  * The die can be rolled to produce a random value between 1 and the number of sides.
  */
@@ -24,7 +24,7 @@ public class Die {
     * @throws IllegalArgumentException if the number of sides is less than 2
   */
   public Die(int sides) {
-    if(sides<2 ){
+    if (sides < 2) {
       throw new IllegalArgumentException("En terning må ha minst 2 sider.");
     }
     this.sides = sides; 
@@ -49,6 +49,8 @@ public class Die {
   }
 
   /**
+   * Gets the value og the last rolled die.
+   *
   * @return The value of the last rolled die.
   */
   public int getValue() {

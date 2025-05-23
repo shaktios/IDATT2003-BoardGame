@@ -26,16 +26,17 @@ public class ChessPuzzleViewController {
   private static final int CORRECT_MOVE_FORWARD = 5;
   private static final int WRONG_MOVE_BACKWARD = 3;
 
-    /**
-     * Constructs the ChessPuzzleViewController.
-     *
-     * @param player the player who triggered the puzzle
-     * @param board the game board
-     * @param onPuzzleComplete callback to run after the puzzle interaction is
-     * finished
-     * @param boardgame the current game instance used for win condition checks
-     */
-  public ChessPuzzleViewController(Player player, Board board, Runnable onPuzzleComplete, Boardgame boardgame) {
+  /**
+   * Constructs the ChessPuzzleViewController.
+   *
+   * @param player the player who triggered the puzzle
+   * @param board the game board
+   * @param onPuzzleComplete callback to run after the puzzle interaction is
+   * finished
+   * @param boardgame the current game instance used for win condition checks
+   */
+  public ChessPuzzleViewController(Player player, Board board, Runnable onPuzzleComplete,
+                                   Boardgame boardgame) {
     this.player = player;
     this.board = board;
     this.onPuzzleComplete = onPuzzleComplete;
@@ -43,10 +44,10 @@ public class ChessPuzzleViewController {
     this.model = new ChessPuzzleModel();
   }
 
-    /**
-     * Starts the puzzle interaction by selecting a puzzle, initializing the
-     * view, and displaying it to the user.
-     */
+  /**
+   * Starts the puzzle interaction by selecting a puzzle, initializing the
+   * view, and displaying it to the user.
+   */
   public void startPuzzle() {
     model.selectRandomPuzzle();
     String image = model.getSelectedImage();
@@ -58,13 +59,13 @@ public class ChessPuzzleViewController {
     view.show();
   }
 
-    /**
-     * Handles the logic after the player selects a move in the puzzle view.
-     * Moves the player forward or backward depending on correctness, displays
-     * the result, and closes the puzzle after a short delay.
-     *
-     * @param selectedMove the move the user selected
-     */
+  /**
+   * Handles the logic after the player selects a move in the puzzle view.
+   * Moves the player forward or backward depending on correctness, displays
+   * the result, and closes the puzzle after a short delay.
+   *
+   * @param selectedMove the move the user selected
+   */
   public void handleUserMove(String selectedMove) {
     boolean isCorrect = selectedMove.equals(model.getCorrectMove());
 
@@ -84,12 +85,12 @@ public class ChessPuzzleViewController {
     pause.play();
   }
 
-    /**
-     * Moves the player by the given offset. Makes sure the new position is
-     * valid. Updates the tile and checks for win condition.
-     *
-     * @param offset number of tiles to move (positive or negative)
-     */
+  /**
+   * Moves the player by the given offset. Makes sure the new position is
+   * valid. Updates the tile and checks for win condition.
+   *
+   * @param offset number of tiles to move (positive or negative)
+   */
   private void movePlayer(int offset) {
     int newPosition = Math.max(1, Math.min(player.getPosition() + offset, board.getSize()));
     player.setPosition(newPosition, board);

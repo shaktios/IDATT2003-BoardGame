@@ -11,139 +11,137 @@ import edu.ntnu.boardgame.actions.tileactions.TileAction;
  */
 public class Tile {
 
-    private final int position; //en tile burde være immutabel, posisjonen flyttes ikke på brettet --> bruker derfor final...
-    private int x = -1;
-    private int y = -1;
-    private Tile nextTile;
-    private TileAction action; // Nytt felt for tile-effekt
-    private String token; //  TicTacToe for å lagre "X" eller "O"
+  private final int position; //en tile burde være immutabel,-
+  // posisjonen flyttes ikke på brettet --> bruker derfor final...
+  private int x = -1;
+  private int y = -1;
+  private Tile nextTile;
+  private TileAction action; // Nytt felt for tile-effekt
+  private String token; //  TicTacToe for å lagre "X" eller "O"
 
-
-    /**
-     * Constructs a new Tile with the given position.
-     *
-     * @param position the tile's position on the board (must be positive)
-     * @throws IllegalArgumentException if the position is less than or equal to
-     * 0
-     */
-    public Tile(int position) {
-        if (position <= 0) {
-            throw new IllegalArgumentException("Posisjonen må være et positivt tall.");
-        }
-
-        this.position = position;
+  /**
+   * Constructs a new Tile with the given position.
+   *
+   * @param position the tile's position on the board (must be positive)
+   * @throws IllegalArgumentException if the position is less than or equal to
+   */
+  public Tile(int position) {
+    if (position <= 0) {
+      throw new IllegalArgumentException("Posisjonen må være et positivt tall.");
     }
 
-    /**
-     * Sets the x-coordinate of this tile (used for GUI placement).
-     *
-     * @param x the x-coordinate
-     */
-    public void setX(int x) {
-        this.x = x;
-    }
+    this.position = position;
+  }
 
-    /**
-     * Sets the y-coordinate of this tile (used for GUI placement).
-     *
-     * @param y the y-coordinate
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
+  /**
+   * Sets the x-coordinate of this tile (used for GUI placement).
+   *
+   * @param x the x-coordinate
+   */
+  public void setX(int x) {
+    this.x = x;
+  }
 
-    /**
-     * Returns the x-coordinate of the tile.
-     *
-     * @return the x-coordinate
-     */
-    public int getX() {
-        return x;
-    }
+  /**
+   * Sets the y-coordinate of this tile (used for GUI placement).
+   *
+   * @param y the y-coordinate
+   */
+  public void setY(int y) {
+    this.y = y;
+  }
 
-    /**
-     * Returns the y-coordinate of the tile.
-     *
-     * @return the y-coordinate
-     */
-    public int getY() {
-        return y;
-    }
+  /**
+   * Returns the x-coordinate of the tile.
+   *
+   * @return the x-coordinate
+   */
+  public int getX() {
+    return x;
+  }
 
-    /**
-     * Returns the position number of this tile.
-     *
-     * @return the tile's position
-     */
-    public int getPosition() {
-        return position;
-    }
+  /**
+   * Returns the y-coordinate of the tile.
+   *
+   * @return the y-coordinate
+   */
+  public int getY() {
+    return y;
+  }
 
-    /**
-     * Sets the reference to the next tile.
-     *
-     * @param nextTile the next tile in the board path
-     */
-    public void setNextTile(Tile nextTile) {
-        this.nextTile = nextTile;
-    }
+  /**
+   * Returns the position number of this tile.
+   *
+   * @return the tile's position
+   */
+  public int getPosition() {
+    return position;
+  }
 
-    /**
-     * Returns the next tile linked to this tile.
-     *
-     * @return the next tile
-     */
-    public Tile getNextTile() {
-        return this.nextTile;
-    }
+  /**
+   * Sets the reference to the next tile.
+   *
+   * @param nextTile the next tile in the board path
+   */
+  public void setNextTile(Tile nextTile) {
+    this.nextTile = nextTile;
+  }
 
-    /**
-     * Sets a tile action that should be executed when a player lands on this
-     * tile.
-     *
-     * @param action the action to assign
-     */
-    public void setAction(TileAction action) {
-        this.action = action;
-    }
+  /**
+   * Returns the next tile linked to this tile.
+   *
+   * @return the next tile
+   */
+  public Tile getNextTile() {
+    return this.nextTile;
+  }
 
-    /**
-     * Returns the action associated with this tile, if any.
-     *
-     * @return the tile's action
-     */
-    public TileAction getAction() {
-        return this.action;
-    }
+  /**
+   * Sets a tile action that should be executed when a player lands on this
+   * tile.
+   *
+   * @param action the action to assign
+   */
+  public void setAction(TileAction action) {
+    this.action = action;
+  }
 
-    /**
-     * Executes the assigned action for a given player and board, if any exists.
-     *
-     * @param player the player who landed on the tile
-     * @param board the game board
-     */
-    public void executeAction(Player player, Board board) {
-        if (action != null) {
-            action.execute(player, board);
-        }
-    }
+  /**
+   * Returns the action associated with this tile, if any.
+   *
+   * @return the tile's action
+   */
+  public TileAction getAction() {
+    return this.action;
+  }
 
-    /**
-     * Returns the token assigned to this tile (e.g., "X" or "O").
-     *
-     * @return the token or null if tile is empty
-     */
-    public String getToken() {
-        return token;
+  /**
+   * Executes the assigned action for a given player and board, if any exists.
+   *
+   * @param player the player who landed on the tile
+   * @param board the game board
+   */
+  public void executeAction(Player player, Board board) {
+    if (action != null) {
+      action.execute(player, board);
     }
+  }
 
-    /**
-     * Sets the token for this tile.
-     *
-     * @param token the token string ("X", "O", or null)
-     */
-    public void setToken(String token) {
-        this.token = token;
-    }
+  /**
+   * Returns the token assigned to this tile (e.g., "X" or "O").
+   *
+   * @return the token or null if tile is empty
+   */
+  public String getToken() {
+    return token;
+  }
 
+  /**
+   * Sets the token for this tile.
+   *
+   * @param token the token string ("X", "O", or null)
+   */
+  public void setToken(String token) {
+    this.token = token;
+  }
 }
