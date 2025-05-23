@@ -1,9 +1,5 @@
 package edu.ntnu.boardgame.controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import edu.ntnu.boardgame.actions.puzzleactions.PuzzleTileAction;
 import edu.ntnu.boardgame.actions.tileactions.TileAction;
 import edu.ntnu.boardgame.constructors.Board;
@@ -13,6 +9,9 @@ import edu.ntnu.boardgame.constructors.Player;
 import edu.ntnu.boardgame.constructors.Tile;
 import edu.ntnu.boardgame.observer.BoardGameObserver;
 import edu.ntnu.boardgame.view.laddergame.LadderGameScreen;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -44,7 +43,8 @@ public class LadderGameController {
    * @param stage the JavaFX stage
    * @param gameVariant the selected game variant name
    */
-  public LadderGameController(Boardgame boardgame, LadderGameScreen view, Stage stage, String gameVariant, int startingPlayerIndex) {
+  public LadderGameController(Boardgame boardgame, LadderGameScreen view,
+                              Stage stage, String gameVariant, int startingPlayerIndex) {
     this.boardgame = boardgame;
     this.board = boardgame.getBoard();
     this.players = boardgame.getPlayers();
@@ -60,12 +60,12 @@ public class LadderGameController {
 
   }
 
-    /**
-     * Handles the dice roll logic, moves the player accordingly, triggers tile
-     * actions, and updates the game state and UI.
-     *
-     * @param stage the JavaFX stage used for displaying alerts or dialogs
-     */
+  /**
+   * Handles the dice roll logic, moves the player accordingly, triggers tile
+   * actions, and updates the game state and UI.
+   *
+   * @param stage the JavaFX stage used for displaying alerts or dialogs
+   */
   public void handleDiceRoll(Stage stage) {
     Player player = players.get(currentPlayerIndex);
     Dice dice = boardgame.getDice();
@@ -98,7 +98,8 @@ public class LadderGameController {
     if (newTile.getAction() != null) {
       handleTileAction(player, newTile);
     } else {
-      view.updateMessage(player.getName() + " kastet " + roll + " og flyttet til rute " + newPosition);
+      view.updateMessage(player.getName() + " kastet "
+                          + roll + " og flyttet til rute " + newPosition);
       boardgame.notifyPlayerMoved(player);
       if (player.getPosition() == board.getSize()) {
         showWinMessage(player);
@@ -108,13 +109,13 @@ public class LadderGameController {
     }
   }
 
-    /**
-     * Handles logic when a player lands on a special tile. Executes the tile's
-     * action and updates the board view.
-     *
-     * @param player the player who landed on the tile
-     * @param tile the tile with an action to execute
-     */
+  /**
+   * Handles logic when a player lands on a special tile. Executes the tile's
+   * action and updates the board view.
+   *
+   * @param player the player who landed on the tile
+   * @param tile the tile with an action to execute
+   */
   public void handleTileAction(Player player, Tile tile) {
     view.disableDiceAndNextTurnButtons();
 
@@ -154,10 +155,10 @@ public class LadderGameController {
     pause.play();
   }
 
-    /**
-     * Advances to the next player's turn. If the player must skip, waits
-     * briefly before continuing to the next player.
-     */
+  /**
+   * Advances to the next player's turn. If the player must skip, waits
+   * briefly before continuing to the next player.
+   */
   public void handleNextTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     Player nextPlayer = players.get(currentPlayerIndex);
@@ -175,12 +176,12 @@ public class LadderGameController {
     }
   }
 
-    /**
-     * Displays a popup message indicating the player has won, then redirects to
-     * the start screen with the same game variant selected.
-     *
-     * @param winner the player who won the game
-     */
+  /**
+   * Displays a popup message indicating the player has won, then redirects to
+   * the start screen with the same game variant selected.
+   *
+   * @param winner the player who won the game
+   */
   public void showWinMessage(Player winner) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Spillet er ferdig");
@@ -188,7 +189,8 @@ public class LadderGameController {
     alert.setContentText("Du sendes tilbake til menyen for stigespill.");
 
     alert.setOnHidden(e -> {
-      edu.ntnu.boardgame.view.common.StartScreenView startView = new edu.ntnu.boardgame.view.common.StartScreenView();
+      edu.ntnu.boardgame.view.common.StartScreenView startView =
+              new edu.ntnu.boardgame.view.common.StartScreenView();
       startView.setSelectedGameVariant(gameVariant);
       StartScreenController controller = new StartScreenController(stage, startView);
       Scene scene = controller.getStartScene();
@@ -198,11 +200,11 @@ public class LadderGameController {
     alert.show();
   }
 
-    /**
-     * Opens a file dialog to let the user choose where to save the current
-     * board state. Attempts to serialize and save the game board and
-     * configuration to a JSON file.
-     */
+  /**
+   * Opens a file dialog to let the user choose where to save the current
+   * board state. Attempts to serialize and save the game board and
+   * configuration to a JSON file.
+   */
   public void handleSaveBoard() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Velg hvor du vil lagre brettet");
@@ -210,52 +212,54 @@ public class LadderGameController {
     File file = fileChooser.showSaveDialog(stage);
 
     if (file != null) {
-        try {
-            edu.ntnu.boardgame.io.BoardFileWriterGson writer = new edu.ntnu.boardgame.io.BoardFileWriterGson();
-            writer.writeBoardgame(file.toPath(), boardgame);
-            view.updateMessage("Brett lagret til: " + file.getName());
-        } catch (IOException ex) {
-            view.updateMessage("Kunne ikke lagre brettet: " + ex.getMessage());
-        }
+      try {
+        edu.ntnu.boardgame.io.BoardFileWriterGson writer =
+                new edu.ntnu.boardgame.io.BoardFileWriterGson();
+        writer.writeBoardgame(file.toPath(), boardgame);
+        view.updateMessage("Brett lagret til: " + file.getName());
+      } catch (IOException ex) {
+        view.updateMessage("Kunne ikke lagre brettet: " + ex.getMessage());
+      }
     } else {
-        view.updateMessage("Lagring avbrutt.");
+      view.updateMessage("Lagring avbrutt.");
     }
-}
-    /**
-     * Navigates the user back to the main page view from the ladder game
-     * screen.
-     */
-public void handleReturnHome() {
+  }
+
+  /**
+   * Navigates the user back to the main page view from the ladder game
+   * screen.
+   */
+  public void handleReturnHome() {
     MainPageController controller = new MainPageController(stage);
     Scene mainScene = controller.getMainScene();
     stage.setScene(mainScene);
-}
+  }
 
 
 
-    /**
-     * Internal observer class for handling board game events. Listens for
-     * player moves and game win events, and updates the UI accordingly.
-     */
+  /**
+   * Internal observer class for handling board game events. Listens for
+   * player moves and game win events, and updates the UI accordingly.
+   */
   private class GameObserver implements BoardGameObserver {
 
-      /**
-       * Triggered when a player moves. Redraws the board to reflect the
-       * player's new position.
-       *
-       * @param player the player who moved
-       */
+    /**
+     * Triggered when a player moves. Redraws the board to reflect the
+     * player's new position.
+     *
+     * @param player the player who moved
+     */
     @Override
     public void onPlayerMove(Player player) {
       view.redrawBoard();
     }
 
-      /**
-       * Triggered when a player wins the game. Displays a win message and
-       * resets the game view.
-       *
-       * @param winner the player who won the game
-       */
+    /**
+     * Triggered when a player wins the game. Displays a win message and
+     * resets the game view.
+     *
+     * @param winner the player who won the game
+     */
     @Override
     public void onGameWon(Player winner) {
       showWinMessage(winner);
